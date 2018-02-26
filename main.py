@@ -102,9 +102,8 @@ def run_epoch(data_iter, model, train=False, optimizer=None):
         # Accumulate statistics
         epoch_loss += loss.data
         count += batch_size
-    #import pdb; pdb.set_trace()x
-    return epoch_loss[0] / count, correct / (count * bptt_len)
 
+    return epoch_loss[0] / count, correct / (count * bptt_len)
 
 num_epochs = 40
 learning_rate = 1e-3
