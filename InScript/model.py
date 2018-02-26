@@ -19,7 +19,6 @@ class RNNLM(nn.Module):
 
 if __name__ == "__main__":
 
-
     vocab_size = 5
     embed_size = 10
     hidden_size = 5
