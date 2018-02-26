@@ -7,12 +7,14 @@ from torchtext import data, datasets
 from torchtext.vocab import GloVe
 
 
+from datasets import InScriptPilot, InScriptSecond
+
 device = 0 if torch.cuda.is_available() else -1
 """
     Config
 """
 batch_size = 32
-bptt_len = 30
+bptt_len = 10
 embed_dim = 300
 
 # Approach 1:
@@ -20,7 +22,7 @@ embed_dim = 300
 TEXT = data.Field(lower=True, batch_first=True)
 
 # make splits for data
-train, valid, test = datasets.WikiText2.splits(TEXT)
+train, valid, test = InScriptPilot.splits(TEXT)
 
 # print information about the data
 
@@ -32,7 +34,7 @@ print('len(TEXT.vocab)', len(TEXT.vocab))
 
 # make iterator for splits
 train_iter, valid_iter, test_iter = data.BPTTIterator.splits(
-    (train, valid, test), batch_size=batch_size, bptt_len=bptt_len, device=device)
+    (train, valid, test), batch_size=batch_size, bptt_len=bptt_len, device=device, repeat=False)
 
 """
     Model Config
@@ -63,25 +65,24 @@ model = RNNLM(len(TEXT.vocab), embed_dim, hidden_size, num_layers)
     Training Config
 """
 
-num_epochs = 10
-learning_rate = 1e-3
-
-criterion = nn.NLLLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-
-for epoch in range(1,num_epochs+1):
-    print("Epoch {}:".format(epoch))
+def run_epoch(data_iter, model, train=False, optimizer=None):
+    if train:
+        model.train()
+    else:
+        model.eval()
 
     epoch_loss = 0.
-    for batch in tqdm(train_iter):
+    correct = 0
+    count = 0
+    for batch in tqdm(data_iter):
         states = Variable(torch.zeros(batch_size, num_layers, hidden_size))
 
         # batch_size, bptt_len
         inputs = batch.text.transpose(0,1)
         targets = batch.target.transpose(0,1)
 
-        # Remove previous gradients
-        model.zero_grad()
+        if train:
+            optimizer.zero_grad()
 
         outputs, states = model.forward(inputs, states)
 
@@ -90,8 +91,31 @@ for epoch in range(1,num_epochs+1):
 
         # Loss
         loss = criterion(transposed_outputs, transposed_targets)
-        loss.backward()
+        if train:
+            loss.backward()
+            optimizer.step()
+
+        _, predicted = transposed_outputs.max(1)
+
+        correct += (predicted == transposed_targets).sum().data[0]
 
         # Accumulate statistics
         epoch_loss += loss.data
-    print("Epoch",epoch,"Train loss", epoch_loss)
+        count += batch_size
+    #import pdb; pdb.set_trace()x
+    return epoch_loss[0] / count, correct / (count * bptt_len)
+
+
+num_epochs = 40
+learning_rate = 1e-3
+
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+
+for epoch in range(1,num_epochs+1):
+    train_loss, train_acc = run_epoch(train_iter, model, True, optimizer)
+    valid_loss, valid_acc = run_epoch(valid_iter, model, False)
+    test_loss, test_acc = run_epoch(test_iter, model, False)
+    print("Epoch",epoch,"train_loss", train_loss,'train_acc',train_acc,
+                        'valid_loss', valid_loss,'valid_acc',valid_acc,
+                        'test_loss',test_loss,'test_acc',test_acc)
