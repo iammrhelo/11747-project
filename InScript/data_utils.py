@@ -9,7 +9,24 @@ def parse_xml(xml_dir, output_file):
         for xml_file in glob(os.path.join(xml_dir,'*.xml')):
             print("Parsing {}...".format(xml_file))
             root = xml.etree.ElementTree.parse(xml_file).getroot()
-            fout.write(root[0][0].text + '\n')
+
+            content = root[0][0].text
+            sentences = content.split('\n')
+
+            entity_locations = []
+
+            participants = root[1][0]
+
+            for sent in sentences:
+                entity_locations.append([0] * len(sent.split()))
+
+            for label in participants:
+                sentence_id, loc = map(int, label.attrib['from'].split('-'))
+                entity_locations[sentence_id-1][loc-1] = 1
+
+            for sent, locations in zip(sentences, entity_locations):
+                fout.write(sent + '\t' + ' '.join(map(str,locations)) + '\n' )
+
 
 def split_datasets(xml_dirs, output_dir):
     # Train 
@@ -52,6 +69,6 @@ if __name__ == "__main__":
     valid_xml_dirs = os.path.join(output_dir,'valid')
     test_xml_dirs = os.path.join(output_dir,'test')
     
-    parse_xml(train_xml_dirs, os.path.join(output_dir,'inscript_train.txt'))
-    parse_xml(valid_xml_dirs, os.path.join(output_dir,'inscript_valid.txt'))
-    parse_xml(test_xml_dirs, os.path.join(output_dir,'inscript_test.txt'))
+    parse_xml(train_xml_dirs, os.path.join(output_dir,'inscript_train.tsv'))
+    parse_xml(valid_xml_dirs, os.path.join(output_dir,'inscript_valid.tsv'))
+    parse_xml(test_xml_dirs, os.path.join(output_dir,'inscript_test.tsv'))
