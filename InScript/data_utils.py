@@ -5,7 +5,6 @@ import shutil
 import xml.etree.ElementTree
 
 def parse_xml(xml_dir, output_file):
-
     with open(output_file,'w') as fout:
         for xml_file in glob(os.path.join(xml_dir,'*.xml')):
             print("Parsing {}...".format(xml_file))
@@ -41,7 +40,6 @@ def split_datasets(xml_dirs, output_dir):
             for copy_file in copy_files:
                 shutil.copy(copy_file, copy_dir)
 
-
 if __name__ == "__main__":
 
     name = "InScript"
@@ -53,7 +51,7 @@ if __name__ == "__main__":
     train_xml_dirs = os.path.join(output_dir,'train')
     valid_xml_dirs = os.path.join(output_dir,'valid')
     test_xml_dirs = os.path.join(output_dir,'test')
-
+    
     parse_xml(train_xml_dirs, os.path.join(output_dir,'inscript_train.txt'))
     parse_xml(valid_xml_dirs, os.path.join(output_dir,'inscript_valid.txt'))
     parse_xml(test_xml_dirs, os.path.join(output_dir,'inscript_test.txt'))

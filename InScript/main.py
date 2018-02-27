@@ -7,14 +7,14 @@ from torchtext import data, datasets
 from torchtext.vocab import GloVe
 
 
-from datasets import InScriptPilot, InScriptSecond
+from datasets import InScript
 
 device = 0 if torch.cuda.is_available() else -1
 """
     Config
 """
 batch_size = 32
-bptt_len = 10
+bptt_len = 15
 embed_dim = 300
 
 # Approach 1:
@@ -22,9 +22,7 @@ embed_dim = 300
 TEXT = data.Field(lower=True, batch_first=True)
 
 # make splits for data
-train, valid, test = InScriptPilot.splits(TEXT)
-
-# print information about the data
+train, valid, test = InScript.splits(TEXT)
 
 # build the vocabulary
 TEXT.build_vocab(train, vectors=GloVe(name='6B', dim=embed_dim))
