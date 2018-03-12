@@ -21,6 +21,7 @@ def parse_arguments():
     parser.add_argument('--num_layers',type=int,default=2)
     parser.add_argument('--num_epochs',type=int,default=15)
     parser.add_argument('--lr',type=float,default=1e-3)
+    parser.add_argument('--early_stop',type=int,default=3)
     args = parser.parse_args()
     return args
 
@@ -36,6 +37,7 @@ hidden_size = args.hidden_size
 num_layers = args.num_layers
 num_epochs = args.num_epochs
 lr = args.lr
+early_stop = args.early_stop
 
 # Load iterators
 train_iter, valid_iter, test_iter, vocab_size = load_inscript(embed_dim, batch_size, bptt_len, device)
@@ -106,6 +108,7 @@ def run_epoch(data_iter, model, optimizer=None):
 
 
 best_valid_loss = None
+early_stop_count = 0
 
 for epoch in range(1,num_epochs+1):
     train_loss, train_acc, train_entity_acc = run_epoch(train_iter, model, optimizer)
@@ -116,10 +119,17 @@ for epoch in range(1,num_epochs+1):
     if best_valid_loss == None or valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
         torch.save(model.state_dict(),'best.pt')
+        early_stop_count = 0
+    else:
+        early_stop_count += 1
+
+    if early_stop_count >= early_stop:
+        print("Early stopping criteria met!")
+        break
 
 print("Running model with the best valid loss...")
 model.load_state_dict(torch.load('best.pt'))
-valid_loss, valid_acc, valid_entity_acc = run_epoch(valid_iter, model, False)
+valid_loss, valid_acc, valid_entity_acc = run_epoch(valid_iter, model)
 print("valid_loss", valid_loss,"valid ppl",math.exp(valid_loss),"valid_acc",valid_acc, 'valid_entity_acc', valid_entity_acc)
-test_loss, test_acc, test_entity_acc = run_epoch(test_iter, model, False)
+test_loss, test_acc, test_entity_acc = run_epoch(test_iter, model)
 print("test_loss", test_loss,"test ppl",math.exp(test_loss),"test_acc",test_acc, 'test_entity_acc', test_entity_acc)
