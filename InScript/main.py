@@ -1,3 +1,5 @@
+import math
+
 from tqdm import tqdm
 
 import torch
@@ -57,11 +59,10 @@ class RNNLM(nn.Module):
 
 
 hidden_size = 100
-num_layers = 1
+num_layers = 2
 
 model = RNNLM(len(TEXT.vocab), embed_dim, hidden_size, num_layers)
-if torch.cuda.is_available():
-    model.cuda(device)
+if torch.cuda.is_available(): model.cuda(device)
 
 """
     Training Config
@@ -108,8 +109,9 @@ def run_epoch(data_iter, model, train=False, optimizer=None):
         correct += compare.sum().data[0]
 
         # Accumulate statistics
-        epoch_loss += loss.data
-        count += batch_size
+        epoch_loss += loss.data[0]
+
+        count += 1
         for dim1 in range(location.shape[0]):
             for dim2 in range(location.shape[1]):
                 compare_is_one = (compare[dim1][dim2] == 1 ).data[0]
@@ -117,7 +119,7 @@ def run_epoch(data_iter, model, train=False, optimizer=None):
                 entity_correct += ( compare_is_one and location_is_one )
         entity_count += location.sum().data[0]
 
-    return epoch_loss[0] / count, correct / (count * bptt_len), entity_correct / entity_count
+    return epoch_loss / count, correct / (count * bptt_len), entity_correct / entity_count
 
 num_epochs = 40
 learning_rate = 1e-3
@@ -129,6 +131,7 @@ for epoch in range(1,num_epochs+1):
     train_loss, train_acc, train_entity_acc = run_epoch(train_iter, model, True, optimizer)
     valid_loss, valid_acc, valid_entity_acc = run_epoch(valid_iter, model, False)
     test_loss, test_acc, test_entity_acc = run_epoch(test_iter, model, False)
-    print("Epoch",epoch,"train_loss", train_loss,"train_acc",train_acc, 'train_entity_acc', train_entity_acc,
-                        "valid_loss", valid_loss,"valid_acc",valid_acc, 'valid_entity_acc', valid_entity_acc,
-                        "test_loss",test_loss,"test_acc",test_acc, 'valid_entity_acc', valid_entity_acc)
+    print("Epoch",epoch)
+    print("train_loss", train_loss,"train ppl",math.exp(train_loss),"train_acc",train_acc, 'train_entity_acc', train_entity_acc)
+    print("valid_loss", valid_loss,"train ppl",math.exp(train_loss),"valid_acc",valid_acc, 'valid_entity_acc', valid_entity_acc)
+    print("test_loss", test_loss,"test ppl", math.exp(test_loss),"test_acc",test_acc, 'valid_entity_acc', valid_entity_acc)

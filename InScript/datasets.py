@@ -9,7 +9,6 @@ from torchtext import data, datasets
 from torchtext.data.batch import Batch
 from torchtext.data.dataset import Dataset
 
-
 class InScript(data.Dataset):
 
     urls = []
