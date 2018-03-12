@@ -1,38 +1,21 @@
-import numpy as np
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
 
 class RNNLM(nn.Module):
-    def __init__(self, vocab_size, embed_size, hidden_size, num_layers):
+    def __init__(self, vocab_size, embed_size, hidden_size, num_layers, dropout=0.5):
         super(RNNLM, self).__init__()
         self.embed = nn.Embedding(vocab_size, embed_size)
-        self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
+        self.rnn = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
+        self.linear = nn.Linear(hidden_size, vocab_size) # Linear
+        self.dropout = nn.Dropout(dropout)
 
-    def forward(self, x, h):
+    def forward(self, x, hidden_state):
         embed_x = self.embed(x)
 
-        output, h = self.lstm(embed_x)
+        lstm_output, hidden_state = self.rnn(embed_x)
 
-        return output, h
+        output = self.linear(lstm_output)
 
-
-if __name__ == "__main__":
-
-    vocab_size = 5
-    embed_size = 10
-    hidden_size = 5
-    num_layers = 1
-
-    model = RNNLM(vocab_size, embed_size, hidden_size, num_layers)
-
-    # Dummy data
-    inputs = torch.IntTensor(np.array(range(5)))
-    state0 = torch.FloatTensor(np.zeros(5))
-    targets = torch.FloatTensor(np.array([1,0,0,0,0]))
-
-    input_tensor = Variable(inputs)
-    state_tensor = Variable(state0)
-    target_tensor = Variable(targets)
-
-    import pdb; pdb.set_trace()
+        return output, hidden_state

@@ -4,8 +4,9 @@ import math
 import os
 
 import torch
-from torchtext.data import Example
 from torchtext import data, datasets
+from torchtext.data import Example
+from torchtext.vocab import GloVe
 from torchtext.data.batch import Batch
 from torchtext.data.dataset import Dataset
 
@@ -107,3 +108,26 @@ class EntityLocationIterator(data.BPTTIterator):
                     target=data[i + 1:i + 1 + seq_len])
             if not self.repeat:
                 raise StopIteration
+
+def load_inscript(embed_dim, batch_size, bptt_len, device):
+    # Approach 1:
+    # set up fields
+    TEXT = data.Field(lower=True, batch_first=True)
+    LOCATION = data.Field(sequential=True, use_vocab=False, tensor_type=torch.ByteTensor)
+
+    # make splits for data
+    #train, valid, test = InScript.splits(TEXT)
+    train, valid, test = InScript.splits( fields= [("text", TEXT),("location",LOCATION)])
+
+    # build the vocabulary
+    TEXT.build_vocab(train, vectors=GloVe(name="6B", dim=embed_dim))
+
+    # print vocab information
+    vocab_size = len(TEXT.vocab)
+    print("Vocabulary", len(TEXT.vocab))
+
+    # make iterator for splits
+    train_iter, valid_iter, test_iter = EntityLocationIterator.splits(
+        (train, valid, test), batch_size=batch_size, bptt_len=bptt_len, device=device, repeat=False)
+    
+    return train_iter, valid_iter, test_iter, vocab_size
