@@ -1,6 +1,7 @@
 import math
 
 from tqdm import tqdm
+import argparse
 
 import torch
 import torch.nn as nn
@@ -12,6 +13,22 @@ from torchtext.vocab import GloVe
 from datasets import InScript, EntityLocationIterator
 
 device = 0 if torch.cuda.is_available() else -1
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--batch_size',type=int,default=32)
+    parser.add_argument('--bptt_len',type=int,default=15)
+    parser.add_argument('--embed_dim',type=int,default=300)
+    parser.add_argument('--hidden_size',type=int,default=300)
+    parser.add_argument('--num_layers',type=int,default=2)
+    parser.add_argument('--embed_dim',type=int,default=300)
+    parser.add_argument('--num_epochs',type=int,default=15)
+    parser.add_argument('--lr',type=float,default=1e-3)
+    args = parser.parse_args()
+    return args
+
+args = parse_arguments()
+
 """
     Config
 """
