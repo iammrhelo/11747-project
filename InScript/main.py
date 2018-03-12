@@ -33,7 +33,7 @@ args = parse_arguments()
     Config
 """
 batch_size = 32
-bptt_len = 15
+bptt_len = 20
 embed_dim = 300
 
 # Approach 1:
@@ -75,8 +75,8 @@ class RNNLM(nn.Module):
         return output, hidden_state
 
 
-hidden_size = 100
-num_layers = 2
+hidden_size = 300
+num_layers = 1
 
 model = RNNLM(len(TEXT.vocab), embed_dim, hidden_size, num_layers)
 if torch.cuda.is_available(): model.cuda(device)
@@ -136,19 +136,29 @@ def run_epoch(data_iter, model, train=False, optimizer=None):
                 entity_correct += ( compare_is_one and location_is_one )
         entity_count += location.sum().data[0]
 
-    return epoch_loss / count, correct / (count * bptt_len), entity_correct / entity_count
+    return epoch_loss / count, correct / (count * batch_size * bptt_len), entity_correct / entity_count
 
-num_epochs = 40
+num_epochs = 15
 learning_rate = 1e-3
 
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
+best_valid_loss = None
+
 for epoch in range(1,num_epochs+1):
     train_loss, train_acc, train_entity_acc = run_epoch(train_iter, model, True, optimizer)
     valid_loss, valid_acc, valid_entity_acc = run_epoch(valid_iter, model, False)
-    test_loss, test_acc, test_entity_acc = run_epoch(test_iter, model, False)
     print("Epoch",epoch)
     print("train_loss", train_loss,"train ppl",math.exp(train_loss),"train_acc",train_acc, 'train_entity_acc', train_entity_acc)
-    print("valid_loss", valid_loss,"train ppl",math.exp(train_loss),"valid_acc",valid_acc, 'valid_entity_acc', valid_entity_acc)
-    print("test_loss", test_loss,"test ppl", math.exp(test_loss),"test_acc",test_acc, 'valid_entity_acc', valid_entity_acc)
+    print("valid_loss", valid_loss,"valid ppl",math.exp(valid_loss),"valid_acc",valid_acc, 'valid_entity_acc', valid_entity_acc)
+    if best_valid_loss == None or valid_loss < best_valid_loss:
+        best_valid_loss = valid_loss
+        torch.save(model.state_dict(),'best.pt')
+
+print("Running model with the best valid loss...")
+model.load_state_dict(torch.load('best.pt'))
+valid_loss, valid_acc, valid_entity_acc = run_epoch(valid_iter, model, False)
+print("valid_loss", valid_loss,"valid ppl",math.exp(valid_loss),"valid_acc",valid_acc, 'valid_entity_acc', valid_entity_acc)
+test_loss, test_acc, test_entity_acc = run_epoch(test_iter, model, False)
+print("test_loss", test_loss,"test ppl",math.exp(test_loss),"test_acc",test_acc, 'test_entity_acc', test_entity_acc)
