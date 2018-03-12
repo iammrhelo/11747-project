@@ -19,7 +19,8 @@ def parse_arguments():
     parser.add_argument('--embed_dim',type=int,default=300)
     parser.add_argument('--hidden_size',type=int,default=300)
     parser.add_argument('--num_layers',type=int,default=2)
-    parser.add_argument('--num_epochs',type=int,default=15)
+    parser.add_argument('--dropout',type=float,default=0.5)
+    parser.add_argument('--num_epochs',type=int,default=20)
     parser.add_argument('--lr',type=float,default=1e-3)
     parser.add_argument('--early_stop',type=int,default=3)
     args = parser.parse_args()
@@ -27,14 +28,12 @@ def parse_arguments():
 
 args = parse_arguments()
 
-"""
-    Config
-"""
 batch_size = args.batch_size
 bptt_len = args.bptt_len
 embed_dim = args.embed_dim
 hidden_size = args.hidden_size
 num_layers = args.num_layers
+dropout = args.dropout
 num_epochs = args.num_epochs
 lr = args.lr
 early_stop = args.early_stop
@@ -43,7 +42,7 @@ early_stop = args.early_stop
 train_iter, valid_iter, test_iter, vocab_size = load_inscript(embed_dim, batch_size, bptt_len, device)
 
 # Model Related
-model = RNNLM(vocab_size, embed_dim, hidden_size, num_layers)
+model = RNNLM(vocab_size, embed_dim, hidden_size, num_layers, dropout)
 if torch.cuda.is_available(): model.cuda(device)
 
 criterion = nn.CrossEntropyLoss()
@@ -64,10 +63,17 @@ def run_epoch(data_iter, model, optimizer=None):
 
     entity_correct = 0
     entity_count = 0
- 
-    for batch in tqdm(data_iter):
 
-        states = Variable(torch.zeros(batch_size, num_layers, hidden_size))
+    hidden_states = model.init_hidden_states(data_iter.batch_size)
+    if torch.cuda.is_available():
+        hidden_states = [ state.cuda() for state in hidden_states ]
+
+    for batch in tqdm(data_iter):
+        
+        hidden_states = [ Variable(state.data) for state in hidden_states ]
+        if torch.cuda.is_available():
+            hidden_states = [ state.cuda() for state in hidden_states ]
+
         # batch_size, bptt_len
         inputs = batch.text.transpose(0,1)
         targets = batch.target.transpose(0,1)
@@ -76,7 +82,7 @@ def run_epoch(data_iter, model, optimizer=None):
         if train:
             optimizer.zero_grad()
 
-        outputs, states = model.forward(inputs, states)
+        outputs, hidden_states = model.forward(inputs, hidden_states)
 
         transposed_outputs = outputs.transpose(0,2).transpose(0,1)
         transposed_targets = targets.transpose(0,1)

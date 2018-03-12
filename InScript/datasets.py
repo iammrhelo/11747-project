@@ -101,6 +101,9 @@ class EntityLocationIterator(data.BPTTIterator):
         while True:
             for i in range(0, len(self) * self.bptt_len, self.bptt_len):
                 seq_len = min(self.bptt_len, len(data) - i - 1)
+                if seq_len == 0:
+                    raise StopIteration
+
                 yield Batch.fromvars(
                     dataset, self.batch_size, train=self.train,
                     text=data[i:i + seq_len],
