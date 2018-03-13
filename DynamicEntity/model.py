@@ -67,11 +67,21 @@ class EntityNLM(nn.Module):
 
     def forward(self, x, hidden_states):
         embed_x = self.dropout(self.embed(x))
+            
+
+        X_list = []
+        R_list = []
+        L_list = []
+        E_list = []
         
+        hx, hc = hidden_states
+        for step_embed_x in embed_x:
+            import pdb; pdb.set_trace()
+
         rnn_output, hidden_states = self.rnn(embed_x, hidden_states)
         
         X = self.x(self.dropout(rnn_output))
-        R = self.sigmoid(self.r(self.dropout(rnn_output)))
+        R = self.r(self.dropout(rnn_output))
         L = self.l(self.dropout(rnn_output))
         E = self.e(self.dropout(rnn_output))
 

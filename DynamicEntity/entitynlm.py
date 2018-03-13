@@ -21,7 +21,7 @@ def parse_arguments():
     parser.add_argument('--hidden_size',type=int,default=128)
     parser.add_argument('--num_layers',type=int,default=2)
     parser.add_argument('--dropout',type=float,default=0.5)
-    parser.add_argument('--num_epochs',type=int,default=30)
+    parser.add_argument('--num_epochs',type=int,default=50)
     parser.add_argument('--lr',type=float,default=1e-3)
     parser.add_argument('--early_stop',type=int,default=3)
     args = parser.parse_args()
@@ -47,7 +47,7 @@ train_iter, valid_iter, test_iter, vocab_size = load_inscript(embed_dim, batch_s
 model = EntityNLM(rnn, vocab_size, embed_dim, hidden_size, num_layers, dropout)
 if torch.cuda.is_available(): model.cuda(device)
 
-binarycrossentropy = nn.BCELoss()
+binarycrossentropy = nn.BCEWithLogitsLoss()
 crossentropy = nn.CrossEntropyLoss()
 mse = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=lr)
