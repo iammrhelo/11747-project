@@ -27,27 +27,37 @@ class InScript(data.Dataset):
             Remaining keyword arguments: Passed to the constructor of
                 data.Dataset.
         """
-        #fields = [('text', text_field)]
         text_field = fields[0][1]
-        location_fields = fields[1][1]
+        R_field = fields[1][1]
+        E_field = fields[2][1]
+        L_field = fields[3][1]
+        
         text = []
-        entity = []
+        R = []
+        E = []
+        L = []
         with io.open(path, encoding=encoding) as f:
             for line in f:
                 columns = line.strip('\n').split('\t')
                 if len(columns) == 0:
                     continue
-                sentence, entity_locations = columns
+                sentence, is_entity, entity_indices, remaining_length = columns
                 text += text_field.preprocess(sentence)
-                entity += location_fields.preprocess(entity_locations)
-                if newline_eos:
-                    text.append(u'<eos>')
-                    entity.append(0)
+                R += R_field.preprocess(is_entity)
+                E += E_field.preprocess(entity_indices)
+                L += L_field.preprocess(remaining_length)
         
-        entity = list(map(int, entity))
-        assert len(text) == len(entity) 
+        def str2int(array):
+            return list(map(int,array))
 
-        examples = [data.Example.fromlist([text, entity], fields)]
+        R = str2int(R)
+        E = str2int(E)
+        L = str2int(L)
+        assert len(text) == len(R)
+        assert len(R) == len(E)
+        assert len(E) == len(L) 
+
+        examples = [data.Example.fromlist([text, R, E, L], fields)]
         
         super(InScript, self).__init__(examples, fields, **kwargs)
 
@@ -72,58 +82,74 @@ class InScript(data.Dataset):
             (train, val, test), batch_size=batch_size, bptt_len=bptt_len,
             device=device)
 
-class EntityLocationIterator(data.BPTTIterator):
+class InScriptIterator(data.BPTTIterator):
     
     def __iter__(self):
         text = self.dataset[0].text
         TEXT = self.dataset.fields['text']
-        
         TEXT.eos_token = None
-        text = text + ([TEXT.pad_token] * int(math.ceil(len(text) / self.batch_size) *
-                                              self.batch_size - len(text)))
+
+        R = self.dataset[0].R
+        R_field = self.dataset.fields['R']
+        R_field.pad_token = 0
+        R_field.eos_token = None
+
+        E = self.dataset[0].E
+        E_field = self.dataset.fields['E']
+        E_field.pad_token = 0
+        E_field.eos_token = None
+
+        L = self.dataset[0].L
+        L_field = self.dataset.fields['L']
+        L_field.pad_token = 0
+        L_field.eos_token = None
+ 
+        def convert2tensor(data, data_field):
+            data = data + ([data_field.pad_token] * int(math.ceil(len(data) / self.batch_size) *
+                                              self.batch_size - len(data)))
                                               
-        data = TEXT.numericalize([text], device=self.device, train=self.train)
+            data_tensor = data_field.numericalize([data], device=self.device, train=self.train)
 
-        data = data.view(self.batch_size, -1).t().contiguous()
-        #
-        location = self.dataset[0].location
-        LOCATION = self.dataset.fields['location']
+            data_tensor = data_tensor.view(self.batch_size, -1).t().contiguous()
+            return data_tensor
 
-        location = location + ([0] * int(math.ceil(len(location) / self.batch_size) *
-                                              self.batch_size - len(location)))
-        location_data = LOCATION.numericalize([location], device=self.device, train=self.train).transpose(0,1)
+        text_tensor = convert2tensor(text,TEXT)
+        R_tensor = convert2tensor(R,R_field)
+        E_tensor = convert2tensor(E,E_field)
+        L_tensor = convert2tensor(L,L_field)
 
-        location_data = location_data.view(self.batch_size,-1).t().contiguous()
-
+  
         dataset = Dataset(examples=self.dataset.examples, fields=[
-            ('text', TEXT), ('target', TEXT), ('location', LOCATION)])
+            ('text', TEXT), ('target', TEXT), ('R', R_field),('E',E_field),('L',L_field)])
 
         while True:
             for i in range(0, len(self) * self.bptt_len, self.bptt_len):
-                seq_len = min(self.bptt_len, len(data) - i - 1)
+                seq_len = min(self.bptt_len, len(text_tensor) - i - 1)
                 if seq_len == 0:
                     raise StopIteration
 
                 yield Batch.fromvars(
                     dataset, self.batch_size, train=self.train,
-                    text=data[i:i + seq_len],
-                    location=location_data[i:i+seq_len],
-                    target=data[i + 1:i + 1 + seq_len])
+                    text=text_tensor[i:i + seq_len],
+                    R=R_tensor[i:i + seq_len],
+                    E=E_tensor[i:i + seq_len],
+                    L=L_tensor[i:i + seq_len],
+                    target=text_tensor[i + 1:i + 1 + seq_len])
             if not self.repeat:
                 raise StopIteration
 
 def load_inscript(embed_dim, batch_size, bptt_len, device):
     # Approach 1:
     # set up fields
-    TEXT = data.Field(lower=True, batch_first=True)
-    LOCATION = data.Field(sequential=True, use_vocab=False, tensor_type=torch.ByteTensor)
+    TEXT = data.Field(sequential=True, lower=False, batch_first=True)
+    R = data.Field(sequential=True, use_vocab=False, tensor_type=torch.FloatTensor)
+    E = data.Field(sequential=True, use_vocab=False, tensor_type=torch.FloatTensor)
+    L = data.Field(sequential=True, use_vocab=False, tensor_type=torch.LongTensor)
 
     # make splits for data
     #train, valid, test = InScript.splits(TEXT)
-    train, valid, test = InScript.splits( fields= [("text", TEXT),("location",LOCATION)])
-
-    import pdb; pdb.set_trace()
-
+    train, valid, test = InScript.splits( fields= [("text", TEXT),("R",R),("E",E),("L",L)])
+   
     # build the vocabulary
     TEXT.build_vocab(train, vectors=GloVe(name="6B", dim=embed_dim))
 
@@ -132,7 +158,20 @@ def load_inscript(embed_dim, batch_size, bptt_len, device):
     print("Vocabulary", vocab_size)
 
     # make iterator for splits
-    train_iter, valid_iter, test_iter = EntityLocationIterator.splits(
+    train_iter, valid_iter, test_iter = InScriptIterator.splits(
         (train, valid, test), batch_size=batch_size, bptt_len=bptt_len, device=device, repeat=False)
-    
+
     return train_iter, valid_iter, test_iter, vocab_size
+
+
+if __name__ == "__main__":
+    embed_dim = 300
+    batch_size = 32
+    bptt_len = 35
+    device = -1
+
+    train_iter, valid_iter, test_iter, vocab_size = load_inscript(embed_dim,batch_size,bptt_len,device)
+    
+    for batch in train_iter:
+        
+        import pdb; pdb.set_trace()

@@ -5,6 +5,7 @@ import shutil
 import xml.etree.ElementTree
 
 def parse_xml(xml_dir, output_file):
+    
     with open(output_file,'w') as fout:
         for xml_file in glob(os.path.join(xml_dir,'*.xml')):
             print("Parsing {}...".format(xml_file))
@@ -13,20 +14,61 @@ def parse_xml(xml_dir, output_file):
             content = root[0][0].text
             sentences = content.split('\n')
 
-            entity_locations = []
+            R = []
+            E = [] 
+            L = []
 
             participants = root[1][0]
 
+            entity_table = {}
+
             for sent in sentences:
-                entity_locations.append([0] * len(sent.split()))
+                R.append([0] * len(sent.split()))
+                E.append([0] * len(sent.split())) 
+                L.append([1] * (len(sent.split())-1) + [0] )
 
             for label in participants:
-                sentence_id, loc = map(int, label.attrib['from'].split('-'))
-                entity_locations[sentence_id-1][loc-1] = 1
+                sentence_id, word_id = map(int, label.attrib['from'].split('-'))
+                
+                entity = label.attrib["name"]
 
-            for sent, locations in zip(sentences, entity_locations):
-                fout.write(sent + '\t' + ' '.join(map(str,locations)) + '\n' )
+                if entity not in entity_table:
+                    entity_table[entity] = len(entity_table)+1
+                entity_id = entity_table[entity]
 
+                text = label.attrib["text"]
+                tokens = text.split()
+                # R : is entity?
+                R[sentence_id-1][word_id-1] = 1
+
+                # E : entity index
+                start = word_id-1
+                end = start+1
+                if 'to' in label.attrib:
+                    _, end = map(int,label.attrib['to'].split('-'))
+                for idx in range(start,end,1):
+                    E[sentence_id-1][idx] = entity_id
+
+                # L : entity remaining length
+                for l in range(len(tokens),0,-1):
+                    idx = word_id-1 + len(tokens)-l
+                    L[sentence_id-1][idx] = l
+                
+            # Debug
+            """
+            for sent, r, e, l in zip(sentences, R, E, L):
+                print(sent)
+                print(r)
+                print(e)
+                print(l)
+            """
+            for sent, r, e, l in zip(sentences, R, E, L):
+                row = sent + '\t' \
+                    + ' '.join(map(str,r)) + '\t' \
+                    + ' '.join(map(str,e)) + '\t' \
+                    + ' '.join(map(str,l)) \
+                    + '\n'
+                fout.write(row)
 
 def split_datasets(xml_dirs, output_dir):
     # Train 
