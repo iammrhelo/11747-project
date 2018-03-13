@@ -135,6 +135,7 @@ for epoch in range(1,num_epochs+1):
     train_loss = run_epoch(train_iter, model, optimizer)
     valid_loss = run_epoch(valid_iter, model)
     print("Epoch",epoch,'train_loss', train_loss, 'valid_loss', valid_loss)
+    print("Epoch",epoch,'train ppl', math.exp(train_loss[0]), 'valid ppl',math.exp(valid_loss[0]))
     if best_valid_loss == None or valid_loss[0] < best_valid_loss:
         best_valid_loss = valid_loss[0]
         torch.save(model.state_dict(),'best.pt')
