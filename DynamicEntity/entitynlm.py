@@ -61,7 +61,6 @@ model = EntityNLM(vocab_size=vocab_size, embed_size=128, hidden_size=128,dropout
 
 lambda_dist = 1e-6
 
-#model.sample_normal()
 #####################
 #  Training Config  #
 #####################
@@ -172,8 +171,8 @@ for epoch in range(1,num_epochs+1,1):
                             next_e = Variable(torch.zeros(1).type(torch.LongTensor), requires_grad=False)
 
                         # TODO: FAILURE
-                        e_loss = crossentropy(pred_e, next_e)
-                        losses.append(e_loss)
+                        #e_loss = crossentropy(pred_e, next_e)
+                        #losses.append(e_loss)
 
                     # Entity Length Prediction
                     if int(next_e.data[0]) > 0: # Has Entity
@@ -200,7 +199,7 @@ for epoch in range(1,num_epochs+1,1):
 
             if len(losses):
                 total_loss = sum(losses)
-                total_loss.backward()
+                total_loss.backward(retain_graph=True)
                 optimizer.step()
 
         import pdb; pdb.set_trace()
