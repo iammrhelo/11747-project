@@ -25,7 +25,7 @@ def parse_arguments():
     parser.add_argument('--hidden_size',type=int,default=128)
     parser.add_argument('--num_layers',type=int,default=2)
     parser.add_argument('--dropout',type=float,default=0.5)
-    parser.add_argument('--num_epochs',type=int,default=50)
+    parser.add_argument('--num_epochs',type=int,default=10)
     parser.add_argument('--lr',type=float,default=1e-3)
     parser.add_argument('--early_stop',type=int,default=3)
     parser.add_argument('--shuffle',action="store_true",default=False)
@@ -79,14 +79,18 @@ def repack(h_t, c_t):
 ####################
 for epoch in range(1,num_epochs+1,1):
     print("Epoch",epoch)
+
+    epoch_loss = 0
     # Training
     model.train()
 
     # Shuffle Documents Here
     if shuffle: random.shuffle(train_corpus.documents)
-
+    
     for doc in tqdm(train_corpus.documents):
         
+        doc_loss = 0
+
         X, R, E, L = doc[0]
 
         nsent = len(X)
@@ -131,8 +135,10 @@ for epoch in range(1,num_epochs+1,1):
                     # Next Entity Type
 
                     entity_idx = int(curr_e.data[0])
-
-                    assert entity_idx == curr_e.data[0] and entity_idx <= len(model.entities)
+                    try:
+                        assert entity_idx == curr_e.data[0] and entity_idx <= len(model.entities)
+                    except:
+                        import pdb; pdb.set_trace()
 
                     # Create if it's a new entity
                     if entity_idx == len(model.entities):
@@ -199,11 +205,14 @@ for epoch in range(1,num_epochs+1,1):
                 total_loss = sum(losses)
                 total_loss.backward(retain_graph=True)
                 optimizer.step()
+                
+                doc_loss += total_loss.data[0]
         
-        import pdb; pdb.set_trace()
         # End of document
         # Clear Entities
         model.clear_entities()
-        print("End document")
+
+    epoch_loss += doc_loss
+    print("Epoch loss: {}".format(epoch_loss))
 
      
