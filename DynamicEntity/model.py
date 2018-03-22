@@ -14,6 +14,7 @@ class RNNLM(nn.Module):
             self.rnn = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
         elif rnn == "GRU":
             self.rnn = nn.GRU(embed_size, hidden_size, num_layers, batch_first=True)
+        
         self.linear = nn.Linear(hidden_size, vocab_size) # Linear
         self.dropout = nn.Dropout(dropout)
         
@@ -111,7 +112,7 @@ class EntityNLM(nn.Module):
             return self.entities[entity_idx]
 
     def get_dist_feat(self, nsent):
-        dist_feat = Variable((torch.FloatTensor(self.entities_dist) - nsent)[:,None])
+        dist_feat = Variable((torch.FloatTensor(self.entities_dist) - nsent).view(-1,1), requires_grad=False)
         return dist_feat
 
 
@@ -130,7 +131,7 @@ class EntityNLM(nn.Module):
 
         dist_feat = self.get_dist_feat(sent_idx)
 
-        pred_e = self.e(entity_stack, h_t) + torch.exp(dist_feat * lambda_dist)
+        pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + torch.exp(dist_feat * lambda_dist)
         pred_e = pred_e.transpose(0,1)
 
         return pred_e

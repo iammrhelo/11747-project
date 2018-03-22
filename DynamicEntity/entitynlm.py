@@ -160,8 +160,6 @@ for epoch in range(1,num_epochs+1,1):
                         next_entity_index = int(next_e.data[0])
                         assert next_entity_index == next_e.data[0]
 
-                        dist_feat = model.get_dist_feat(sent_idx)
-
                         # Concatenate entities to a block
                         pred_e = model.predict_entity(next_entity_index, h_t, sent_idx, lambda_dist)
 
@@ -171,8 +169,8 @@ for epoch in range(1,num_epochs+1,1):
                             next_e = Variable(torch.zeros(1).type(torch.LongTensor), requires_grad=False)
 
                         # TODO: FAILURE
-                        #e_loss = crossentropy(pred_e, next_e)
-                        #losses.append(e_loss)
+                        e_loss = crossentropy(pred_e, next_e)
+                        losses.append(e_loss)
 
                     # Entity Length Prediction
                     if int(next_e.data[0]) > 0: # Has Entity
@@ -201,7 +199,7 @@ for epoch in range(1,num_epochs+1,1):
                 total_loss = sum(losses)
                 total_loss.backward(retain_graph=True)
                 optimizer.step()
-
+        
         import pdb; pdb.set_trace()
         # End of document
         # Clear Entities
