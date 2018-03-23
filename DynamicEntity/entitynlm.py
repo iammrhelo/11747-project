@@ -1,6 +1,7 @@
 import argparse
 import math
 import os
+import pprint
 import random
 
 import numpy as np
@@ -27,23 +28,31 @@ def parse_arguments():
     parser.add_argument('--dropout',type=float,default=0.5)
     parser.add_argument('--num_epochs',type=int,default=10)
     parser.add_argument('--lr',type=float,default=1e-3)
-    parser.add_argument('--early_stop',type=int,default=3)
+    parser.add_argument('--early_stop',type=int,default=10)
     parser.add_argument('--shuffle',action="store_true",default=False)
+    parser.add_argument('--debug',action="store_true",default=False)
     args = parser.parse_args()
     return args
 
 args = parse_arguments()
+print(args)
 
 ##################
 #  Data Loading  #
 ##################
 data = args.data
+debug = args.debug
 dict_pickle = os.path.join(data,'train','dict.pickle')
 
 # Set Corpus
-train_corpus = Corpus(os.path.join(data,'train'), dict_pickle)
-#valid_corpus = Corpus(os.path.join(data,'valid'),dict_pickle)
-#test_corpus = Corpus(os.path.join(data,'test'),dict_pickle)
+if debug:
+    train_corpus = Corpus(os.path.join(data,'debug_train'), dict_pickle)
+    valid_corpus = Corpus(os.path.join(data,'debug_valid'),dict_pickle)
+    test_corpus = Corpus(os.path.join(data,'debug_test'),dict_pickle)
+else:
+    train_corpus = Corpus(os.path.join(data,'train'), dict_pickle)
+    valid_corpus = Corpus(os.path.join(data,'valid'),dict_pickle)
+    test_corpus = Corpus(os.path.join(data,'test'),dict_pickle)
 
 vocab_size = len(train_corpus.dictionary)+1 # 0 for unknown
 
@@ -74,22 +83,24 @@ binarycrossentropy = nn.BCELoss()
 def repack(h_t, c_t):
     return Variable(h_t.data), Variable(c_t.data)
 
-####################
-#   Main Program   #
-####################
-for epoch in range(1,num_epochs+1,1):
-    print("Epoch",epoch)
 
-    epoch_loss = 0
-    # Training
-    model.train()
+def run_corpus(corpus, train_mode=False):
+    print("train_mode",train_mode)
 
-    # Shuffle Documents Here
-    if shuffle: random.shuffle(train_corpus.documents)
+    if train_mode: 
+        model.train()
+    else:
+        model.eval()
     
-    for doc in tqdm(train_corpus.documents):
+    corpus_loss = 0
+    entity_count = 0
+    entity_correct_count = 0
+
+    for doc_idx, (doc_name, doc) in enumerate(corpus.documents,1):
         
         doc_loss = 0
+        doc_entity_count = 0
+        doc_entity_correct_count = 0
 
         X, R, E, L = doc[0]
 
@@ -106,7 +117,7 @@ for epoch in range(1,num_epochs+1,1):
         for sent_idx in range(nsent):
             # Learn for every sentence
             losses = []
-            optimizer.zero_grad()
+            if train_mode: optimizer.zero_grad()
 
             h_t, c_t = repack(h_t,c_t)
 
@@ -130,15 +141,32 @@ for epoch in range(1,num_epochs+1,1):
                 embed_curr_x = model.embed(curr_x)
                 h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
 
+                # Need to predict the next entity
+                if curr_r.data[0] == 0 and next_r.data[0] == 1: 
+                    next_entity_index = int(next_e.data[0])
+                    assert next_entity_index == next_e.data[0]
+
+                    # Concatenate entities to a block
+                    pred_e = model.predict_entity(h_t, sent_idx, lambda_dist)
+
+                    if next_entity_index < len(model.entities):
+                        next_e = Variable(torch.LongTensor([next_entity_index]), requires_grad=False)
+                    else:
+                        next_e = Variable(torch.zeros(1).type(torch.LongTensor), requires_grad=False)
+
+                    # TODO: FAILURE
+                    pred_entity_index = pred_e.squeeze().max(0)[1].data[0]
+                    next_entity_index = next_e.data[0]
+
+                    entity_count += 1
+                    entity_correct_count += pred_entity_index == next_entity_index
+
                 # Update Entity
                 if curr_r.data[0] > 0 and curr_e.data[0] > 0:
+                    
                     # Next Entity Type
-
                     entity_idx = int(curr_e.data[0])
-                    try:
-                        assert entity_idx == curr_e.data[0] and entity_idx <= len(model.entities)
-                    except:
-                        import pdb; pdb.set_trace()
+                    assert entity_idx == curr_e.data[0] and entity_idx <= len(model.entities)
 
                     # Create if it's a new entity
                     if entity_idx == len(model.entities):
@@ -146,7 +174,7 @@ for epoch in range(1,num_epochs+1,1):
                     
                     # Update Entity Here
                     last_entity = model.update_entity(entity_idx, h_t, sent_idx)
-                
+
                 # l == 1, End of Mention
                 if curr_l.data[0] == 1:
 
@@ -167,14 +195,14 @@ for epoch in range(1,num_epochs+1,1):
                         assert next_entity_index == next_e.data[0]
 
                         # Concatenate entities to a block
-                        pred_e = model.predict_entity(next_entity_index, h_t, sent_idx, lambda_dist)
+                        pred_e = model.predict_entity(h_t, sent_idx, lambda_dist)
 
                         if next_entity_index < len(model.entities):
                             next_e = Variable(torch.LongTensor([next_entity_index]), requires_grad=False)
                         else:
                             next_e = Variable(torch.zeros(1).type(torch.LongTensor), requires_grad=False)
 
-                        # TODO: FAILURE
+                        # TODO: OK
                         e_loss = crossentropy(pred_e, next_e)
                         losses.append(e_loss)
 
@@ -198,21 +226,64 @@ for epoch in range(1,num_epochs+1,1):
                 # TODO: OK
                 x_loss = crossentropy(pred_x, next_x)
                 losses.append(x_loss)
-            
+
             last_entity = h_t # Take hidden state as last entity embedding for next sentence
 
-            if len(losses):
-                total_loss = sum(losses)
-                total_loss.backward(retain_graph=True)
+            sent_loss = sum(losses)
+            doc_loss += sent_loss.data[0]
+
+            if train_mode:
+                sent_loss.backward(retain_graph=True)
                 optimizer.step()
-                
-                doc_loss += total_loss.data[0]
-        
+
         # End of document
         # Clear Entities
         model.clear_entities()
 
-    epoch_loss += doc_loss
-    print("Epoch loss: {}".format(epoch_loss))
+        doc_entity_acc = entity_correct_count / entity_count
+
+        progress = "{}/{}".format(doc_idx,len(corpus.documents))
+        print("progress",progress,"doc_name",doc_name,"doc_loss",doc_loss,'doc_entity_acc',doc_entity_acc)
+
+        corpus_loss += doc_loss
+        entity_count += doc_entity_count
+        entity_correct_count += doc_entity_correct_count
+
+    corpus_entity_acc = entity_correct_count / entity_count
+    return corpus_loss, corpus_entity_acc
+
+####################
+#   Main Program   #
+####################
+
+best_valid_loss = None
+early_stop_count = 0
+model_path = 'models/entitynlm_best.pt'
+for epoch in range(1,num_epochs+1,1):
+    print("Epoch",epoch)
+
+    epoch_loss = 0
+    
+    # Shuffle Documents Here
+    if shuffle: random.shuffle(train_corpus.documents)
+    train_loss, train_entity_acc = run_corpus(train_corpus, train_mode=True)
+    print("train_loss",train_loss,"train_entity_acc",train_entity_acc)
+    
+    valid_loss, valid_entity_acc = run_corpus(valid_corpus, train_mode=False)
+    print("valid_loss",valid_loss,"valid_entity_acc",valid_entity_acc)
+
+    # Early stopping conditioning on validation set loss
+    if best_valid_loss == None or valid_loss < best_valid_loss:
+        best_valid_loss = valid_loss
+        torch.save(model.state_dict(),model_path)
+        early_stop_count = 0
+    else:
+        early_stop_count += 1
+
+print("Test set evaluation")
+model.load_state_dict(torch.load(model_path))
+test_loss, test_entity_acc = run_corpus(test_corpus, train_mode=False)
+print("test_loss",test_loss,"test_entity_acc",test_entity_acc)
+
 
      

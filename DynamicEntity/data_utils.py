@@ -26,7 +26,7 @@ def split_datasets(xml_dirs, output_dir):
     for idx, xml_dir in enumerate(xml_dirs):
         xml_files = glob(os.path.join(xml_dir,"*.xml"))
         
-        random.shuffle(xml_files)
+        random.shuffle(xml_files)   
 
         test_end = 18 + ( idx == test_idx )
         valid_end = test_end + 9 + ( idx == valid_idx1 ) + ( idx == valid_idx2 )
@@ -54,8 +54,6 @@ def build_dict(xml_dir):
     
     with open(os.path.join(xml_dir,'dict.pickle'),'wb') as fout:
         pickle.dump(d,fout)
-
-
 
 if __name__ == "__main__":
 

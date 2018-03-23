@@ -16,8 +16,9 @@ class Corpus(object):
 
         print("[Corpus] Parsing {}...".format(xml_dir))
         for xml_file in tqdm(glob(os.path.join(xml_dir,"*.xml"))):
+            doc_name = os.path.basename(xml_file)
             doc = self.parse_document(xml_file, self.dictionary)
-            self.documents.append(doc)
+            self.documents.append((doc_name,doc))
 
     def parse_document(self, xml_file, dictionary):
         root = xml.etree.ElementTree.parse(xml_file).getroot()

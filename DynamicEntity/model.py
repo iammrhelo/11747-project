@@ -125,7 +125,7 @@ class EntityNLM(nn.Module):
         pred_r = torch.squeeze(pred_r)
         return pred_r
 
-    def predict_entity(self, next_entity_idx, h_t, sent_idx, lambda_dist):
+    def predict_entity(self, h_t, sent_idx, lambda_dist):
         # Concatenate entities to a block
         entity_stack = torch.cat(self.entities)
 
