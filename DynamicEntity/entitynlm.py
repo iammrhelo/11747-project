@@ -26,7 +26,7 @@ def parse_arguments():
     parser.add_argument('--hidden_size',type=int,default=128)
     parser.add_argument('--num_layers',type=int,default=2)
     parser.add_argument('--dropout',type=float,default=0.5)
-    parser.add_argument('--num_epochs',type=int,default=10)
+    parser.add_argument('--num_epochs',type=int,default=40)
     parser.add_argument('--lr',type=float,default=1e-3)
     parser.add_argument('--early_stop',type=int,default=10)
     parser.add_argument('--shuffle',action="store_true",default=False)
