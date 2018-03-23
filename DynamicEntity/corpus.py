@@ -8,9 +8,6 @@ import xml.etree.ElementTree
 
 from tqdm import tqdm
 
-import torch
-import torch.nn as nn
-
 class Corpus(object):
     def __init__(self, xml_dir, dict_pickle):
         # Use Predefined Dictionary 
@@ -39,35 +36,39 @@ class Corpus(object):
         for sent in sentences:
             R.append([0] * len(sent.split()))
             E.append([0] * len(sent.split())) 
-            L.append([1] * (len(sent.split())-1) + [0] )
+            L.append([1] * (len(sent.split())-1) + [0] ) # "." has to be 0
 
         for label in participants:
             sentence_id, word_id = map(int, label.attrib['from'].split('-'))
             
             entity = label.attrib["name"]
 
-            if entity not in entity_table:
-                entity_table[entity] = len(entity_table)+1
-            entity_id = entity_table[entity]
-
             text = label.attrib["text"]
             tokens = text.split()
-            # R : is entity?
-            R[sentence_id-1][word_id-1] = 1
 
-            # E : entity index
+          
             start = word_id-1
             end = start+1
             if 'to' in label.attrib:
                 _, end = map(int,label.attrib['to'].split('-'))
-            for idx in range(start,end,1):
-                E[sentence_id-1][idx] = entity_id
 
-            # L : entity remaining length
-            for l in range(len(tokens),0,-1):
-                idx = word_id-1 + len(tokens)-l
-                L[sentence_id-1][idx] = l
+            if any(x == 0 for x in E[sentence_id-1][start:end]):
+            
+                if entity not in entity_table:
+                    entity_table[entity] = len(entity_table)+1
+                entity_id = entity_table[entity]
 
+                # R : is entity?
+                # E : entity index
+
+                for idx in range(start,end,1):
+                    E[sentence_id-1][idx] = entity_id
+                    R[sentence_id-1][word_id-1] = 1
+
+                # L : entity remaining length
+                for l in range(len(tokens),0,-1):
+                    idx = word_id-1 + len(tokens)-l
+                    L[sentence_id-1][idx] = l
 
         X = []
         for sent in sentences:
@@ -89,10 +90,15 @@ class Corpus(object):
         return obj
 
 if __name__ == "__main__":
+    """
     train_dir = './data/InScript/train'
     train_corpus_pickle = os.path.join(train_dir, 'corpus.pickle')
     train_dict_pickle = os.path.join(train_dir,'dict.pickle')
-    
     train_corpus = Corpus(train_dir, train_dict_pickle)
+    """
+    debug_dir = './data/InScript/debug'
+    debug_corpus_pickle = os.path.join(debug_dir, 'corpus.pickle')
+    debug_dict_pickle = os.path.join(debug_dir,'dict.pickle')
+    debug_corpus = Corpus(debug_dir, debug_dict_pickle)
 
     import pdb; pdb.set_trace()
