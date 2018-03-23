@@ -6,6 +6,9 @@ import torch.nn.init as init
 from torch.autograd import Variable
 from torch.distributions import Normal
 
+import torch
+import torchtext.vocab as vocab
+
 class RNNLM(nn.Module):
     def __init__(self, rnn, vocab_size, embed_size, hidden_size, num_layers, dropout=0.5):
         super(RNNLM, self).__init__()
@@ -44,23 +47,23 @@ class RNNLM(nn.Module):
         elif self.rnn.__class__ == nn.GRU:
             return Variable(torch.zeros(dim1,dim2,dim3) ) 
 
-
 class EntityNLM(nn.Module):
-    def __init__(self, vocab_size, embed_size=300, hidden_size=128, dropout=0.5):
+    def __init__(self, vocab_size, embed_size=300, hidden_size=128, entity_size=128, dropout=0.5):
         super(EntityNLM, self).__init__()
         self.embed = nn.Embedding(vocab_size, embed_size)
+
         self.rnn = nn.LSTMCell(input_size=embed_size, hidden_size=hidden_size)
-        
+
         self.x = nn.Linear(hidden_size, vocab_size) # Linear
         self.r = nn.Linear(hidden_size, 1) # Is Entity? Binary
         self.l = nn.Linear(2 * hidden_size, 25) # Remaining Length Prediction, Categorial 
         
         self.e = nn.Bilinear(hidden_size, hidden_size, 1, bias=False) # Randomly Sample from Entity Set
 
-        self.delta = nn.Bilinear(embed_size, hidden_size, 1, bias=False) # Delta Matrix
+        self.delta = nn.Bilinear(entity_size, hidden_size, 1, bias=False) # Delta Matrix
 
-        self.Te = nn.Linear(embed_size, hidden_size, bias=False)
-        self.Tc = nn.Linear(embed_size, hidden_size, bias=False)
+        self.Te = nn.Linear(entity_size, hidden_size, bias=False)
+        self.Tc = nn.Linear(entity_size, hidden_size, bias=False)
 
 
         self.sigmoid = nn.Sigmoid()
@@ -71,12 +74,25 @@ class EntityNLM(nn.Module):
 
         self.init_weights()
 
+    def load_pretrained(self, dictionary):
+        # Load pretrained vectors for embedding layer
+        glove = vocab.GloVe(name='6B', dim=self.embed.embedding_dim)
+
+        # Build weight matrix here
+        pretrained_weight = self.embed.weight.data
+        for word, idx in dictionary.items():
+            if word.lower() in glove.stoi:     
+                vector = glove.vectors[ glove.stoi[word.lower()] ]
+                pretrained_weight[ idx ] = vector
+
+        self.embed.weight = nn.Parameter(pretrained_weight)
+
     def create_entity(self, nsent=0.0):
         
         # Sample from normal distribution
         def sample_normal():
             # Sample from normal distribution
-            e = np.random.normal(loc=0.0,scale=0.01,size=(1,self.embed.embedding_dim))
+            e = np.random.normal(loc=0.0,scale=0.01,size=(1,self.rnn.hidden_size))
             # Project to unit ball
             e /= np.linalg.norm(e)
             # Convert to PyTorch Tensor

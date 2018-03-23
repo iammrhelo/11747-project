@@ -19,17 +19,16 @@ device = 0 if torch.cuda.is_available() else -1
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data',type=str,default='./data/InScript')
-    parser.add_argument('--rnn',type=str,default="LSTM",help="GRU | LSTM")
-    parser.add_argument('--batch_size',type=int,default=32)
-    parser.add_argument('--bptt_len',type=int,default=15)
     parser.add_argument('--embed_dim',type=int,default=300)
     parser.add_argument('--hidden_size',type=int,default=128)
+    parser.add_argument('--entity_size',type=int,default=128)
     parser.add_argument('--num_layers',type=int,default=2)
     parser.add_argument('--dropout',type=float,default=0.5)
-    parser.add_argument('--num_epochs',type=int,default=40)
+    parser.add_argument('--num_epochs',type=int,default=80)
     parser.add_argument('--lr',type=float,default=1e-3)
     parser.add_argument('--early_stop',type=int,default=10)
-    parser.add_argument('--shuffle',action="store_true",default=False)
+    parser.add_argument('--shuffle',action="store_true",default=True)
+    parser.add_argument('--pretrained',action="store_true",default=False)
     parser.add_argument('--debug',action="store_true",default=False)
     args = parser.parse_args()
     return args
@@ -63,10 +62,18 @@ shuffle = args.shuffle
 ##################
 embed_dim = args.embed_dim
 hidden_size = args.hidden_size
+entity_size = args.entity_size
 num_layers = args.num_layers
 dropout = args.dropout
+pretrained = args.pretrained
 
-model = EntityNLM(vocab_size=vocab_size, embed_size=128, hidden_size=128,dropout=0.5)
+model = EntityNLM(vocab_size=vocab_size, 
+                    embed_size=embed_dim, 
+                    hidden_size=hidden_size,
+                    entity_size=entity_size,
+                    dropout=dropout)
+
+if pretrained: model.load_pretrained(train_corpus.dictionary)
 
 lambda_dist = 1e-6
 
@@ -82,7 +89,6 @@ binarycrossentropy = nn.BCELoss()
 
 def repack(h_t, c_t):
     return Variable(h_t.data), Variable(c_t.data)
-
 
 def run_corpus(corpus, train_mode=False):
     print("train_mode",train_mode)
@@ -258,7 +264,13 @@ def run_corpus(corpus, train_mode=False):
 
 best_valid_loss = None
 early_stop_count = 0
-model_path = 'models/entitynlm_best.pt'
+
+
+model_name = "epoch_{}_embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_best.pt"\
+            .format(num_epochs,embed_dim,hidden_size,entity_size,dropout,pretrained)
+model_path = os.path.join('models', model_name)
+print("Model will be saved to {}".format(model_path))
+
 for epoch in range(1,num_epochs+1,1):
     print("Epoch",epoch)
 
