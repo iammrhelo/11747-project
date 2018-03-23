@@ -228,13 +228,13 @@ def run_corpus(corpus, train_mode=False):
                 losses.append(x_loss)
 
             last_entity = h_t # Take hidden state as last entity embedding for next sentence
+            if len(losses):
+                sent_loss = sum(losses)
+                doc_loss += sent_loss.data[0]
 
-            sent_loss = sum(losses)
-            doc_loss += sent_loss.data[0]
-
-            if train_mode:
-                sent_loss.backward(retain_graph=True)
-                optimizer.step()
+                if train_mode:
+                    sent_loss.backward(retain_graph=True)
+                    optimizer.step()
 
         # End of document
         # Clear Entities
