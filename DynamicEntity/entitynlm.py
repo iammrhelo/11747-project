@@ -3,6 +3,7 @@ import math
 import os
 import pprint
 import random
+import time
 
 import numpy as np
 from tqdm import tqdm
@@ -13,6 +14,7 @@ from torch.autograd import Variable
 
 from corpus import Corpus
 from model import EntityNLM
+from util import timeit
 
 use_cuda = torch.cuda.is_available()
 
@@ -107,6 +109,7 @@ if use_cuda:
 def repack(h_t, c_t):
     return Variable(h_t.data), Variable(c_t.data)
 
+@timeit
 def run_corpus(corpus, train_mode=False):
     print("train_mode",train_mode)
 
