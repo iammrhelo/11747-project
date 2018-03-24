@@ -10,6 +10,8 @@ from tqdm import tqdm
 
 class Corpus(object):
     def __init__(self, xml_dir, dict_pickle):
+        self.name = os.path.basename(xml_dir)
+
         # Use Predefined Dictionary 
         self.dictionary = self.load_dict(dict_pickle)
         self.documents = []
@@ -18,6 +20,9 @@ class Corpus(object):
             doc_name = os.path.basename(xml_file)
             doc = self.parse_document(xml_file, self.dictionary)
             self.documents.append((doc_name,doc))
+    
+    def __str__(self):
+        return self.name
 
     def parse_document(self, xml_file, dictionary):
         root = xml.etree.ElementTree.parse(xml_file).getroot()
@@ -95,7 +100,7 @@ if __name__ == "__main__":
     train_dict_pickle = os.path.join(train_dir,'dict.pickle')
     train_corpus = Corpus(train_dir, train_dict_pickle)
     """
-    debug_dir = './data/InScript/debug'
+    debug_dir = './data/InScript/debug_train'
     debug_corpus_pickle = os.path.join(debug_dir, 'corpus.pickle')
     debug_dict_pickle = os.path.join(debug_dir,'dict.pickle')
     debug_corpus = Corpus(debug_dir, debug_dict_pickle)
