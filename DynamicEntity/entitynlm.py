@@ -28,9 +28,9 @@ def parse_arguments():
     parser.add_argument('--entity_size',type=int,default=128)
     parser.add_argument('--num_layers',type=int,default=2)
     parser.add_argument('--dropout',type=float,default=0.5)
-    parser.add_argument('--num_epochs',type=int,default=80)
+    parser.add_argument('--num_epochs',type=int,default=40)
     parser.add_argument('--lr',type=float,default=1e-3)
-    parser.add_argument('--early_stop',type=int,default=10)
+    parser.add_argument('--early_stop',type=int,default=3)
     parser.add_argument('--shuffle',action="store_true",default=True)
     parser.add_argument('--pretrained',action="store_true",default=False)
     parser.add_argument('--model_path',type=str,default=None)
@@ -295,11 +295,11 @@ def run_corpus(corpus, train_mode=False):
 
 best_valid_loss = None
 early_stop_count = 0
-
+early_stop_threshold = args.early_stop
 
 model_name = "epoch_{}_embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_best.pt"\
             .format(num_epochs,embed_dim,hidden_size,entity_size,dropout,pretrained)
-model_path = os.path.join('models', model_name)
+model_path = os.path.join('models', model_name) if model_path is None else model_path
 print("Model will be saved to {}".format(model_path))
 
 for epoch in range(1,num_epochs+1,1):
@@ -322,6 +322,10 @@ for epoch in range(1,num_epochs+1,1):
         early_stop_count = 0
     else:
         early_stop_count += 1
+
+    if early_stop_count >= early_stop_threshold:
+        print("Early stopping criteria met!")
+        break
 
 print("Test set evaluation")
 model.load_state_dict(torch.load(model_path))
