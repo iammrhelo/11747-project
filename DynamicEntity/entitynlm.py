@@ -298,11 +298,10 @@ early_stop_threshold = args.early_stop
 
 model_name = "embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_best.pt"\
             .format(embed_dim,hidden_size,entity_size,dropout,pretrained)
+if debug: model_name = "debug_" + model_name
 
 model_path = os.path.join('models', model_name) if model_path is None else model_path
 
-if debug:
-    model_name = "debug_" + model_name
 
 print("Model will be saved to {}".format(model_path))
 
