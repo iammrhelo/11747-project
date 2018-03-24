@@ -14,7 +14,9 @@ from torch.autograd import Variable
 from corpus import Corpus
 from model import EntityNLM
 
-device = 0 if torch.cuda.is_available() else -1
+use_cuda = torch.cuda.is_available()
+
+device = 0 if use_cuda else -1
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
@@ -35,6 +37,7 @@ def parse_arguments():
 
 args = parse_arguments()
 print(args)
+print("use_cuda",use_cuda)
 
 ##################
 #  Data Loading  #
@@ -74,6 +77,9 @@ model = EntityNLM(vocab_size=vocab_size,
                     dropout=dropout)
 
 if pretrained: model.load_pretrained(train_corpus.dictionary)
+
+if use_cuda:
+    model.cuda()
 
 lambda_dist = 1e-6
 
@@ -126,11 +132,20 @@ def run_corpus(corpus, train_mode=False):
             if train_mode: optimizer.zero_grad()
 
             h_t, c_t = repack(h_t,c_t)
-
+            
             X_tensor = Variable(torch.from_numpy(np.array(X[sent_idx])).type(torch.LongTensor))
             R_tensor = Variable(torch.from_numpy(np.array(R[sent_idx])).type(torch.FloatTensor))
             E_tensor = Variable(torch.from_numpy(np.array(E[sent_idx])).type(torch.LongTensor))
             L_tensor = Variable(torch.from_numpy(np.array(L[sent_idx])).type(torch.LongTensor))
+
+            # Move to cuda here
+            if use_cuda:
+                h_t = h_t.cuda()
+                c_t = c_t.cuda()
+                X_tensor = X_tensor.cuda()
+                R_tensor = R_tensor.cuda()
+                E_tensor = E_tensor.cuda()
+                L_tensor = L_tensor.cuda()
 
             for pos in range(0,len(X[sent_idx])-1): # 1 to N-1
                 curr_x = X_tensor[pos]
