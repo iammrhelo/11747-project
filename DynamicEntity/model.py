@@ -50,15 +50,23 @@ class RNNLM(nn.Module):
 class EntityNLM(nn.Module):
     def __init__(self, vocab_size, embed_size=300, hidden_size=128, entity_size=128, dropout=0.5, use_cuda=False):
         super(EntityNLM, self).__init__()
+
+        assert hidden_size == entity_size, "hidden_size should be equal to entity_size"
+
         self.embed = nn.Embedding(vocab_size, embed_size)
 
         self.rnn = nn.LSTMCell(input_size=embed_size, hidden_size=hidden_size)
 
         self.x = nn.Linear(hidden_size, vocab_size) # Linear
-        self.r = nn.Linear(hidden_size, 1) # Is Entity? Binary
-        self.l = nn.Linear(2 * hidden_size, 25) # Remaining Length Prediction, Categorial 
-        
+        self.r = nn.Bilinear(hidden_size, hidden_size, 1, bias=False) # Is Entity? Binary
+        self.l = nn.Linear(2 * hidden_size, 25) # Remaining Length Prediction, Categorial         
         self.e = nn.Bilinear(hidden_size, hidden_size, 1, bias=False) # Randomly Sample from Entity Set
+
+        # For r embeddings
+        r_embeddings = Variable(torch.FloatTensor(2, hidden_size), requires_grad=True)
+        if use_cuda: r_embeddings = r_embeddings.cuda()
+        init.xavier_uniform(r_embeddings,gain=np.sqrt(2)) 
+        self.r_embeddings = r_embeddings
 
         self.delta = nn.Bilinear(entity_size, hidden_size, 1, bias=False) # Delta Matrix
 
@@ -89,26 +97,20 @@ class EntityNLM(nn.Module):
         self.embed.weight = nn.Parameter(pretrained_weight)
 
     def create_entity(self, nsent=0.0):
+        # Get r1
+        r1 = self.r_embeddings[1]
         
         # Sample from normal distribution
-        def sample_normal():
-            # Sample from normal distribution
-            e = np.random.normal(loc=0.0,scale=0.01,size=(1,self.rnn.hidden_size))
-            # Project to unit ball
-            e /= np.linalg.norm(e)
-            # Convert to PyTorch Tensor
-            e_tensor = torch.from_numpy(e).type(torch.FloatTensor)
-            return e_tensor
+        e_tensor = torch.normal(means=r1.data, std=0.01).view(1,-1)
+        e_tensor /= torch.norm(e_tensor)
 
-        e_tensor = sample_normal()
-
+        # Create variable
         e_var = Variable(e_tensor, requires_grad=True)
         if self.use_cuda:
             e_var = e_var.cuda()
 
         self.entities.append(e_var)
         self.entities_dist.append(nsent)
-        return e_tensor
 
     def update_entity(self, entity_idx, h_t, sent_idx):
         # Update Entity Here
@@ -140,14 +142,8 @@ class EntityNLM(nn.Module):
 
         return dist_feat
 
-
     def predict_type(self, h_t):
-        pred_r = self.sigmoid(
-            self.r(
-                self.dropout(h_t)
-            )
-        )
-        pred_r = torch.squeeze(pred_r)
+        pred_r = self.r( self.r_embeddings, h_t.expand_as(self.r_embeddings)).transpose(0,1)
         return pred_r
 
     def predict_entity(self, h_t, sent_idx, lambda_dist):

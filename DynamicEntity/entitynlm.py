@@ -148,7 +148,7 @@ def run_corpus(corpus, train_mode=False):
             h_t, c_t = repack(h_t,c_t)
             
             X_tensor = Variable(torch.from_numpy(np.array(X[sent_idx])).type(torch.LongTensor))
-            R_tensor = Variable(torch.from_numpy(np.array(R[sent_idx])).type(torch.FloatTensor))
+            R_tensor = Variable(torch.from_numpy(np.array(R[sent_idx])).type(torch.LongTensor))
             E_tensor = Variable(torch.from_numpy(np.array(E[sent_idx])).type(torch.LongTensor))
             L_tensor = Variable(torch.from_numpy(np.array(L[sent_idx])).type(torch.LongTensor))
 
@@ -217,9 +217,8 @@ def run_corpus(corpus, train_mode=False):
                     assert mention_length == curr_l.data[0], "{} : {}".format(mention_length, curr_l.data[0])
 
                     pred_r = model.predict_type(h_t)
-                    
                     # TODO: OK
-                    type_loss = binarycrossentropy(pred_r,next_r)
+                    type_loss = crossentropy(pred_r,next_r)
                     losses.append(type_loss)
                             
                     # Entity Prediction
@@ -297,9 +296,14 @@ best_valid_loss = None
 early_stop_count = 0
 early_stop_threshold = args.early_stop
 
-model_name = "epoch_{}_embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_best.pt"\
-            .format(num_epochs,embed_dim,hidden_size,entity_size,dropout,pretrained)
+model_name = "embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_best.pt"\
+            .format(embed_dim,hidden_size,entity_size,dropout,pretrained)
+
 model_path = os.path.join('models', model_name) if model_path is None else model_path
+
+if debug:
+    model_name = "debug_" + model_name
+
 print("Model will be saved to {}".format(model_path))
 
 for epoch in range(1,num_epochs+1,1):
