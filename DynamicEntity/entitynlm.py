@@ -3,6 +3,7 @@ import math
 import os
 import pprint
 import random
+import sys
 import time
 
 import numpy as np
@@ -34,6 +35,7 @@ def parse_arguments():
     parser.add_argument('--shuffle',action="store_true",default=True)
     parser.add_argument('--pretrained',action="store_true",default=False)
     parser.add_argument('--model_path',type=str,default=None)
+    parser.add_argument('--exp',type=str,default="")
     parser.add_argument('--debug',action="store_true",default=False)
     args = parser.parse_args()
     return args
@@ -49,6 +51,7 @@ data = args.data
 debug = args.debug
 dict_pickle = os.path.join(data,'train','dict.pickle')
 
+print("Loading corpus...")
 # Set Corpus
 if debug:
     train_corpus = Corpus(os.path.join(data,'debug_train'), dict_pickle)
@@ -100,11 +103,7 @@ lr = args.lr
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 crossentropy = nn.CrossEntropyLoss()
-binarycrossentropy = nn.BCELoss()
-
-if use_cuda:
-    crossentropy = crossentropy.cuda()
-    binarycrossentropy = binarycrossentropy.cuda()
+if use_cuda: crossentropy = crossentropy.cuda()
 
 def repack(h_t, c_t):
     return Variable(h_t.data), Variable(c_t.data)
@@ -279,12 +278,12 @@ def run_corpus(corpus, train_mode=False):
         doc_entity_acc = entity_correct_count / entity_count
 
         progress = "{}/{}".format(doc_idx,len(corpus.documents))
-        print("progress",progress,"doc_name",doc_name,"doc_loss",doc_loss,'doc_entity_acc',doc_entity_acc)
+        print("progress",progress,"doc_name",doc_name,"doc_loss",doc_loss,'doc_entity_acc',doc_entity_acc,end='\r')
 
         corpus_loss += doc_loss
         entity_count += doc_entity_count
         entity_correct_count += doc_entity_correct_count
-
+    
     corpus_entity_acc = entity_correct_count / entity_count
     return corpus_loss, corpus_entity_acc
 
@@ -300,8 +299,9 @@ model_name = "embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_best.pt"\
             .format(embed_dim,hidden_size,entity_size,dropout,pretrained)
 if debug: model_name = "debug_" + model_name
 
-model_path = os.path.join('models', model_name) if model_path is None else model_path
-
+exp_dir = args.exp
+if not os.path.exists(exp_dir): os.makedirs(exp_dir)
+model_path = os.path.join(exp_dir, model_name) if model_path is None else model_path
 
 print("Model will be saved to {}".format(model_path))
 

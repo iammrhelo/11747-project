@@ -14,8 +14,7 @@ class Corpus(object):
         self.dictionary = self.load_dict(dict_pickle)
         self.documents = []
 
-        print("[Corpus] Parsing {}...".format(xml_dir))
-        for xml_file in tqdm(glob(os.path.join(xml_dir,"*.xml"))):
+        for xml_file in glob(os.path.join(xml_dir,"*.xml")):
             doc_name = os.path.basename(xml_file)
             doc = self.parse_document(xml_file, self.dictionary)
             self.documents.append((doc_name,doc))
@@ -85,7 +84,6 @@ class Corpus(object):
         return doc
 
     def load_dict(self, dict_pickle):
-        print("[Corpus] Loading dictionary from {}.".format(dict_pickle))
         with open(dict_pickle,'rb') as fin:
             obj = pickle.load(fin)
         return obj
