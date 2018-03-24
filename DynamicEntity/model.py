@@ -48,7 +48,7 @@ class RNNLM(nn.Module):
             return Variable(torch.zeros(dim1,dim2,dim3) ) 
 
 class EntityNLM(nn.Module):
-    def __init__(self, vocab_size, embed_size=300, hidden_size=128, entity_size=128, dropout=0.5):
+    def __init__(self, vocab_size, embed_size=300, hidden_size=128, entity_size=128, dropout=0.5, use_cuda=False):
         super(EntityNLM, self).__init__()
         self.embed = nn.Embedding(vocab_size, embed_size)
 
@@ -65,12 +65,13 @@ class EntityNLM(nn.Module):
         self.Te = nn.Linear(entity_size, hidden_size, bias=False)
         self.Tc = nn.Linear(entity_size, hidden_size, bias=False)
 
-
         self.sigmoid = nn.Sigmoid()
         self.dropout = nn.Dropout(dropout)
     
         self.entities = []
         self.entities_dist = []
+
+        self.use_cuda = use_cuda
 
         self.init_weights()
 
@@ -100,7 +101,12 @@ class EntityNLM(nn.Module):
             return e_tensor
 
         e_tensor = sample_normal()
-        self.entities.append(Variable(e_tensor, requires_grad=True))
+
+        e_var = Variable(e_tensor, requires_grad=True)
+        if self.use_cuda:
+            e_var = e_var.cuda()
+
+        self.entities.append(e_var)
         self.entities_dist.append(nsent)
         return e_tensor
 
@@ -128,7 +134,10 @@ class EntityNLM(nn.Module):
             return self.entities[entity_idx]
 
     def get_dist_feat(self, nsent):
-        dist_feat = Variable((torch.FloatTensor(self.entities_dist) - nsent).view(-1,1), requires_grad=False)
+        dist_feat = Variable((torch.FloatTensor(self.entities_dist) - nsent).view(-1,1), requires_grad=False) 
+        if self.use_cuda:
+            dist_feat = dist_feat.cuda()
+
         return dist_feat
 
 
@@ -196,5 +205,12 @@ class EntityNLM(nn.Module):
     def init_hidden_states(self, batch_size):
         dim1 = batch_size
         dim2 = self.rnn.hidden_size
-        
-        return ( Variable(torch.zeros(dim1,dim2)), Variable(torch.zeros(dim1,dim2)) )
+
+        var1 = Variable(torch.zeros(dim1,dim2))
+        var2 = Variable(torch.zeros(dim1,dim2))
+
+        if self.use_cuda:
+            var1 = var1.cuda()
+            var2 = var2.cuda()
+
+        return var1, var2
