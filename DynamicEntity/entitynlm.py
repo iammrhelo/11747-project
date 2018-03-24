@@ -21,7 +21,7 @@ device = 0 if use_cuda else -1
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data',type=str,default='./data/InScript')
-    parser.add_argument('--embed_dim',type=int,default=300)
+    parser.add_argument('--embed_dim',type=int,default=128)
     parser.add_argument('--hidden_size',type=int,default=128)
     parser.add_argument('--entity_size',type=int,default=128)
     parser.add_argument('--num_layers',type=int,default=2)
@@ -31,6 +31,7 @@ def parse_arguments():
     parser.add_argument('--early_stop',type=int,default=10)
     parser.add_argument('--shuffle',action="store_true",default=True)
     parser.add_argument('--pretrained',action="store_true",default=False)
+    parser.add_argument('--model_path',type=str,default=None)
     parser.add_argument('--debug',action="store_true",default=False)
     args = parser.parse_args()
     return args
@@ -69,6 +70,7 @@ entity_size = args.entity_size
 num_layers = args.num_layers
 dropout = args.dropout
 pretrained = args.pretrained
+model_path = args.model_path
 
 model = EntityNLM(vocab_size=vocab_size, 
                     embed_size=embed_dim, 
@@ -77,7 +79,11 @@ model = EntityNLM(vocab_size=vocab_size,
                     dropout=dropout,
                     use_cuda=use_cuda)
 
-if pretrained: model.load_pretrained(train_corpus.dictionary)
+if model_path is not None:
+    print("Loading from {}".format(model_path))
+    model.load_state_dict(torch.load(model_path))
+elif pretrained: 
+    model.load_pretrained(train_corpus.dictionary)
 
 if use_cuda:
     model = model.cuda()
