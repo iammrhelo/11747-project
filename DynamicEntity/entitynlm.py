@@ -74,12 +74,13 @@ model = EntityNLM(vocab_size=vocab_size,
                     embed_size=embed_dim, 
                     hidden_size=hidden_size,
                     entity_size=entity_size,
-                    dropout=dropout)
+                    dropout=dropout,
+                    use_cuda=use_cuda)
 
 if pretrained: model.load_pretrained(train_corpus.dictionary)
 
 if use_cuda:
-    model.cuda()
+    model = model.cuda()
 
 lambda_dist = 1e-6
 
@@ -92,6 +93,10 @@ optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 crossentropy = nn.CrossEntropyLoss()
 binarycrossentropy = nn.BCELoss()
+
+if use_cuda:
+    crossentropy = crossentropy.cuda()
+    binarycrossentropy = binarycrossentropy.cuda()
 
 def repack(h_t, c_t):
     return Variable(h_t.data), Variable(c_t.data)
@@ -138,7 +143,6 @@ def run_corpus(corpus, train_mode=False):
             E_tensor = Variable(torch.from_numpy(np.array(E[sent_idx])).type(torch.LongTensor))
             L_tensor = Variable(torch.from_numpy(np.array(L[sent_idx])).type(torch.LongTensor))
 
-            # Move to cuda here
             if use_cuda:
                 h_t = h_t.cuda()
                 c_t = c_t.cuda()
@@ -222,6 +226,9 @@ def run_corpus(corpus, train_mode=False):
                             next_e = Variable(torch.LongTensor([next_entity_index]), requires_grad=False)
                         else:
                             next_e = Variable(torch.zeros(1).type(torch.LongTensor), requires_grad=False)
+                        
+                        if use_cuda:
+                            next_e = next_e.cuda()
 
                         # TODO: OK
                         e_loss = crossentropy(pred_e, next_e)
