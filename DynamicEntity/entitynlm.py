@@ -31,12 +31,13 @@ def parse_arguments():
     parser.add_argument('--dropout',type=float,default=0.5)
     parser.add_argument('--num_epochs',type=int,default=40)
     parser.add_argument('--lr',type=float,default=1e-3)
-    parser.add_argument('--early_stop',type=int,default=3)
+    parser.add_argument('--early_stop',type=int,default=5)
     parser.add_argument('--shuffle',action="store_true",default=True)
     parser.add_argument('--pretrained',action="store_true",default=False)
     parser.add_argument('--model_path',type=str,default=None)
     parser.add_argument('--exp',type=str,default="")
     parser.add_argument('--debug',action="store_true",default=False)
+    parser.add_argument('--every_entity',action="store_true",default=False)
     args = parser.parse_args()
     return args
 
@@ -104,6 +105,9 @@ optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 crossentropy = nn.CrossEntropyLoss()
 if use_cuda: crossentropy = crossentropy.cuda()
+
+
+every_entity = args.every_entity
 
 def repack(h_t, c_t):
     return Variable(h_t.data), Variable(c_t.data)
@@ -180,7 +184,7 @@ def run_corpus(corpus, train_mode=False):
                 h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
 
                 # Need to predict the next entity
-                if curr_r.data[0] == 0 and next_r.data[0] == 1: 
+                if ( every_entity or curr_r.data[0] == 0 ) and next_r.data[0] == 1: 
                     next_entity_index = int(next_e.data[0])
                     assert next_entity_index == next_e.data[0]
 
