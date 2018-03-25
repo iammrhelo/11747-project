@@ -124,6 +124,11 @@ def run_corpus(corpus, train_mode=False):
     for doc_idx, (doc_name, doc) in enumerate(corpus.documents,1):
         
         doc_loss = 0
+        doc_x_loss = 0
+        doc_r_loss = 0
+        doc_e_loss = 0
+        doc_l_loss = 0
+
         doc_entity_count = 0
         doc_entity_correct_count = 0
 
@@ -218,6 +223,7 @@ def run_corpus(corpus, train_mode=False):
                     pred_r = model.predict_type(h_t)
                     # TODO: OK
                     type_loss = crossentropy(pred_r,next_r)
+                    doc_r_loss += type_loss.data[0]
                     losses.append(type_loss)
                             
                     # Entity Prediction
@@ -239,18 +245,21 @@ def run_corpus(corpus, train_mode=False):
 
                         # TODO: OK
                         e_loss = crossentropy(pred_e, next_e)
+                        doc_e_loss += e_loss.data[0]
                         losses.append(e_loss)
 
                     # Entity Length Prediction
                     if int(next_e.data[0]) > 0: # Has Entity
 
-                        # Get entity embedding
+                        # User predicted entity's embedding
                         entity_idx = int(next_e.data[0])
-                        entity_embedding = model.entities[entity_idx] if entity_idx < len(model.entities) else model.entities[0]
+                        entity_embedding = model.get_entity(entity_idx)
 
                         pred_l = model.predict_length(h_t, entity_embedding)
-                        # TODO: OK
-                        losses.append(crossentropy(pred_l, next_l))
+                        
+                        l_loss = crossentropy(pred_l, next_l)
+                        doc_l_loss += l_loss.data[0]
+                        losses.append(l_loss)
 
                 # Word Prediction
                 next_entity_index = int(next_e.data[0])
@@ -260,6 +269,7 @@ def run_corpus(corpus, train_mode=False):
 
                 # TODO: OK
                 x_loss = crossentropy(pred_x, next_x)
+                doc_x_loss += x_loss.data[0]
                 losses.append(x_loss)
 
             last_entity = h_t # Take hidden state as last entity embedding for next sentence
@@ -278,7 +288,15 @@ def run_corpus(corpus, train_mode=False):
         doc_entity_acc = entity_correct_count / entity_count
 
         progress = "{}/{}".format(doc_idx,len(corpus.documents))
-        print("progress",progress,"doc_name",doc_name,"doc_loss",doc_loss,'doc_entity_acc',doc_entity_acc,end='\r')
+        print("progress",progress,
+              "doc_name",doc_name,
+              "doc_loss",doc_loss,
+              "doc_x_loss",doc_x_loss,
+              "doc_r_loss",doc_r_loss,
+              "doc_l_loss",doc_l_loss,
+              "doc_e_loss",doc_e_loss,
+              "doc_entity_acc",doc_entity_acc,
+              end='\r')
 
         corpus_loss += doc_loss
         entity_count += doc_entity_count
