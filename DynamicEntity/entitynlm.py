@@ -37,6 +37,7 @@ def parse_arguments():
     parser.add_argument('--pretrained',action="store_true",default=False)
     parser.add_argument('--model_path',type=str,default=None)
     parser.add_argument('--exp',type=str,default="exp")
+    parser.add_argument('--tensorboard',type=str,default="runs")
     parser.add_argument('--debug',action="store_true",default=False)
     parser.add_argument('--every_entity',action="store_true",default=False)
     args = parser.parse_args()
@@ -216,7 +217,6 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                     if next_entity_index < len(model.entities):
                         next_e = Variable(torch.LongTensor([next_entity_index]), requires_grad=False)
                     else:
-                        import pdb; pdb.set_trace()
                         next_e = Variable(torch.zeros(1).type(torch.LongTensor), requires_grad=False)
 
                     # TODO: FAILURE
@@ -348,11 +348,13 @@ exp_dir = args.exp
 if not os.path.exists(exp_dir): os.makedirs(exp_dir)
 model_path = os.path.join(exp_dir, model_name) if model_path is None else model_path
 
+tensorboard_dir = args.tensorboard
+
 print("Model will be saved to {}".format(model_path))
 
-train_writer = SummaryWriter('runs/{}/{}'.format(model_name,'train'))
-valid_writer = SummaryWriter('runs/{}/{}'.format(model_name,'valid'))
-test_writer = SummaryWriter('runs/{}/{}'.format(model_name,'test'))
+train_writer = SummaryWriter('{}/{}/{}'.format(tensorboard_dir,model_name,'train'))
+valid_writer = SummaryWriter('{}/{}/{}'.format(tensorboard_dir,model_name,'valid'))
+test_writer = SummaryWriter('{}/{}/{}'.format(tensorboard_dir,model_name,'test'))
 
 for epoch in range(1,num_epochs+1,1):
     print("Epoch",epoch)
