@@ -12,6 +12,7 @@ from tqdm import tqdm
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
+from tensorboardX import SummaryWriter
 
 from corpus import Corpus
 from model import EntityNLM
@@ -35,7 +36,7 @@ def parse_arguments():
     parser.add_argument('--shuffle',action="store_true",default=True)
     parser.add_argument('--pretrained',action="store_true",default=False)
     parser.add_argument('--model_path',type=str,default=None)
-    parser.add_argument('--exp',type=str,default="")
+    parser.add_argument('--exp',type=str,default="exp")
     parser.add_argument('--debug',action="store_true",default=False)
     parser.add_argument('--every_entity',action="store_true",default=False)
     args = parser.parse_args()
@@ -65,7 +66,7 @@ else:
 
 vocab_size = len(train_corpus.dictionary)+1 # 0 for unknown
 
-shuffle = args.shuffle
+
 
 ##################
 #   Model Setup  #
@@ -106,14 +107,16 @@ optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 crossentropy = nn.CrossEntropyLoss()
 if use_cuda: crossentropy = crossentropy.cuda()
 
+shuffle = args.shuffle
 
+# Evaluation
 every_entity = args.every_entity
 
 def repack(h_t, c_t):
     return Variable(h_t.data), Variable(c_t.data)
 
 @timeit
-def run_corpus(corpus, train_mode=False):
+def run_corpus(corpus, epoch, train_mode=False, writer=None):
     print("train_mode",train_mode)
 
     if train_mode: 
@@ -122,6 +125,11 @@ def run_corpus(corpus, train_mode=False):
         model.eval()
     
     corpus_loss = 0
+    corpus_x_loss = 0
+    corpus_r_loss = 0
+    corpus_l_loss = 0
+    corpus_e_loss = 0
+    
     entity_count = 0
     entity_correct_count = 0
 
@@ -292,21 +300,34 @@ def run_corpus(corpus, train_mode=False):
         doc_entity_acc = entity_correct_count / entity_count
 
         progress = "{}/{}".format(doc_idx,len(corpus.documents))
-        print("progress",progress,
-              "doc_name",doc_name,
-              "doc_loss",doc_loss,
-              "doc_x_loss",doc_x_loss,
-              "doc_r_loss",doc_r_loss,
-              "doc_l_loss",doc_l_loss,
-              "doc_e_loss",doc_e_loss,
-              "doc_entity_acc",doc_entity_acc,
-              end='\r')
+        print("progress",progress,"doc_name",doc_name,"doc_loss",doc_loss,"doc_entity_acc",doc_entity_acc,end='\r')
 
+        corpus_x_loss += doc_x_loss
+        corpus_r_loss += doc_r_loss
+        corpus_e_loss += doc_e_loss
+        corpus_l_loss += doc_l_loss
+        
         corpus_loss += doc_loss
+     
         entity_count += doc_entity_count
         entity_correct_count += doc_entity_correct_count
     
+    # Write to tensorboard
+    corpus_loss /= len(corpus.documents)
+    corpus_x_loss /= len(corpus.documents)
+    corpus_r_loss /= len(corpus.documents)
+    corpus_e_loss /= len(corpus.documents)
+    corpus_l_loss /= len(corpus.documents)
+
+    writer.add_scalar('loss/x',corpus_x_loss, epoch)
+    writer.add_scalar('loss/r',corpus_r_loss, epoch)
+    writer.add_scalar('loss/l',corpus_l_loss, epoch)
+    writer.add_scalar('loss/e',corpus_e_loss, epoch)
+    writer.add_scalar('loss/total',corpus_loss, epoch)
+
     corpus_entity_acc = entity_correct_count / entity_count
+
+    writer.add_scalar('accuracy/entity',corpus_entity_acc, epoch)
     return corpus_loss, corpus_entity_acc
 
 ####################
@@ -327,6 +348,10 @@ model_path = os.path.join(exp_dir, model_name) if model_path is None else model_
 
 print("Model will be saved to {}".format(model_path))
 
+train_writer = SummaryWriter('runs/{}/{}'.format(model_name,'train'))
+valid_writer = SummaryWriter('runs/{}/{}'.format(model_name,'valid'))
+test_writer = SummaryWriter('runs/{}/{}'.format(model_name,'test'))
+
 for epoch in range(1,num_epochs+1,1):
     print("Epoch",epoch)
 
@@ -334,10 +359,10 @@ for epoch in range(1,num_epochs+1,1):
     
     # Shuffle Documents Here
     if shuffle: random.shuffle(train_corpus.documents)
-    train_loss, train_entity_acc = run_corpus(train_corpus, train_mode=True)
+    train_loss, train_entity_acc = run_corpus(train_corpus, epoch, train_mode=True, writer=train_writer)
     print("train_loss",train_loss,"train_entity_acc",train_entity_acc)
     
-    valid_loss, valid_entity_acc = run_corpus(valid_corpus, train_mode=False)
+    valid_loss, valid_entity_acc = run_corpus(valid_corpus, epoch, train_mode=False, writer=valid_writer)
     print("valid_loss",valid_loss,"valid_entity_acc",valid_entity_acc)
 
     # Early stopping conditioning on validation set loss
@@ -354,8 +379,9 @@ for epoch in range(1,num_epochs+1,1):
 
 print("Test set evaluation")
 model.load_state_dict(torch.load(model_path))
-test_loss, test_entity_acc = run_corpus(test_corpus, train_mode=False)
+test_loss, test_entity_acc = run_corpus(test_corpus, num_epochs, train_mode=False, writer=test_writer)
 print("test_loss",test_loss,"test_entity_acc",test_entity_acc)
 
-
-     
+train_writer.close()
+valid_writer.close()
+test_writer.close()

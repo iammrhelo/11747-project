@@ -68,6 +68,9 @@ class EntityNLM(nn.Module):
         init.xavier_uniform(r_embeddings,gain=np.sqrt(2)) 
         self.r_embeddings = r_embeddings
 
+        # For distance feature
+        self.w_dist = nn.Linear(1, 1, bias=False)
+
         self.delta = nn.Bilinear(entity_size, hidden_size, 1, bias=False) # Delta Matrix
 
         self.Te = nn.Linear(entity_size, hidden_size, bias=False)
@@ -150,9 +153,11 @@ class EntityNLM(nn.Module):
         # Concatenate entities to a block
         entity_stack = torch.cat(self.entities)
 
-        dist_feat = self.get_dist_feat(sent_idx)
-        
+        dist_feat = self.get_dist_feat(sent_idx) # Sentence distance
+        # Github
         pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + torch.exp(dist_feat * lambda_dist)
+        # Paper
+        #pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + self.w_dist(dist_feat)
         pred_e = pred_e.transpose(0,1)
 
         return pred_e
