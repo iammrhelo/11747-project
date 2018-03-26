@@ -133,6 +133,12 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
     
     entity_count = 0
     entity_correct_count = 0
+    
+    prev_entity_count = 0
+    prev_entity_correct_count = 0
+
+    new_entity_count = 0
+    new_entity_correct_count = 0
 
     for doc_idx, (doc_name, doc) in enumerate(corpus.documents,1):
         
@@ -144,6 +150,12 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
 
         doc_entity_count = 0
         doc_entity_correct_count = 0
+
+        doc_prev_entity_count = 0
+        doc_prev_entity_correct_count = 0
+
+        doc_new_entity_count = 0
+        doc_new_entity_correct_count = 0
 
         X, R, E, L = doc[0]
 
@@ -192,20 +204,6 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                 embed_curr_x = model.embed(curr_x)
                 h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
 
-                # Update Entity
-                if curr_r.data[0] > 0 and curr_e.data[0] > 0:
-                    
-                    # Next Entity Type
-                    entity_idx = int(curr_e.data[0])
-                    assert entity_idx == curr_e.data[0] and entity_idx <= len(model.entities)
-
-                    # Create if it's a new entity
-                    if entity_idx == len(model.entities):
-                        model.create_entity(nsent=sent_idx)
-                    
-                    # Update Entity Here
-                    last_entity = model.update_entity(entity_idx, h_t, sent_idx)
-                
                 # Need to predict the next entity
                 if ( every_entity or curr_r.data[0] == 0 ) and next_r.data[0] == 1: 
                     next_entity_index = int(next_e.data[0])
@@ -223,10 +221,30 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                     pred_entity_index = pred_e.squeeze().max(0)[1].data[0]
                     next_entity_index = next_e.data[0]
 
-                    entity_count += 1
-                    entity_correct_count += pred_entity_index == next_entity_index
+                    doc_entity_count += 1
+                    doc_entity_correct_count += pred_entity_index == next_entity_index
 
+                    if next_entity_index == 0:
+                        doc_new_entity_correct_count += pred_entity_index == next_entity_index
+                        doc_new_entity_count += 1
+                    else:
+                        doc_prev_entity_correct_count += pred_entity_index == next_entity_index
+                        doc_prev_entity_count += 1
 
+                # Update Entity
+                if curr_r.data[0] > 0 and curr_e.data[0] > 0:
+                    
+                    # Next Entity Type
+                    entity_idx = int(curr_e.data[0])
+                    assert entity_idx == curr_e.data[0] and entity_idx <= len(model.entities)
+
+                    # Create if it's a new entity
+                    if entity_idx == len(model.entities):
+                        model.create_entity(nsent=sent_idx)
+                    
+                    # Update Entity Here
+                    last_entity = model.update_entity(entity_idx, h_t, sent_idx)
+    
                 # l == 1, End of Mention
                 if curr_l.data[0] == 1:
 
@@ -299,7 +317,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
         # Clear Entities
         model.clear_entities()
 
-        doc_entity_acc = entity_correct_count / entity_count
+        doc_entity_acc = doc_entity_correct_count / doc_entity_count
 
         progress = "{}/{}".format(doc_idx,len(corpus.documents))
         print("progress",progress,"doc_name",doc_name,"doc_loss",doc_loss,"doc_entity_acc",doc_entity_acc,end='\r')
@@ -313,6 +331,12 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
      
         entity_count += doc_entity_count
         entity_correct_count += doc_entity_correct_count
+
+        prev_entity_count += doc_prev_entity_count
+        prev_entity_correct_count += doc_prev_entity_correct_count
+
+        new_entity_count += doc_new_entity_count
+        new_entity_correct_count += doc_new_entity_correct_count
     
     # Write to tensorboard
     corpus_loss /= len(corpus.documents)
@@ -328,8 +352,13 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
     writer.add_scalar('loss/total',corpus_loss, epoch)
 
     corpus_entity_acc = entity_correct_count / entity_count
+    corpus_prev_entity_acc = prev_entity_correct_count / prev_entity_count
+    corpus_new_entity_acc = new_entity_correct_count / new_entity_count
 
     writer.add_scalar('accuracy/entity',corpus_entity_acc, epoch)
+    writer.add_scalar('accuracy/prev_entity',corpus_prev_entity_acc, epoch)
+    writer.add_scalar('accuracy/new_entity',corpus_new_entity_acc, epoch)
+    
     return corpus_loss, corpus_entity_acc
 
 ####################
