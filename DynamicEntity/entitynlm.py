@@ -379,8 +379,8 @@ best_valid_loss = None
 early_stop_count = 0
 early_stop_threshold = args.early_stop
 
-model_name = "embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_skip_{}_max_{}_best.pt"\
-            .format(embed_dim,hidden_size,entity_size,dropout,pretrained,skip_sentence, max_entity)
+model_name = "embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_every_{}_skip_{}_max_{}_best.pt"\
+            .format(embed_dim,hidden_size,entity_size,dropout,pretrained,every_entity, skip_sentence, max_entity)
 if debug: model_name = "debug_" + model_name
 
 exp_dir = args.exp
