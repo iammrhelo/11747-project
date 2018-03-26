@@ -104,13 +104,11 @@ class EntityNLM(nn.Module):
         r1 = self.r_embeddings[1]
         
         # Sample from normal distribution
-        e_tensor = torch.normal(means=r1.data, std=0.01).view(1,-1)
-        e_tensor /= torch.norm(e_tensor)
-
-        # Create variable
-        e_var = Variable(e_tensor, requires_grad=True)
-        if self.use_cuda:
-            e_var = e_var.cuda()
+        # Code implementation
+        e_var = r1 + torch.normal(means=torch.zeros_like(r1), std=0.01).view(1,-1)
+        e_var /= torch.norm(e_var)
+        # Not sure if this line is redundant
+        if self.use_cuda: e_var = e_var.cuda()
 
         self.entities.append(e_var)
         self.entities_dist.append(nsent)
@@ -156,7 +154,7 @@ class EntityNLM(nn.Module):
         dist_feat = self.get_dist_feat(sent_idx) # Sentence distance
         # Github
         pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + torch.exp(dist_feat * lambda_dist)
-        # Paper
+        # Paper, this is very bad...
         #pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + self.w_dist(dist_feat)
         pred_e = pred_e.transpose(0,1)
 
