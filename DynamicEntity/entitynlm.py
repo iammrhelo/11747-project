@@ -361,7 +361,8 @@ for epoch in range(1,num_epochs+1,1):
     if shuffle: random.shuffle(train_corpus.documents)
     train_loss, train_entity_acc = run_corpus(train_corpus, epoch, train_mode=True, writer=train_writer)
     print("train_loss",train_loss,"train_entity_acc",train_entity_acc)
-    
+   	
+    if len(valid_corpus.documents) == 0: continue 
     valid_loss, valid_entity_acc = run_corpus(valid_corpus, epoch, train_mode=False, writer=valid_writer)
     print("valid_loss",valid_loss,"valid_entity_acc",valid_entity_acc)
 
