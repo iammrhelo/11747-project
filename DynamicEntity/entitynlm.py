@@ -142,7 +142,6 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
     new_entity_count = 0
     new_entity_correct_count = 0
 
-    predict_entity_count = 0
 
     for doc_idx, (doc_name, doc) in enumerate(corpus.documents,1):
         
@@ -160,6 +159,8 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
 
         doc_new_entity_count = 0
         doc_new_entity_correct_count = 0
+        
+        doc_predict_entity_count = 0
 
         X, R, E, L = doc[0]
 
@@ -209,7 +210,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                 h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
 
                 # Need to predict the next entity
-                test_condition = ( sent_idx >= skip_sentence ) and ( max_entity < 0 or predict_entity_count < max_entity )
+                test_condition = ( sent_idx >= skip_sentence ) and ( max_entity < 0 or doc_predict_entity_count < max_entity )
 
                 if (train_mode or test_condition) and ( every_entity or curr_r.data[0] == 0 ) and next_r.data[0] == 1:
                     next_entity_index = int(next_e.data[0])
@@ -236,7 +237,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                         doc_prev_entity_correct_count += pred_entity_index == next_entity_index
                         doc_prev_entity_count += 1
 
-                    predict_entity_count += 1
+                    doc_predict_entity_count += 1
 
                 # Update Entity
                 if curr_r.data[0] > 0 and curr_e.data[0] > 0:
@@ -329,8 +330,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
         progress = "{}/{}".format(doc_idx,len(corpus.documents))
         progress_msg = "progress {}, doc_name {}, doc_loss {}, doc_entity_acc {}/{}={:.2f}"\
                         .format(progress, doc_name, doc_loss, doc_entity_correct_count, doc_entity_count, doc_entity_acc)
-        #print(progress_msg,end='\r')
-        print(progress_msg)
+        print(progress_msg,end='\r')
 
         corpus_x_loss += doc_x_loss
         corpus_r_loss += doc_r_loss
@@ -379,8 +379,8 @@ best_valid_loss = None
 early_stop_count = 0
 early_stop_threshold = args.early_stop
 
-model_name = "embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_best.pt"\
-            .format(embed_dim,hidden_size,entity_size,dropout,pretrained)
+model_name = "embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_skip_{}_max_{}_best.pt"\
+            .format(embed_dim,hidden_size,entity_size,dropout,pretrained,skip_sentence, max_entity)
 if debug: model_name = "debug_" + model_name
 
 exp_dir = args.exp
