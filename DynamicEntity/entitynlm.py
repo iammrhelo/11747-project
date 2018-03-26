@@ -191,26 +191,6 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                 embed_curr_x = model.embed(curr_x)
                 h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
 
-                # Need to predict the next entity
-                if ( every_entity or curr_r.data[0] == 0 ) and next_r.data[0] == 1: 
-                    next_entity_index = int(next_e.data[0])
-                    assert next_entity_index == next_e.data[0]
-
-                    # Concatenate entities to a block
-                    pred_e = model.predict_entity(h_t, sent_idx, lambda_dist)
-
-                    if next_entity_index < len(model.entities):
-                        next_e = Variable(torch.LongTensor([next_entity_index]), requires_grad=False)
-                    else:
-                        next_e = Variable(torch.zeros(1).type(torch.LongTensor), requires_grad=False)
-
-                    # TODO: FAILURE
-                    pred_entity_index = pred_e.squeeze().max(0)[1].data[0]
-                    next_entity_index = next_e.data[0]
-
-                    entity_count += 1
-                    entity_correct_count += pred_entity_index == next_entity_index
-
                 # Update Entity
                 if curr_r.data[0] > 0 and curr_e.data[0] > 0:
                     
@@ -224,6 +204,28 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                     
                     # Update Entity Here
                     last_entity = model.update_entity(entity_idx, h_t, sent_idx)
+                
+                # Need to predict the next entity
+                if ( every_entity or curr_r.data[0] == 0 ) and next_r.data[0] == 1: 
+                    next_entity_index = int(next_e.data[0])
+                    assert next_entity_index == next_e.data[0]
+
+                    # Concatenate entities to a block
+                    pred_e = model.predict_entity(h_t, sent_idx, lambda_dist)
+
+                    if next_entity_index < len(model.entities):
+                        next_e = Variable(torch.LongTensor([next_entity_index]), requires_grad=False)
+                    else:
+                        import pdb; pdb.set_trace()
+                        next_e = Variable(torch.zeros(1).type(torch.LongTensor), requires_grad=False)
+
+                    # TODO: FAILURE
+                    pred_entity_index = pred_e.squeeze().max(0)[1].data[0]
+                    next_entity_index = next_e.data[0]
+
+                    entity_count += 1
+                    entity_correct_count += pred_entity_index == next_entity_index
+
 
                 # l == 1, End of Mention
                 if curr_l.data[0] == 1:
