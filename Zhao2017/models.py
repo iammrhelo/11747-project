@@ -6,6 +6,7 @@ from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence
 import math
 import random
 import sys
+from attention import GlobalAttention
 
 class CNNEncoder(nn.Module):
     
@@ -21,7 +22,7 @@ class CNNEncoder(nn.Module):
 
         self.embed = nn.Embedding(V, D)
         # self.convs1 = [nn.Conv2d(Ci, Co, (K, D)) for K in Ks]
-        self.convs1 = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D)) for K in Ks])
+        self.convs1 = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D), padding = (1, 0)) for K in Ks])
         '''
         self.conv13 = nn.Conv2d(Ci, Co, (3, D))
         self.conv14 = nn.Conv2d(Ci, Co, (4, D))
@@ -59,12 +60,14 @@ class CNNEncoder(nn.Module):
 
 
 class Encoder(nn.Module):
-    def __init__(self, embed_size, hidden_size, num_layers=1, dropout=0.5):
+    def __init__(self, embed_size, hidden_size, num_layers=1, dropout=0.5, bidirectional = True):
         super(Encoder, self).__init__()
+
         self.hidden_size = hidden_size
+
         self.embed_size = embed_size
         self.lstm = nn.LSTM(embed_size, hidden_size, num_layers,
-                            dropout = dropout, bidirectional = True)
+                            dropout = dropout, bidirectional = bidirectional)
 
     def forward(self, src_embed, hidden=None):
         outputs, hidden = self.lstm(src_embed, hidden)
@@ -107,8 +110,11 @@ class Seq2Seq(nn.Module):
         # dropout layer
         self.dropout = nn.Dropout(args.dropout)
 
+        self.attn = GlobalAttention(self.decoder.hidden_size)
+        self.bi2decoder_ctx = nn.Linear(self.encoder.hidden_size*2, self.decoder.hidden_size, bias = False)
+
         # bidirectional encoder feed
-        self.bi2decoder = nn.Linear(self.encoder.hidden_size * 2, self.decoder.hidden_size)
+        self.bi2decoder_c = nn.Linear(self.encoder.hidden_size * 2, self.decoder.hidden_size)
         self.att_src_linear = nn.Linear(args.hidden_size * 2, args.hidden_size, bias=False)
         self.att_vec_linear = nn.Linear(args.hidden_size * 2 + args.hidden_size, args.hidden_size, bias=False)
 
@@ -129,59 +135,88 @@ class Seq2Seq(nn.Module):
         encoded, (h_n, c_n) = self.encoder(src_embed)
         encoded, _ = pad_packed_sequence(encoded)
 
-        dec_c_0 = self.bi2decoder(torch.cat([c_n[0], c_n[1]], 1))
+        dec_c_0 = self.bi2decoder_c(torch.cat([c_n[0], c_n[1]], 1))
+        #dec_c_0 = torch.cat([c_n[0], c_n[1]], 1)
         dec_h_0 = F.tanh(dec_c_0)
+
+        encoded = self.bi2decoder_ctx(encoded)
 
         return encoded, (dec_h_0, dec_c_0)
 
     def decode(self, src_encoded, src_len, decoder_init, tgt):
+
+        # print(src_encoded.shape) # seqlen, batch_size, hidden_size 
+        # print(src_len) 
+        # print(tgt.shape)
+        # sys.exit(0)
         
+
+        # pcyin attention
+        # new_tensor = decoder_init[1].data.new
+        # batch_size = src_encoded.size(1)
+
+        # # (batch_size, src_sent_len, hidden_size * 2)
+        # src_encoded = src_encoded.permute(1, 0, 2)
+
+        # # (batch_size, src_sent_len, hidden_size)
+        # src_encoded_att_linear = tensor_transform(self.att_src_linear, src_encoded)
+
+
+        # # initialize attentional vector
+        # att_tm1 = Variable(new_tensor(batch_size, self.decoder.hidden_size).zero_(), requires_grad=False)
+
+        # t > 0
         tgt_embed = self.tgt_embed(tgt)
         
-        hidden = (decoder_init[0], decoder_init[1])
-
-        new_tensor = decoder_init[1].data.new
-        batch_size = src_encoded.size(1)
-
-        # (batch_size, src_sent_len, hidden_size * 2)
-        src_encoded = src_encoded.permute(1, 0, 2)
-
-        # (batch_size, src_sent_len, hidden_size)
-        src_encoded_att_linear = tensor_transform(self.att_src_linear, src_encoded)
-
-
-        # initialize attentional vector
-        att_tm1 = Variable(new_tensor(batch_size, self.decoder.hidden_size).zero_(), requires_grad=False)
-
-        tgt_word_embed = self.tgt_embed(tgt)
-
-
-
-
+        batch_size = src_encoded.shape[1]
         scores = []
-        for t, y_embed in enumerate(tgt_embed.split(split_size=1)):
+        new_tensor = decoder_init[1].data.new
+        output = Variable(new_tensor(batch_size, self.decoder.hidden_size).zero_(), requires_grad=False)
+        hidden = (decoder_init[0], decoder_init[1])
+        for embed_t in tgt_embed.split(split_size=1):
 
-            x = torch.cat([y_embed.squeeze(0), att_tm1], 1)
+            embed_t = embed_t.squeeze(0)
+
+            # print(embed_t.shape)
+            # print(output.shape)
+            embed_t = torch.cat([embed_t, output], 1)
 
 
-            h_t, c_t = self.decoder(x, hidden)
+            output, h_t = self.decoder(embed_t, hidden)
 
-            h_t = self.dropout(h_t)
+            # print(output.shape)
+            if len(output.shape) < 2:
+                output = output.unsqueeze(0)
+            # print(src_encoded.shape)
+            output, attn = self.attn(output.unsqueeze(1), src_encoded.transpose(0, 1))
+            output = output.squeeze(0)
+            output = self.dropout(output)
+            score = self.out(output)
+            scores += [score]
+            hidden = output, h_t
 
-            ctx_t, alpha_t = self.dot_prod_attention(h_t, src_encoded, src_encoded_att_linear)
+            # pcyin
+            # x = torch.cat([y_embed.squeeze(0), att_tm1], 1)
 
-            att_t = F.tanh(self.att_vec_linear(torch.cat([h_t, ctx_t], 1)))   # E.q. (5)
-            att_t = self.dropout(att_t)
 
-            score_t = self.out(att_t)
-            scores.append(score_t)
+            # h_t, c_t = self.decoder(x, hidden)
 
-            att_tm1 = att_t
+            # h_t = self.dropout(h_t)
 
-            hidden = h_t, c_t
+            # ctx_t, alpha_t = self.dot_prod_attention(h_t, src_encoded, src_encoded_att_linear)
+
+            # att_t = F.tanh(self.att_vec_linear(torch.cat([h_t, ctx_t], 1)))   # E.q. (5)
+            # att_t = self.dropout(att_t)
+
+            # score_t = self.out(att_t)
+            # scores.append(score_t)
+
+            # att_tm1 = att_t
+
+            # hidden = h_t, c_t
 
         scores = torch.stack(scores)
-        return scores
+        return scores, hidden, attn
 
 
     def dot_prod_attention(self, h_t, src_encoding, src_encoding_att_linear, mask=None):
@@ -206,6 +241,7 @@ class Seq2Seq(nn.Module):
 
     def forward(self, src, src_len, tgt):
         src_encoded, dec_init = self.encode(src, src_len)
+
         scores = self.decode(src_encoded, src_len, dec_init, tgt)
         return scores
 

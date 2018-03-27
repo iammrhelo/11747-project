@@ -14,7 +14,7 @@ from data_utils import *
 from config import init_config
 import sys
 from vocab import *
-
+import time
 
 
 
@@ -167,7 +167,7 @@ def train():
     train_iter = patience = cum_loss = report_loss = cum_tgt_words = report_tgt_words = 0
     cum_examples = cum_batches = report_examples = epoch = valid_num = best_model_iter = 0
     # hist_valid_scores = []
-    # train_time = begin_time = time.time()
+    train_time = begin_time = time.time()
 
     # print('begin Maximum Likelihood training')
 
@@ -191,7 +191,8 @@ def train():
             optimizer.zero_grad()
 
             # (tgt_sent_len, batch_size, tgt_vocab_size)
-            scores = model(src_sents_vars, src_sents_len, tgt_sents_var[:-1])
+            #print(src_sents_vars.shape)
+            scores, hidden_, attn_ = model(src_sents_vars, src_sents_len, tgt_sents_var[:-1])
 
 
             word_loss = cross_entropy_loss(scores.view(-1, scores.size(2)), tgt_sents_var[1:].view(-1))
