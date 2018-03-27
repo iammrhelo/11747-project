@@ -68,6 +68,9 @@ class EntityNLM(nn.Module):
         init.xavier_uniform(r_embeddings,gain=np.sqrt(2)) 
         self.r_embeddings = r_embeddings
 
+        # For distance feature
+        self.w_dist = nn.Linear(1, 1, bias=False)
+
         self.delta = nn.Bilinear(entity_size, hidden_size, 1, bias=False) # Delta Matrix
 
         self.Te = nn.Linear(entity_size, hidden_size, bias=False)
@@ -101,13 +104,11 @@ class EntityNLM(nn.Module):
         r1 = self.r_embeddings[1]
         
         # Sample from normal distribution
-        e_tensor = torch.normal(means=r1.data, std=0.01).view(1,-1)
-        e_tensor /= torch.norm(e_tensor)
-
-        # Create variable
-        e_var = Variable(e_tensor, requires_grad=True)
-        if self.use_cuda:
-            e_var = e_var.cuda()
+        # Code implementation
+        e_var = r1 + torch.normal(means=torch.zeros_like(r1), std=0.01).view(1,-1)
+        e_var /= torch.norm(e_var)
+        # Not sure if this line is redundant
+        if self.use_cuda: e_var = e_var.cuda()
 
         self.entities.append(e_var)
         self.entities_dist.append(nsent)
@@ -150,9 +151,11 @@ class EntityNLM(nn.Module):
         # Concatenate entities to a block
         entity_stack = torch.cat(self.entities)
 
-        dist_feat = self.get_dist_feat(sent_idx)
-        
+        dist_feat = self.get_dist_feat(sent_idx) # Sentence distance
+        # Github
         pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + torch.exp(dist_feat * lambda_dist)
+        # Paper, this is very bad...
+        #pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + self.w_dist(dist_feat)
         pred_e = pred_e.transpose(0,1)
 
         return pred_e
