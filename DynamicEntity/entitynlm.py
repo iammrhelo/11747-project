@@ -32,16 +32,17 @@ def parse_arguments():
     parser.add_argument('--dropout',type=float,default=0.5)
     parser.add_argument('--num_epochs',type=int,default=40)
     parser.add_argument('--lr',type=float,default=1e-3)
-    parser.add_argument('--early_stop',type=int,default=5)
+    parser.add_argument('--early_stop',type=int,default=3)
     parser.add_argument('--shuffle',action="store_true",default=True)
     parser.add_argument('--pretrained',action="store_true",default=False)
     parser.add_argument('--model_path',type=str,default=None)
     parser.add_argument('--exp',type=str,default="exp")
     parser.add_argument('--tensorboard',type=str,default="runs")
     parser.add_argument('--debug',action="store_true",default=False)
-    parser.add_argument('--every_entity',action="store_true",default=False)
+    parser.add_argument('--every_entity',action="store_true",default=True)
     parser.add_argument('--skip_sentence',type=int,default=3)
-    parser.add_argument('--max_entity',type=int,default=-1)
+    parser.add_argument('--max_entity',type=int,default=30)
+    parser.add_argument('--weight',type=int,default=1)
     args = parser.parse_args()
     return args
 
@@ -107,6 +108,8 @@ optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 crossentropy = nn.CrossEntropyLoss()
 if use_cuda: crossentropy = crossentropy.cuda()
+
+weight = args.weight
 
 shuffle = args.shuffle
 
@@ -284,7 +287,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                             next_e = next_e.cuda()
 
                         # TODO: OK
-                        e_loss = crossentropy(pred_e, next_e)
+                        e_loss = weight * crossentropy(pred_e, next_e)
                         doc_e_loss += e_loss.data[0]
                         losses.append(e_loss)
 
