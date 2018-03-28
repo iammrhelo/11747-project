@@ -4,7 +4,7 @@ import numpy as np
 def init_config():
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', default=321, type=int, help='random seed')
-    parser.add_argument('--cuda', action='store_true', default=False, help='use gpu')
+    parser.add_argument('--cuda', action='store_true', default=True, help='use gpu')
     parser.add_argument('--mode', choices=['train', 'raml_train', 'test', 'sample', 'prob', 'interactive'],
                         default='train', help='run mode')
     parser.add_argument('--vocab', default='./data/vocab.bin', type=str, help='path of the serialized vocabulary')
