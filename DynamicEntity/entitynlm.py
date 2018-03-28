@@ -25,7 +25,7 @@ device = 0 if use_cuda else -1
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data',type=str,default='./data/InScript')
-    parser.add_argument('--embed_dim',type=int,default=128)
+    parser.add_argument('--embed_dim',type=int,default=100)
     parser.add_argument('--hidden_size',type=int,default=128)
     parser.add_argument('--entity_size',type=int,default=128)
     parser.add_argument('--num_layers',type=int,default=2)
@@ -42,7 +42,11 @@ def parse_arguments():
     parser.add_argument('--every_entity',action="store_true",default=True)
     parser.add_argument('--skip_sentence',type=int,default=3)
     parser.add_argument('--max_entity',type=int,default=30)
-    parser.add_argument('--weight',type=int,default=1)
+    parser.add_argument('--eloss_weight',type=int,default=1)
+    parser.add_argument('--ignore_x',action="store_true",default=False)
+    parser.add_argument('--ignore_r',action="store_true",default=False)
+    parser.add_argument('--ignore_e',action="store_true",default=False)
+    parser.add_argument('--ignore_l',action="store_true",default=False)
     args = parser.parse_args()
     return args
 
@@ -109,7 +113,12 @@ optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 crossentropy = nn.CrossEntropyLoss()
 if use_cuda: crossentropy = crossentropy.cuda()
 
-weight = args.weight
+eloss_weight = args.eloss_weight
+
+ignore_x = args.ignore_x
+ignore_r = args.ignore_r
+ignore_e = args.ignore_e
+ignore_l = args.ignore_l
 
 shuffle = args.shuffle
 
@@ -265,9 +274,10 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
 
                     pred_r = model.predict_type(h_t)
                     # TODO: OK
-                    type_loss = crossentropy(pred_r,next_r)
-                    doc_r_loss += type_loss.data[0]
-                    losses.append(type_loss)
+                    if not ignore_r:
+                        type_loss = crossentropy(pred_r,next_r)
+                        doc_r_loss += type_loss.data[0]
+                        losses.append(type_loss)
                             
                     # Entity Prediction
                     if next_r.data[0] > 0: # If the next word is an entity
@@ -287,9 +297,10 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                             next_e = next_e.cuda()
 
                         # TODO: OK
-                        e_loss = weight * crossentropy(pred_e, next_e)
-                        doc_e_loss += e_loss.data[0]
-                        losses.append(e_loss)
+                        if not ignore_e:
+                            e_loss = eloss_weight * crossentropy(pred_e, next_e)
+                            doc_e_loss += e_loss.data[0]
+                            losses.append(e_loss)
 
                     # Entity Length Prediction
                     if int(next_e.data[0]) > 0: # Has Entity
@@ -300,9 +311,10 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
 
                         pred_l = model.predict_length(h_t, entity_embedding)
                         
-                        l_loss = crossentropy(pred_l, next_l)
-                        doc_l_loss += l_loss.data[0]
-                        losses.append(l_loss)
+                        if not ignore_l: 
+                            l_loss = crossentropy(pred_l, next_l)
+                            doc_l_loss += l_loss.data[0]
+                            losses.append(l_loss)
 
                 # Word Prediction
                 next_entity_index = int(next_e.data[0])
@@ -311,9 +323,10 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                 pred_x = model.predict_word(next_entity_index, h_t, last_entity)
 
                 # TODO: OK
-                x_loss = crossentropy(pred_x, next_x)
-                doc_x_loss += x_loss.data[0]
-                losses.append(x_loss)
+                if not ignore_x:
+                    x_loss = crossentropy(pred_x, next_x)
+                    doc_x_loss += x_loss.data[0]
+                    losses.append(x_loss)
 
             last_entity = h_t # Take hidden state as last entity embedding for next sentence
             if len(losses):
