@@ -1,7 +1,7 @@
 import pickle as pkl
 from collections import defaultdict
 import numpy as np
-
+import copy
 class LetsGoCorpus(object):
 
     def __init__(self, data_path):
@@ -59,8 +59,7 @@ def data_iter(data, batch_size, shuffle=True):
     """
     randomly permute data, then sort by source length, and partition into batches
     ensure that the length of source sentences in each batch is decreasing
-    """
-
+    """ 
     buckets = defaultdict(list)
     for pair in data:
         src_sent = pair[0]

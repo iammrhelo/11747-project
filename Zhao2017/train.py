@@ -18,21 +18,29 @@ import time
 
 
 
-def evaluate(model, val_iter, vocab_size, DE, EN):
+def evaluate_loss(model, data, crit, args):
     model.eval()
-    pad = EN.vocab.stoi['<pad>']
-    total_loss = 0
-    for b, batch in enumerate(val_iter):
-        src, len_src = batch.src
-        trg, len_trg = batch.trg
-        src = Variable(src.data.cuda(), volatile=True)
-        trg = Variable(trg.data.cuda(), volatile=True)
-        output = model(src, trg)
-        loss = F.cross_entropy(output[1:].view(-1, vocab_size),
-                               trg[1:].contiguous().view(-1),
-                               ignore_index=pad)
-        total_loss += loss.data[0]
-    return total_loss / len(val_iter)
+    cum_loss = 0.
+    cum_tgt_words = 0.
+    for src_sents, tgt_sents in data_iter(data, batch_size=args.batch_size, shuffle=False):
+
+        src_sents_vars = to_input_variable_src(src_sents, model.vocab.src, cuda=args.cuda, is_test=True)
+        tgt_sents_var = to_input_variable(tgt_sents, model.vocab.tgt, cuda=args.cuda, is_test=True)
+
+        src_sents_len = [len(s) for s in src_sents]
+        pred_tgt_word_num = sum(len(s[1:]) for s in tgt_sents) # omitting leading `<s>`
+
+        
+        scores, hidden_, attn_ = model(src_sents_vars, src_sents_len, tgt_sents_var[:-1])
+
+        loss = crit(scores.view(-1, scores.size(2)), tgt_sents_var[1:].view(-1))
+
+        cum_loss += loss.data[0]
+        cum_tgt_words += pred_tgt_word_num
+
+    loss = cum_loss / cum_tgt_words
+    return loss
+
 
 def word2id(sents, vocab):
     if type(sents[0]) == list:
@@ -157,16 +165,16 @@ def train():
     dev_loader = FakeLetsGoDataLoader(corpus.valid)
     test_loader = FakeLetsGoDataLoader(corpus.test)
 
-    train_data = zip(train_loader.get_src(), train_loader.get_tgt())
-    dev_data = zip(dev_loader.get_src(), dev_loader.get_tgt())
-    test_data = zip(test_loader.get_src(), test_loader.get_tgt())
+    train_data = list(zip(train_loader.get_src(), train_loader.get_tgt()))
+    dev_data = list(zip(dev_loader.get_src(), dev_loader.get_tgt()))
+    test_data = list(zip(test_loader.get_src(), test_loader.get_tgt()))
 
 
     vocab, model, optimizer, nll_loss, cross_entropy_loss = init_training(args)
 
-    train_iter = patience = cum_loss = report_loss = cum_tgt_words = report_tgt_words = 0
-    cum_examples = cum_batches = report_examples = epoch = valid_num = best_model_iter = 0
-    # hist_valid_scores = []
+    patience = cum_loss = report_loss = cum_tgt_words = report_tgt_words = 0
+    cum_examples = cum_batches = report_examples = epoch = valid_num = best_model_epoch = 0
+    hist_valid_scores = []
     train_time = begin_time = time.time()
 
     # print('begin Maximum Likelihood training')
@@ -174,7 +182,6 @@ def train():
     while True:
         epoch += 1
         for src_sents, tgt_sents in data_iter(train_data, batch_size=args.batch_size):
-            train_iter += 1
 
             src_sents_vars = to_input_variable_src(src_sents, vocab.src, cuda=args.cuda)
             tgt_sents_var = to_input_variable(tgt_sents, vocab.tgt, cuda=args.cuda)
@@ -216,18 +223,69 @@ def train():
 
 
 
-
-            if train_iter % args.log_every == 0:
-                print('epoch %d, iter %d, avg. loss %.2f, avg. ppl %.2f ' \
-                      'cum. examples %d, speed %.2f words/sec, time elapsed %.2f sec' % (epoch, train_iter,
+            print('Training: epoch %d, avg. loss %.2f, avg. ppl %.2f ' \
+                      'cum. examples %d, speed %.2f words/sec, time elapsed %.2f sec' % (epoch,
                                                                                          report_loss / report_examples,
                                                                                          np.exp(report_loss / report_tgt_words),
                                                                                          cum_examples,
                                                                                          report_tgt_words / (time.time() - train_time),
-                                                                                         time.time() - begin_time), file=sys.stderr)
+                                                                                         time.time() - begin_time))
 
-           
+       
+            train_time = time.time()
+            report_loss = report_tgt_words = report_examples = 0.
 
+
+
+        if epoch % args.valid_nepoch == 0:
+            print('Validation: epoch %d, cum. loss %.2f, cum. ppl %.2f cum. examples %d' % (epoch,
+                                                                                     cum_loss / cum_batches,
+                                                                                     np.exp(cum_loss / cum_tgt_words),
+                                                                                     cum_examples))
+
+            cum_loss = cum_batches = cum_tgt_words = 0.
+            valid_num += 1
+
+            print('begin validation ...')
+            model.eval()
+
+            # compute dev. ppl and bleu
+
+            dev_loss = evaluate_loss(model, dev_data, cross_entropy_loss, args)
+            dev_ppl = np.exp(dev_loss)
+
+            valid_metric = -dev_ppl
+            print('validation: epoch %d, dev. ppl %f' % (epoch, dev_ppl))
+
+            model.train()
+
+            is_better = len(hist_valid_scores) == 0 or valid_metric > max(hist_valid_scores)
+            is_better_than_last = len(hist_valid_scores) == 0 or valid_metric > hist_valid_scores[-1]
+            hist_valid_scores.append(valid_metric)
+
+            if valid_num > args.save_model_after:
+                model_file = args.save_to + 'current.bin'
+                print('Save current model to [%s] at Epoch: [%d]' % (model_file, epoch) )
+                torch.save(model.state_dict(), model_file)
+
+            if (not is_better_than_last) and args.lr_decay:
+                lr = optimizer.param_groups[0]['lr'] * args.lr_decay
+                print('decay learning rate to %f' % lr)
+                optimizer.param_groups[0]['lr'] = lr
+
+            if is_better:
+                patience = 0
+                best_model_epoch = epoch
+                model_file = args.save_to + 'best.bin'
+                print('Save best model to [%s] at Epoch: [%d]' % (model_file, epoch) )
+                torch.save(model.state_dict(), model_file)
+
+            else:
+                patience += 1
+                print('hit patience %d' % patience)
+                if patience == args.patience:
+                    print('early stop!')
+                    exit(0)
 
 def main():
     train()
