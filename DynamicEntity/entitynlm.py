@@ -61,6 +61,7 @@ data = args.data
 debug = args.debug
 dict_pickle = os.path.join(data,'train','dict.pickle')
 
+
 print("Loading corpus...")
 # Set Corpus
 if debug:
@@ -73,6 +74,7 @@ else:
     test_corpus = Corpus(os.path.join(data,'test'),dict_pickle)
 
 vocab_size = len(train_corpus.dictionary)+1 # 0 for unknown
+print("vocab_size",vocab_size)
 
 ##################
 #   Model Setup  #
@@ -108,7 +110,7 @@ lambda_dist = 1e-6
 #####################
 num_epochs = args.num_epochs
 lr = args.lr
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
 crossentropy = nn.CrossEntropyLoss()
 if use_cuda: crossentropy = crossentropy.cuda()
