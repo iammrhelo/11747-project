@@ -1,4 +1,5 @@
 import argparse
+from collections import Counter
 from glob import glob
 import os
 import pickle
@@ -70,16 +71,12 @@ def split_datasets_random(xml_dirs, output_dir):
         for copy_file in copy_files:
             shutil.copy(copy_file, copy_dir)
 
+def split_datasets_cv(xml_dirs, output_dir):
+    pass
 
-def build_dict(xml_dir):
-    d = dict()
-    for xml_file in tqdm(glob(os.path.join(xml_dir,"*.xml"))):
-        root = xml.etree.ElementTree.parse(xml_file).getroot()
+def build_dict(xml_dir, threshold=10):
+    cnt = Counter()
 
-        content = root[0][0].text
-
-def build_dict(xml_dir):
-    d = dict()
     for xml_file in tqdm(glob(os.path.join(xml_dir,"*.xml"))):
         root = xml.etree.ElementTree.parse(xml_file).getroot()
 
@@ -88,8 +85,20 @@ def build_dict(xml_dir):
 
         for sentence in sentences:
             for word in sentence.split():
-                if word not in d:
-                    d[ word ] = len(d)+1
+
+                lowercased_word = word.lower()
+
+                cnt[ lowercased_word ] += 1
+
+    filtered_cnt = { k : v for k, v in cnt.items() if v >= threshold }
+
+    d = dict()
+    for word, count in filtered_cnt.items():
+        if word not in d:
+            d[word] = len(d) + 1
+
+    print("threshold",threshold)
+    print("Vocab size",len(d))
     
     with open(os.path.join(xml_dir,'dict.pickle'),'wb') as fout:
         pickle.dump(d,fout)
@@ -98,10 +107,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-o','--output_dir',type=str)
     parser.add_argument('-t','--type',type=str,help='modi | random | cv')
+    parser.add_argument('--min_threshold',type=int,default=10)
     args = parser.parse_args()
     
     output_dir = args.output_dir
     split_type = args.type
+    min_threshold = args.min_threshold
+
     xml_dirs = list(filter(os.path.isdir,glob("InScript/corpus/*")))
     if split_type == "modi":
         split_datasets_modi(xml_dirs, output_dir)
@@ -112,4 +124,4 @@ if __name__ == "__main__":
 
     train_xml_dirs = os.path.join(output_dir,'train')
 
-    build_dict(train_xml_dirs)
+    build_dict(train_xml_dirs, threshold=min_threshold)
