@@ -7,6 +7,7 @@ import math
 import random
 import sys
 from attention import GlobalAttention
+from beam import Beam
 
 class CNNEncoder(nn.Module):
     
@@ -87,7 +88,6 @@ class Decoder(nn.Module):
 
         output, hidden = self.lstm_cell(input, hidden)
         output = output.squeeze(0)  # (1,B,N) -> (B,N)
-
         return output, hidden
 
 
@@ -128,6 +128,7 @@ class Seq2Seq(nn.Module):
 
         # input here: n_bath*n_turn, len(sent)
         src_embed = self.cnn_encoder(src.view(-1, src.shape[1]))
+        
         #print(src_embed.view(n_batch, n_turn, -1))
         # src_embed: n_bath*n_turn, hidden_size*#direction
         # input here:n_turn, n_batch, hidden_size*#direction
@@ -166,14 +167,16 @@ class Seq2Seq(nn.Module):
         # att_tm1 = Variable(new_tensor(batch_size, self.decoder.hidden_size).zero_(), requires_grad=False)
 
         # t > 0
+
         tgt_embed = self.tgt_embed(tgt)
-        
+
         batch_size = src_encoded.shape[1]
         scores = []
         new_tensor = decoder_init[1].data.new
         output = Variable(new_tensor(batch_size, self.decoder.hidden_size).zero_(), requires_grad=False)
         hidden = (decoder_init[0], decoder_init[1])
         for embed_t in tgt_embed.split(split_size=1):
+
 
             embed_t = embed_t.squeeze(0)
 
@@ -182,18 +185,19 @@ class Seq2Seq(nn.Module):
             embed_t = torch.cat([embed_t, output], 1)
 
 
-            output, h_t = self.decoder(embed_t, hidden)
-
+            h_t, c_t = self.decoder(embed_t, hidden)
             # print(output.shape)
-            if len(output.shape) < 2:
-                output = output.unsqueeze(0)
+            if len(h_t.shape) < 2:
+                h_t = h_t.unsqueeze(0)
+
+            hidden = h_t, c_t
+
             # print(src_encoded.shape)
-            output, attn = self.attn(output.unsqueeze(1), src_encoded.transpose(0, 1))
-            output = output.squeeze(0)
-            output = self.dropout(output)
+            attn_t, attn = self.attn(h_t.unsqueeze(1), src_encoded.transpose(0, 1))
+            attn_t = attn_t.squeeze(0)
+            output = self.dropout(attn_t)
             score = self.out(output)
             scores += [score]
-            hidden = output, h_t
 
             # pcyin
             # x = torch.cat([y_embed.squeeze(0), att_tm1], 1)
@@ -225,174 +229,115 @@ class Seq2Seq(nn.Module):
         scores = self.decode(src_encoded, src_len, dec_init, tgt)
         return scores
 
-    def greedy(self, src, length = 30):
+    def greedy(self, src, src_len, length = 30):
 
-        src_encoded, dec_init = encode(src, src_len)
-        hidden = (dec_init[0], dec_init[1])
+        # n_batch = src.shape[0]
+        n_turn = src.shape[2]
+
+        # input here: n_bath*n_turn, len(sent)
+        src_embed = self.cnn_encoder(src.view(-1, src.shape[1]))
+
+        # src_embed: n_bath*n_turn, hidden_size*#direction
+        # input here:n_turn, n_batch, hidden_size*#direction
+
+
+        src_embed = pack_padded_sequence(src_embed.view(n_turn, 1, -1), src_len)
+        encoded, (h_n, c_n) = self.encoder(src_embed)
+        encoded, _ = pad_packed_sequence(encoded)
+
+
+        dec_c_0 = self.bi2decoder_c(torch.cat([c_n[0], c_n[1]], 1))
+        dec_h_0 = F.tanh(dec_c_0)
+
+        src_encoded = self.bi2decoder_ctx(encoded)
+
+        decoder_init = (dec_h_0, dec_c_0)
 
         sampled_ids = []
         outputs = []
 
-        emb_t = self.tgt_embed(self.vocab.tgt['<s>'])
-        for i in range(length):
-            h_t, c_t = self.decoder(embed_t, hidden)
-            predicted = self.out(h_t).max(1)[1]
-            sampled_ids.append(predicted)
-            outputs.append(h_t)
+        new_tensor = decoder_init[1].data.new
+        output = Variable(new_tensor(1, self.decoder.hidden_size).zero_(), requires_grad=False)
+        hidden = (decoder_init[0], decoder_init[1])
 
-            emb_t = self.tgt_embed(predicted)
+
+        start = torch.LongTensor([self.vocab.tgt['<s>']])
+        start = Variable(start, volatile = True, requires_grad=False)
+        embed_t = self.tgt_embed(start)
+
+        for i in range(length):
+
+            embed_t = torch.cat([embed_t, output], 1)
+
+            h_t, c_t = self.decoder(embed_t, hidden)
+
+            h_t = h_t.unsqueeze(0)
+            hidden = h_t, c_t
+
+            attn_t, attn = self.attn(h_t.unsqueeze(1), src_encoded.transpose(0, 1))
+            output = attn_t.squeeze(0)
+            outputs.append(output)
+
+            predicted = self.out(output).max(1)[1]
+            sampled_ids.append(predicted)
+
+            embed_t = self.tgt_embed(predicted)
 
         outputs = torch.stack(outputs)
+        sampled_ids = torch.stack(sampled_ids, 1)
         sampled_ids = sampled_ids.cpu().data.numpy().flatten()
 
-        return [[sampled_ids]], outputs, h_t
 
-    
-    # def greedy(self, images, length = 70):
-    #     # input image features and init hidden states
-    #     context = self.encoder(images)
-    #     init_hidden = self.make_init_decoder_hidden(context)
-
-    #     # t = 0
-    #     init_context = to_var(context.data.mean(0))
-
-    #     batch_size = context.size(1)
-    #     init_emb = to_var(torch.FloatTensor(1 , batch_size, self.decoder.word_vec_size).zero_())
-
-    #     if self.decoder.input_feed:
-    #         init_emb = torch.cat([init_emb, init_context], 2)
-
-    #     init_emb = init_emb.squeeze(0)
-
-    #     output, hidden = self.decoder.rnn(init_emb, init_hidden)
-    #     output, attn = self.decoder.attn(output, context.transpose(0, 1))
-    #     #output = self.decoder.dropout(output)
-
-    #     # get argmax which is the index
-    #     predicted = self.generator(output).max(1)[1]
-        
-    #     sampled_ids = [predicted]
-    #     outputs = [output]
-
-    #     emb_t = self.decoder.word_lut(predicted)
-
-    #     # t > 0
-    #     for i in range(length): 
-            
-    #         emb_t = emb_t.squeeze(0)
-    #         if self.decoder.input_feed:
-    #             emb_t = torch.cat([emb_t, output], 1)
-
-    #         output, hidden = self.decoder.rnn(emb_t, hidden)
-    #         output, attn = self.decoder.attn(output, context.transpose(0, 1))
-    #         #output = self.decoder.dropout(output)
-
-    #         # get argmax which is the index
-    #         predicted = self.generator(output).max(1)[1]
-    #         sampled_ids.append(predicted)
-    #         outputs += [output]
-
-    #         emb_t = self.decoder.word_lut(predicted)
-
-    #     outputs = torch.stack(outputs)
-    #     sampled_ids = torch.stack(sampled_ids, 1) # (length + 1, batch_size)
-
-    #     sampled_ids = sampled_ids.cpu().data.numpy().flatten()
-
-    #     return [[sampled_ids]], outputs, hidden, attn
+        return [[sampled_ids]], outputs, attn
 
 
-    # def beam_search(self, images, length = 70, beam_size = 5):
+    # def beam_search(self, src, length = 30, beam_size = 5):
 
-    #     # batch_size number of beams
-    #     #beams = [Beam(beam_size, True) for _ in images]
-    #     beams = [Beam(beam_size, 5, True) for _ in images]
+    #     # n_batch = src.shape[0]
+    #     # n_turn = src.shape[2]
 
-    #     # input image features and init hidden states
-    #     context = self.encoder(images)
-    #     init_hidden = self.make_init_decoder_hidden(context)
+    #     # input here: n_bath*n_turn, len(sent)
+    #     src_embed = self.cnn_encoder(src.view(-1, src.shape[1]))
+    #     # src_embed: n_bath*n_turn, hidden_size*#direction
+    #     # input here:n_turn, n_batch, hidden_size*#direction
+    #     encoded, (h_n, c_n) = self.encoder(src_embed)
 
-    #     # Each hypothesis in the beam uses the same context and initial decoder state
-    #     context_b = Variable(context.data.repeat(1, beam_size, 1))
-    #     init_hidden_b = (Variable(init_hidden[0].data.repeat(1, beam_size, 1)),
-    #                      Variable(init_hidden[1].data.repeat(1, beam_size, 1)))
+    #     dec_c_0 = self.bi2decoder_c(torch.cat([c_n[0], c_n[1]], 1))
+    #     dec_h_0 = F.tanh(dec_c_0)
 
-    #     # t = 0
-    #     init_context_b = to_var(context_b.data.mean(0))
+    #     src_encoded = self.bi2decoder_ctx(encoded)
 
-    #     batch_size = context.size(1)
-    #     batch_beam_size = context_b.size(1)
-    #     init_emb_b = to_var(torch.FloatTensor(1, batch_beam_size, self.decoder.word_vec_size).zero_())
+    #     decoder_init = (dec_h_0, dec_c_0)
 
-    #     if self.decoder.input_feed:
-    #         init_emb_b = torch.cat([init_emb_b, init_context_b], 2)
+    #     sampled_ids = []
+    #     outputs = []
 
-    #     init_emb_b = init_emb_b.squeeze(0)
+    #     new_tensor = decoder_init[1].data.new
+    #     output = Variable(new_tensor(1, self.decoder.hidden_size).zero_(), requires_grad=False)
+    #     hidden = (decoder_init[0], decoder_init[1])
 
-    #     output, hidden = self.decoder.rnn(init_emb_b, init_hidden_b)
-    #     output, attn = self.decoder.attn(output, context_b.transpose(0, 1))
-    #     # output = self.decoder.dropout(output)
+    #     embed_t = self.tgt_embed(self.vocab.tgt['<s>'])
 
-    #     # change attention shape from (beam*batch) x numWords to (batch, beam, numWords)
-    #     attn = attn.view(beam_size, batch_size, -1).transpose(0, 1).contiguous()
-
-    #     # get output of the softmax
-    #     out = self.generator(output)
-    #     # batch x beam x numWords
-    #     word_scores = out.view(beam_size, batch_size, -1).transpose(0, 1).contiguous()
-
-    #     # advance each beam
-    #     for b in range(batch_size):
-    #         beams[b].advance(word_scores.data[b], attn.data[b])
-
-    #     predicted = torch.stack([b.getCurrentState() for b in beams]).transpose(0, 1).contiguous().view(1, -1)
-
-    #     emb_t_b = self.decoder.word_lut(to_var(predicted))
-
-    #     # t > 0
     #     for i in range(length):
 
-    #         emb_t_b = emb_t_b.squeeze(0)
-    #         if self.decoder.input_feed:
-    #             emb_t_b = torch.cat([emb_t_b, output], 1)
+    #         embed_t = torch.cat([embed_t, output], 1)
 
-    #         output, hidden = self.decoder.rnn(emb_t_b, hidden)
-    #         output, attn = self.decoder.attn(output, context_b.transpose(0, 1))
-    #         # output = self.decoder.dropout(output)
+    #         h_t, c_t = self.decoder(embed_t, hidden)
+    #         h_t = h_t.unsqueeze(0)
+    #         hidden = h_t, c_t
 
-    #         # change attention shape from (beam*batch) x numWords to (batch, beam, numWords)
-    #         attn = attn.view(beam_size, batch_size, -1).transpose(0, 1).contiguous()
+    #         attn_t, attn = self.attn(h_t.unsqueeze(1), src_encoded.transpose(0, 1))
+    #         output = attn_t.squeeze(0)
 
-    #         # get output of the softmax
-    #         out = self.generator(output)
-    #         # batch x beam x numWords
-    #         word_scores = out.view(beam_size, batch_size, -1).transpose(0, 1).contiguous()
+    #         predicted = self.out(output).max(1)[1]
+    #         sampled_ids.append(predicted)
 
-    #         # advance each beam
-    #         for b in range(batch_size):
-    #             beams[b].advance(word_scores.data[b], attn.data[b])
+    #         embed_t = self.tgt_embed(predicted)
 
-    #         # When every beam reaches <end> break out of loop
-    #         if all((b.done() for b in beams)):
-    #             break
+    #     outputs = torch.stack(outputs)
+    #     sampled_ids = torch.stack(sampled_ids, 1)
+    #     sampled_ids = sampled_ids.cpu().data.numpy().flatten()
 
-    #         predicted = torch.stack([b.getCurrentState() for b in beams]).transpose(0, 1).contiguous().view(1, -1)
+    #     return [[sampled_ids]], outputs, attn
 
-    #         emb_t_b = self.decoder.word_lut(to_var(predicted))
-
-    #     n_best = 5
-    #     allHyp, allScores, allAttn = [], [], []
-    #     for b in beams:
-    #         scores, ks = b.sortFinished(minimum=n_best)
-    #         hyps, attn = [], []
-    #         for i, (times, k) in enumerate(ks[:n_best]):
-    #             hyp, att = b.getHyp(times, k)
-    #             hyps.append(hyp)
-    #             attn.append(att)
-    #         allHyp.append(hyps)
-    #         allScores.append(scores[:n_best])
-    #         allAttn.append(attn)
-
-
-    #     return allHyp, allScores, hidden, allAttn
 

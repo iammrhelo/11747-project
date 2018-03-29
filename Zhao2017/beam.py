@@ -92,7 +92,7 @@ class BeamOld(object):
         if len(self.result) == self.size:
             self.done = True
             self.allScores.append(self.scores)
-            print self.result
+            # print self.result
 
         # print self.nextYs
         # print self.scores

@@ -29,6 +29,8 @@ def init_config():
     parser.add_argument('--lr', default=0.001, type=float, help='learning rate')
     parser.add_argument('--lr_decay', default=0.5, type=float, help='decay learning rate if the validation performance drops')
 
+    parser.add_argument('--load_model_path', default='./model/best.bin', type=str, help='load trained model from')
+
     args = parser.parse_args()
 
     # seed the RNG

@@ -195,12 +195,12 @@ def train():
             src_sents_len = [len(s) for s in src_sents]
             pred_tgt_word_num = sum(len(s[1:]) for s in tgt_sents) # omitting leading `<s>`
 
+
             optimizer.zero_grad()
 
             # (tgt_sent_len, batch_size, tgt_vocab_size)
             #print(src_sents_vars.shape)
             scores, hidden_, attn_ = model(src_sents_vars, src_sents_len, tgt_sents_var[:-1])
-
 
             word_loss = cross_entropy_loss(scores.view(-1, scores.size(2)), tgt_sents_var[1:].view(-1))
             loss = word_loss / batch_size
