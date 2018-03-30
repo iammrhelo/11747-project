@@ -106,6 +106,12 @@ def to_input_variable_src(src_data, vocab, cuda=False, is_test=False):
     return sents_var
 
 
+def to_input_variable_conf(src_data, cuda=False, is_test=False):
+    ret = Variable(torch.FloatTensor(src_data), volatile=is_test, requires_grad=False)
+    if cuda:
+        ret = ret.cuda()
+    return ret 
+
 def init_model(args):
     vocab = torch.load(args.vocab)
 
@@ -124,9 +130,14 @@ def generate():
     args = init_config()
     vocab = torch.load('./data/vocab.bin')
     corpus = LetsGoCorpus('./data/union_data-1ab.p')
-    train_loader = FakeLetsGoDataLoader(corpus.train)
-    dev_loader = FakeLetsGoDataLoader(corpus.valid)
-    test_loader = FakeLetsGoDataLoader(corpus.test)
+    # train_loader = FakeLetsGoDataLoader(corpus.train)
+    # dev_loader = FakeLetsGoDataLoader(corpus.valid)
+    # test_loader = FakeLetsGoDataLoader(corpus.test)
+
+    train_loader = LetsGoDataLoader(corpus.train)
+    dev_loader = LetsGoDataLoader(corpus.valid)
+    test_loader = LetsGoDataLoader(corpus.test)
+
 
     train_data = list(zip(train_loader.get_src(), train_loader.get_tgt()))
     dev_data = list(zip(dev_loader.get_src(), dev_loader.get_tgt()))
@@ -138,13 +149,19 @@ def generate():
 
     for sent, tgt in data_iter(test_data, batch_size = 1):
 
-        src_sents_vars = to_input_variable_src(sent, vocab.src, cuda=False)
+        sys_utt = [[turn[0] for turn in dial] for dial in sent]
+        usr_utt = [[turn[1] for turn in dial] for dial in sent]
+        conf = [[turn[2] for turn in dial] for dial in sent]
+
+        src_sents_sys_vars = to_input_variable_src(sys_utt, vocab.src, cuda=False)
+        src_sents_usr_vars = to_input_variable_src(usr_utt, vocab.src, cuda=False)
+        src_sents_conf_vars = to_input_variable_conf(conf, cuda=False)
 
 
         src_sent_len = [len(s) for s in sent]
 
 
-        sampled_ids_all, scores_, attn_ = model.greedy(src_sents_vars, src_sent_len)
+        sampled_ids_all, scores_, attn_ = model.greedy(src_sents_sys_vars, src_sents_usr_vars, src_sents_conf_vars, src_sent_len)
 
         sentences = []
         for sampled_ids in sampled_ids_all[0]: # just a hack, todo

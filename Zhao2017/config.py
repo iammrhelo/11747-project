@@ -8,8 +8,7 @@ def init_config():
     parser.add_argument('--vocab', default='./data/vocab.bin', type=str, help='path of the serialized vocabulary')
     parser.add_argument('--batch_size', default=64, type=int, help='batch size')
     parser.add_argument('--beam_size', default=5, type=int, help='beam size for beam search')
-    parser.add_argument('--sample_size', default=10, type=int, help='sample size')
-    parser.add_argument('--embed_size', default=512, type=int, help='size of word embeddings')
+    parser.add_argument('--embed_size', default=100, type=int, help='size of word embeddings')
     parser.add_argument('--hidden_size', default=512, type=int, help='size of LSTM hidden states')
     parser.add_argument('--dropout', default=0.5, type=float, help='dropout rate')
 

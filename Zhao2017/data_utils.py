@@ -2,6 +2,8 @@ import pickle as pkl
 from collections import defaultdict
 import numpy as np
 import copy
+
+
 class LetsGoCorpus(object):
 
     def __init__(self, data_path):

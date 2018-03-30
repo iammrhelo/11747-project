@@ -66,8 +66,9 @@ class Encoder(nn.Module):
 
         self.hidden_size = hidden_size
 
-        self.embed_size = embed_size
-        self.lstm = nn.LSTM(embed_size, hidden_size, num_layers,
+        self.embed_size = embed_size * 2 + 1
+        
+        self.lstm = nn.LSTM(self.embed_size, self.hidden_size, num_layers,
                             dropout = dropout, bidirectional = bidirectional)
 
     def forward(self, src_embed, hidden=None):
@@ -118,16 +119,20 @@ class Seq2Seq(nn.Module):
         self.att_src_linear = nn.Linear(args.hidden_size * 2, args.hidden_size, bias=False)
         self.att_vec_linear = nn.Linear(args.hidden_size * 2 + args.hidden_size, args.hidden_size, bias=False)
 
-    def encode(self, src, src_len):
+    def encode(self, src_sys, src_usr, src_conf, src_len):
         # src: #batch, len(sent), #turns
-        n_batch = src.shape[0]
-        n_turn = src.shape[2]
+        n_batch = src_sys.shape[0]
+        n_turn = src_sys.shape[2]
 
         # print(src)
         # print(src.view(-1, src.shape[1]))
 
         # input here: n_bath*n_turn, len(sent)
-        src_embed = self.cnn_encoder(src.view(-1, src.shape[1]))
+        src_sys_embed = self.cnn_encoder(src_sys.view(-1, src_sys.shape[1]))
+        src_usr_embed = self.cnn_encoder(src_usr.view(-1, src_usr.shape[1]))
+        src_conf_embed = src_conf.view(-1, 1)
+        src_embed = torch.cat([src_sys_embed, src_usr_embed, src_conf_embed], dim = 1)
+
         
         #print(src_embed.view(n_batch, n_turn, -1))
         # src_embed: n_bath*n_turn, hidden_size*#direction
@@ -223,19 +228,22 @@ class Seq2Seq(nn.Module):
         return scores, hidden, attn
 
 
-    def forward(self, src, src_len, tgt):
-        src_encoded, dec_init = self.encode(src, src_len)
+    def forward(self, src_sys, src_usr, src_conf, src_len, tgt):
+        src_encoded, dec_init = self.encode(src_sys, src_usr, src_conf, src_len)
 
         scores = self.decode(src_encoded, src_len, dec_init, tgt)
         return scores
 
-    def greedy(self, src, src_len, length = 30):
+    def greedy(self, src_sys, src_usr, src_conf, src_len, length = 30):
 
         # n_batch = src.shape[0]
-        n_turn = src.shape[2]
+        n_turn = src_sys.shape[2]
 
         # input here: n_bath*n_turn, len(sent)
-        src_embed = self.cnn_encoder(src.view(-1, src.shape[1]))
+        src_sys_embed = self.cnn_encoder(src_sys.view(-1, src_sys.shape[1]))
+        src_usr_embed = self.cnn_encoder(src_usr.view(-1, src_usr.shape[1]))
+        src_conf_embed = src_conf.view(-1, 1)
+        src_embed = torch.cat([src_sys_embed, src_usr_embed, src_conf_embed], dim = 1)
 
         # src_embed: n_bath*n_turn, hidden_size*#direction
         # input here:n_turn, n_batch, hidden_size*#direction
