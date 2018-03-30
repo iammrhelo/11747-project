@@ -28,11 +28,11 @@ def evaluate_loss(model, data, crit, args):
         usr_utt = [[turn[1] for turn in dial] for dial in src_sents]
         conf = [[turn[2] for turn in dial] for dial in src_sents]
 
-        src_sents_sys_vars = to_input_variable_src(sys_utt, vocab.src, cuda=args.cuda)
-        src_sents_usr_vars = to_input_variable_src(usr_utt, vocab.src, cuda=args.cuda)
+        src_sents_sys_vars = to_input_variable_src(sys_utt, model.vocab.src, cuda=args.cuda)
+        src_sents_usr_vars = to_input_variable_src(usr_utt, model.vocab.src, cuda=args.cuda)
         src_sents_conf_vars = to_input_variable_conf(conf, cuda=args.cuda)
 
-        tgt_sents_var = to_input_variable(tgt_sents, vocab.tgt, cuda=args.cuda)
+        tgt_sents_var = to_input_variable(tgt_sents, model.vocab.tgt, cuda=args.cuda)
 
         src_sents_len = [len(s) for s in src_sents]
         pred_tgt_word_num = sum(len(s[1:]) for s in tgt_sents) # omitting leading `<s>`
