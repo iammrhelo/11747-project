@@ -217,7 +217,7 @@ class LetsGoDataLoader():
         self.data = data
         self.src = []
         self.tgt = []
-
+        self.max_len = 30
         self.process()
 
     def process(self):
@@ -227,8 +227,8 @@ class LetsGoDataLoader():
                 if i == 0: continue
 
                 for prev in dial[:i]:
-                    sys = prev[0].strip().split(' ')
-                    usr = prev[1].strip().split(' ')
+                    sys = prev[0].strip().split(' ')[:self.max_len]
+                    usr = prev[1].strip().split(' ')[:self.max_len]
                     src_ctx.append((sys, usr, prev[2], prev[3]))
 
                 self.src.append(src_ctx)
@@ -248,7 +248,7 @@ class FakeLetsGoDataLoader():
         self.data = data
         self.src = []
         self.tgt = []
-
+        self.max_len = 30
         self.process()
 
     def process(self):
