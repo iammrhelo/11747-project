@@ -58,9 +58,9 @@ class EntityNLM(nn.Module):
         self.rnn = nn.LSTMCell(input_size=embed_size, hidden_size=hidden_size)
 
         self.x = nn.Linear(hidden_size, vocab_size) # Linear
-        self.r = nn.Bilinear(hidden_size, hidden_size, 1, bias=False) # Is Entity? Binary
+        self.r = nn.Bilinear(hidden_size, hidden_size, 1) # Is Entity? Binary
         self.l = nn.Linear(2 * hidden_size, 25) # Remaining Length Prediction, Categorial         
-        self.e = nn.Bilinear(hidden_size, hidden_size, 1, bias=False) # Randomly Sample from Entity Set
+        self.e = nn.Bilinear(hidden_size, hidden_size, 1) # Randomly Sample from Entity Set
 
         # For r embeddings
         r_embeddings = Variable(torch.FloatTensor(2, hidden_size), requires_grad=True)
@@ -69,12 +69,12 @@ class EntityNLM(nn.Module):
         self.r_embeddings = r_embeddings
 
         # For distance feature
-        self.w_dist = nn.Linear(1, 1, bias=False)
+        self.w_dist = nn.Linear(1, 1)
 
-        self.delta = nn.Bilinear(entity_size, hidden_size, 1, bias=False) # Delta Matrix
+        self.delta = nn.Bilinear(entity_size, hidden_size, 1) # Delta Matrix
 
-        self.Te = nn.Linear(entity_size, hidden_size, bias=False)
-        self.Tc = nn.Linear(entity_size, hidden_size, bias=False)
+        self.Te = nn.Linear(entity_size, hidden_size)
+        self.Tc = nn.Linear(entity_size, hidden_size)
 
         self.sigmoid = nn.Sigmoid()
         self.dropout = nn.Dropout(dropout)
