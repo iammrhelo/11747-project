@@ -132,19 +132,17 @@ class EntityNLM(nn.Module):
 
     def get_entity(self, entity_idx):
         if entity_idx >= len(self.entities):
-            return self.entities[0]
+            return self.entities[0] # Dummy Embedding
         else:
             return self.entities[entity_idx]
 
     def get_dist_feat(self, nsent):
         dist_feat = Variable((torch.FloatTensor(self.entities_dist) - nsent).view(-1,1), requires_grad=False) 
-        if self.use_cuda:
-            dist_feat = dist_feat.cuda()
-
+        if self.use_cuda: dist_feat = dist_feat.cuda()
         return dist_feat
 
     def predict_type(self, h_t):
-        pred_r = self.r( self.r_embeddings, h_t.expand_as(self.r_embeddings)).transpose(0,1)
+        pred_r = self.r( self.dropout(self.r_embeddings), self.dropout(h_t.expand_as(self.r_embeddings)) ).transpose(0,1)
         return pred_r
 
     def predict_entity(self, h_t, sent_idx, lambda_dist):
@@ -153,19 +151,14 @@ class EntityNLM(nn.Module):
 
         dist_feat = self.get_dist_feat(sent_idx) # Sentence distance
         # Github
-        pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + torch.exp(dist_feat * lambda_dist)
+        #pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + torch.exp(dist_feat * lambda_dist)
         # Paper, this is very bad...
-        #pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + self.w_dist(dist_feat)
+        pred_e = self.e(self.dropout(entity_stack), self.dropout(h_t.expand_as(entity_stack)) ) + self.w_dist(dist_feat)
         pred_e = pred_e.transpose(0,1)
-
         return pred_e
 
     def predict_length(self, h_t, entity_embedding):
-        pred_l = self.l(
-            self.dropout(
-                torch.cat((h_t, entity_embedding),dim=1)
-                )
-            )
+        pred_l = self.l(self.dropout(torch.cat((h_t, entity_embedding),dim=1)))
         return pred_l
 
     def predict_word(self, next_entity_index, h_t, last_entity):
@@ -173,21 +166,9 @@ class EntityNLM(nn.Module):
         pred_x = None
         if next_entity_index > 0:
             entity_embedding = self.get_entity(next_entity_index)
-            
-            pred_x = self.x(
-                h_t + self.Te(
-                    self.dropout(
-                        entity_embedding)
-                    )
-                )
-
+            pred_x = self.x(self.dropout(h_t + self.Te(self.dropout(entity_embedding))))
         else:
-            pred_x = self.x(
-                h_t + self.Tc(
-                    self.dropout(
-                        last_entity)
-                    )
-                )
+            pred_x = self.x(self.dropout(h_t + self.Tc(self.dropout(last_entity))))
         return pred_x
 
     def clear_entities(self):
