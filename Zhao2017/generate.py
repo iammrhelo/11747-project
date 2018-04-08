@@ -198,8 +198,8 @@ def print_data():
 
 
 def main():
-    print_data()
-    #generate()
+    #print_data()
+    generate()
 
 
 if __name__ == "__main__":

@@ -153,7 +153,9 @@ def init_training(args):
     model = Seq2Seq(cnn_encoder, encoder, devoder, args, vocab)
     model.train()
 
-
+    for p in model.parameters():
+        p.data.uniform_(-args.uniform_init, args.uniform_init)
+    
     vocab_mask = torch.ones(len(vocab.tgt))
     vocab_mask[vocab.tgt['<pad>']] = 0
 

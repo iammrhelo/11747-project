@@ -9,9 +9,10 @@ def init_config():
     parser.add_argument('--batch_size', default=64, type=int, help='batch size')
     parser.add_argument('--beam_size', default=5, type=int, help='beam size for beam search')
     parser.add_argument('--embed_size', default=100, type=int, help='size of word embeddings')
-    parser.add_argument('--hidden_size', default=512, type=int, help='size of LSTM hidden states')
+    parser.add_argument('--hidden_size', default=256, type=int, help='size of LSTM hidden states')
     parser.add_argument('--dropout', default=0.5, type=float, help='dropout rate')
-
+    parser.add_argument('--uniform_init', default=0.1, type=float, help='if specified, use uniform initialization for all parameters')
+    
 
     parser.add_argument('--decode_max_time_step', default=200, type=int, help='maximum number of time steps used '
                                                                               'in decoding and sampling')
@@ -21,12 +22,11 @@ def init_config():
     parser.add_argument('--load_model', default=None, type=str, help='load a pre-trained model')
     parser.add_argument('--save_to', default='./model/', type=str, help='save trained model to')
     parser.add_argument('--save_model_after', default=5, help='save the model only after n validation iterations')
-    parser.add_argument('--patience', default=5, type=int, help='training patience')
-    parser.add_argument('--uniform_init', default=None, type=float, help='if specified, use uniform initialization for all parameters')
+    parser.add_argument('--patience', default=100, type=int, help='training patience')
     parser.add_argument('--clip_grad', default=5., type=float, help='clip gradients')
     parser.add_argument('--max_niter', default=-1, type=int, help='maximum number of training iterations')
     parser.add_argument('--lr', default=0.001, type=float, help='learning rate')
-    parser.add_argument('--lr_decay', default=0.5, type=float, help='decay learning rate if the validation performance drops')
+    parser.add_argument('--lr_decay', default=0.8, type=float, help='decay learning rate if the validation performance drops')
 
     parser.add_argument('--load_model_path', default='./model/best.bin', type=str, help='load trained model from')
 

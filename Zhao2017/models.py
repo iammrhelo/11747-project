@@ -21,7 +21,7 @@ class CNNEncoder(nn.Module):
         Ks = kernel_sizes
         self.out_size = len(kernel_sizes) * kernel_num
 
-        self.embed = nn.Embedding(V, D)
+        self.embed = nn.Embedding(V, D, padding_idx=0)
         # self.convs1 = [nn.Conv2d(Ci, Co, (K, D)) for K in Ks]
         self.convs1 = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D), padding = (1, 0)) for K in Ks])
         '''
