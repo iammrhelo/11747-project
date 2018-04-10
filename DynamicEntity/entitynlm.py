@@ -24,7 +24,7 @@ device = 0 if use_cuda else -1
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data',type=str,default='./data/InScript')
+    parser.add_argument('--data',type=str,default='./data/modi')
     parser.add_argument('--embed_dim',type=int,default=100)
     parser.add_argument('--hidden_size',type=int,default=128)
     parser.add_argument('--entity_size',type=int,default=128)
