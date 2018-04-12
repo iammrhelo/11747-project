@@ -126,7 +126,7 @@ class EntityNLM(nn.Module):
 
         # Update Entity List
         self.entities[ entity_idx ] = updated_embedding
-        self.entities_dist[ entity_idx ] = sent_idx # Update nearest entity apperance in sentence
+        self.entities_dist[ entity_idx ] = sent_idx # Update nearest entity apperance in sentencef
 
         return updated_embedding
 
@@ -161,9 +161,9 @@ class EntityNLM(nn.Module):
         pred_l = self.l(self.dropout(torch.cat((h_t, entity_embedding),dim=1)))
         return pred_l
 
-    def predict_word(self, next_entity_index, h_t, last_entity):
+    def predict_word(self, next_entity_index, h_t, entity_current):
         # Word Prediction
-        pred_x = self.x(self.dropout(h_t + self.Te(self.dropout(last_entity))))
+        pred_x = self.x(self.dropout(h_t + self.Te(self.dropout(entity_current))))
         return pred_x
 
     def clear_entities(self):

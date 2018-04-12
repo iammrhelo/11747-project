@@ -19,14 +19,15 @@ from model import EntityNLM
 from opts import build_model_name, parse_arguments
 from util import timeit
 
+# CUDA
 use_cuda = torch.cuda.is_available()
-
 device = 0 if use_cuda else -1
+print("use_cuda",use_cuda)
 
 args = parse_arguments()
 model_name = build_model_name(args)
+
 print(args)
-print("use_cuda",use_cuda)
 
 ##################
 #  Data Loading  #
@@ -38,13 +39,13 @@ dict_pickle = os.path.join(data,'train','dict.pickle')
 print("Loading corpus...")
 # Set Corpus
 if debug:
-    train_corpus = Corpus(os.path.join(data,'debug_train'), dict_pickle)
-    valid_corpus = Corpus(os.path.join(data,'debug_valid'),dict_pickle)
-    test_corpus = Corpus(os.path.join(data,'debug_test'),dict_pickle)
+    train_corpus = Corpus(os.path.join(data,'debug_train'), dict_pickle, use_cuda=use_cuda)
+    valid_corpus = Corpus(os.path.join(data,'debug_valid'),dict_pickle, use_cuda=use_cuda)
+    test_corpus = Corpus(os.path.join(data,'debug_test'),dict_pickle, use_cuda=use_cuda)
 else:
-    train_corpus = Corpus(os.path.join(data,'train'), dict_pickle)
-    valid_corpus = Corpus(os.path.join(data,'valid'),dict_pickle)
-    test_corpus = Corpus(os.path.join(data,'test'),dict_pickle)
+    train_corpus = Corpus(os.path.join(data,'train'), dict_pickle, use_cuda=use_cuda)
+    valid_corpus = Corpus(os.path.join(data,'valid'),dict_pickle, use_cuda=use_cuda)
+    test_corpus = Corpus(os.path.join(data,'test'),dict_pickle, use_cuda=use_cuda)
 
 vocab_size = len(train_corpus.dictionary)+1 # 0 for unknown
 print("vocab_size",vocab_size)
@@ -52,42 +53,34 @@ print("vocab_size",vocab_size)
 ##################
 #   Model Setup  #
 ##################
-embed_dim = args.embed_dim
-hidden_size = args.hidden_size
-entity_size = args.entity_size
-dropout = args.dropout
-pretrained = args.pretrained
-
 model = EntityNLM(vocab_size=vocab_size, 
-                    embed_size=embed_dim, 
-                    hidden_size=hidden_size,
-                    entity_size=entity_size,
-                    dropout=dropout,
+                    embed_size=args.embed_dim, 
+                    hidden_size=args.hidden_size,
+                    entity_size=args.entity_size,
+                    dropout=args.dropout,
                     use_cuda=use_cuda)
 
 if args.model_path is not None:
     print("Loading from {}".format(args.model_path))
     model.load_state_dict(torch.load(args.model_path))
-elif pretrained: 
+elif args.pretrained: 
     model.load_pretrained(train_corpus.dictionary)
 
 if use_cuda:
     model = model.cuda()
 
-lambda_dist = 1e-6
-
 #####################
 #  Training Config  #
 #####################
 num_epochs = args.num_epochs
-lr = args.lr
 if args.optim == "adam":
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 else:
-    optimizer = torch.optim.Adagrad(model.parameters(), lr=lr)
+    optimizer = torch.optim.Adagrad(model.parameters(), lr=args.lr)
 
 crossentropy = nn.CrossEntropyLoss()
-if use_cuda: crossentropy = crossentropy.cuda()
+if use_cuda: 
+    crossentropy = crossentropy.cuda()
 
 ignore_x = args.ignore_x
 ignore_r = args.ignore_r
@@ -153,7 +146,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
         # For every document
         h_t, c_t = model.init_hidden_states(1)
         model.create_entity() # Dummy
-        last_entity = model.entities[0]
+        entity_current = model.entities[0]
 
         # Check
         assert len(model.entities) == 1 # Only 1 dummy entity
@@ -163,17 +156,11 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
             losses = []
             if train_mode: optimizer.zero_grad()
 
-            X_tensor = Variable(torch.from_numpy(np.array(X[sent_idx])).type(torch.LongTensor))
-            R_tensor = Variable(torch.from_numpy(np.array(R[sent_idx])).type(torch.LongTensor))
-            E_tensor = Variable(torch.from_numpy(np.array(E[sent_idx])).type(torch.LongTensor))
-            L_tensor = Variable(torch.from_numpy(np.array(L[sent_idx])).type(torch.LongTensor))
-
-            if use_cuda:
-                X_tensor = X_tensor.cuda()
-                R_tensor = R_tensor.cuda()
-                E_tensor = E_tensor.cuda()
-                L_tensor = L_tensor.cuda()
-
+            X_tensor = Variable(X[sent_idx])
+            R_tensor = Variable(R[sent_idx])
+            E_tensor = Variable(E[sent_idx])
+            L_tensor = Variable(L[sent_idx])
+            
             h_t, c_t = repack(h_t,c_t)
 
             for pos in range(0,len(X[sent_idx])-1): # 1 to N-1
@@ -191,9 +178,9 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                 embed_curr_x = model.embed(curr_x)
                 h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
 
-                ########################
-                #   Entity Prediction  #
-                ########################
+                #######################
+                #  Entity Prediction  #
+                #######################
                 test_condition = ( sent_idx >= skip_sentence ) and ( max_entity < 0 or doc_predict_entity_count < max_entity )
 
                 if (train_mode or test_condition) and next_r.data[0] == 1:
@@ -235,7 +222,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                         model.create_entity(nsent=sent_idx)
                     
                     # Update Entity Here
-                    last_entity = model.update_entity(entity_idx, h_t, sent_idx)
+                    entity_current = model.update_entity(entity_idx, h_t, sent_idx)
     
                 # l == 1, End of Mention
                 if curr_l.data[0] == 1:
@@ -291,7 +278,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                 next_entity_index = int(next_e.data[0])
                 assert next_entity_index == next_e.data[0]
 
-                pred_x = model.predict_word(next_entity_index, h_t, last_entity)
+                pred_x = model.predict_word(next_entity_index, h_t, entity_current)
 
                 # TODO: OK
                 if not ignore_x:
@@ -368,7 +355,8 @@ early_stop_threshold = args.early_stop
 model_name = build_model_name(args)
 
 exp_dir = args.exp
-if not os.path.exists(exp_dir): os.makedirs(exp_dir)
+if not os.path.exists(exp_dir): 
+    os.makedirs(exp_dir)
 model_path = os.path.join(exp_dir, model_name + '.pt') if args.model_path is None else args.model_path
 
 tensorboard_dir = args.tensorboard

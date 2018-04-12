@@ -50,7 +50,6 @@ if torch.cuda.is_available(): model.cuda(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
-
 def repack(hidden_states):
     if type(hidden_states) == list or type(hidden_states) == tuple:
         hidden_states = [ Variable(state.data) for state in hidden_states ]

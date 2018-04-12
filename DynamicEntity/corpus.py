@@ -1,4 +1,3 @@
-import csv
 from glob import glob
 import os
 import pickle
@@ -7,24 +6,37 @@ import shutil
 import xml.etree.ElementTree
 
 from tqdm import tqdm
+import numpy as np
+
+import torch
 
 class Corpus(object):
-    def __init__(self, xml_dir, dict_pickle):
+    def __init__(self, xml_dir, dict_pickle, use_cuda=False):
         self.name = os.path.basename(xml_dir)
+        self.use_cuda = use_cuda
 
         # Use Predefined Dictionary 
         self.dictionary = self.load_dict(dict_pickle)
         self.documents = []
 
-        for xml_file in glob(os.path.join(xml_dir,"*.xml")):
+
+        for xml_file in sorted(glob(os.path.join(xml_dir,"*.xml"))):
             doc_name = os.path.basename(xml_file)
             doc = self.parse_document(xml_file, self.dictionary)
-            self.documents.append((doc_name,doc))
+            tensor_doc = self.to_tensor(doc)
+            self.documents.append((doc_name,tensor_doc))
     
+        
+
     def __str__(self):
         return self.name
-
-    def parse_document(self, xml_file, dictionary):
+    
+    def load_dict(self, dict_pickle):
+        with open(dict_pickle,'rb') as fin:
+            obj = pickle.load(fin)
+        return obj
+    
+    def parse_document(self, xml_file, dictionary, debug=False):
         root = xml.etree.ElementTree.parse(xml_file).getroot()
 
         content = root[0][0].text
@@ -41,7 +53,7 @@ class Corpus(object):
         for sent in sentences:
             R.append([0] * len(sent.split()))
             E.append([0] * len(sent.split())) 
-            L.append([1] * (len(sent.split())-1) + [0] ) # "." has to be 0
+            L.append([1] * len(sent.split())) 
 
         for label in participants:
             sentence_id, word_id = map(int, label.attrib['from'].split('-'))
@@ -51,7 +63,6 @@ class Corpus(object):
             text = label.attrib["text"]
             tokens = text.split()
 
-          
             start = word_id-1
             end = start+1
             if 'to' in label.attrib:
@@ -83,15 +94,54 @@ class Corpus(object):
                 x.append(xidx)
             X.append(x)
         
+
+        ##############
+        #   Check    #
+        ##############
+
+        # Check L
+        for ls in L:
+            for idx, l in enumerate(ls):
+                assert l >= 1
+                if l > 1:
+                    assert ls[idx+1] == l-1
+
         doc = []
         doc.append((X,R,E,L))
-        
-        return doc
+        if debug:
+            return doc, sentences
+        else:
+            return doc
 
-    def load_dict(self, dict_pickle):
-        with open(dict_pickle,'rb') as fin:
-            obj = pickle.load(fin)
-        return obj
+
+    def to_tensor(self, doc):
+        X, R, E, L = doc[0]
+        
+        tX = []
+        tR = []
+        tE = []
+        tL = []
+
+        for sent_idx in range(len(X)):
+        
+            tx = torch.from_numpy(np.array(X[sent_idx]))
+            tr = torch.from_numpy(np.array(R[sent_idx]))
+            te = torch.from_numpy(np.array(E[sent_idx]))
+            tl = torch.from_numpy(np.array(L[sent_idx]))      
+
+            if self.use_cuda:
+                tx = tx.cuda()
+                tr = tr.cuda()
+                te = te.cuda()
+                tl = tl.cuda()
+
+            tX.append(tx)
+            tR.append(tr)
+            tE.append(te)
+            tL.append(tl)      
+        
+        return [(tX, tR, tE, tL)]
+
 
 if __name__ == "__main__":
     """
@@ -100,9 +150,23 @@ if __name__ == "__main__":
     train_dict_pickle = os.path.join(train_dir,'dict.pickle')
     train_corpus = Corpus(train_dir, train_dict_pickle)
     """
-    debug_dir = './data/InScript/debug_train'
-    debug_corpus_pickle = os.path.join(debug_dir, 'corpus.pickle')
-    debug_dict_pickle = os.path.join(debug_dir,'dict.pickle')
-    debug_corpus = Corpus(debug_dir, debug_dict_pickle)
+    
+    train_dir = './data/modi/train'
+    xml_file = os.path.join(train_dir,'bath_001.xml')
+    dict_pickle = os.path.join(train_dir, 'dict.pickle')
 
-    import pdb; pdb.set_trace()
+    output_file = 'debug_corpus.txt'
+
+    corpus = Corpus(train_dir, dict_pickle, use_cuda=False)
+
+    doc, sentences = corpus.parse_document(xml_file, corpus.dictionary, debug=True)
+
+    X, R, E, L = doc[0]
+
+    for sent, x, r, e, l in zip(sentences, X, R, E, L):
+        print(sent)
+        print(x)
+        print(r)
+        print(e)
+        print(l)
+        import pdb; pdb.set_trace()
