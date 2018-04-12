@@ -10,7 +10,7 @@ def parse_arguments():
     parser.add_argument('--num_epochs',type=int,default=40)
     parser.add_argument('--optim',type=str,default="adam")
     parser.add_argument('--lr',type=float,default=1e-3)
-    parser.add_argument('--early_stop',type=int,default=100)
+    parser.add_argument('--early_stop',type=int,default=3)
     parser.add_argument('--pretrained',action="store_true",default=False)
     parser.add_argument('--model_path',type=str,default=None)
     parser.add_argument('--exp',type=str,default="exp")
