@@ -34,6 +34,8 @@ print(args)
 ##################
 data = args.data
 debug = args.debug
+if debug:
+    model_name = "debug_" + model_name
 dict_pickle = os.path.join(data,'train','dict.pickle')
 
 print("Loading corpus...")
@@ -160,7 +162,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
             R_tensor = Variable(R[sent_idx])
             E_tensor = Variable(E[sent_idx])
             L_tensor = Variable(L[sent_idx])
-            
+
             h_t, c_t = repack(h_t,c_t)
 
             for pos in range(0,len(X[sent_idx])-1): # 1 to N-1
