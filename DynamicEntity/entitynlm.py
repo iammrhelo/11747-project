@@ -16,41 +16,15 @@ from tensorboardX import SummaryWriter
 
 from corpus import Corpus
 from model import EntityNLM
+from opts import build_model_name, parse_arguments
 from util import timeit
 
 use_cuda = torch.cuda.is_available()
 
 device = 0 if use_cuda else -1
 
-def parse_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--data',type=str,default='./data/modi')
-    parser.add_argument('--embed_dim',type=int,default=100)
-    parser.add_argument('--hidden_size',type=int,default=128)
-    parser.add_argument('--entity_size',type=int,default=128)
-    parser.add_argument('--num_layers',type=int,default=2)
-    parser.add_argument('--dropout',type=float,default=0.5)
-    parser.add_argument('--num_epochs',type=int,default=40)
-    parser.add_argument('--lr',type=float,default=1e-3)
-    parser.add_argument('--early_stop',type=int,default=3)
-    parser.add_argument('--shuffle',action="store_true",default=True)
-    parser.add_argument('--pretrained',action="store_true",default=False)
-    parser.add_argument('--model_path',type=str,default=None)
-    parser.add_argument('--exp',type=str,default="exp")
-    parser.add_argument('--tensorboard',type=str,default="runs")
-    parser.add_argument('--debug',action="store_true",default=False)
-    parser.add_argument('--every_entity',action="store_true",default=True)
-    parser.add_argument('--skip_sentence',type=int,default=3)
-    parser.add_argument('--max_entity',type=int,default=30)
-    parser.add_argument('--eloss_weight',type=int,default=1)
-    parser.add_argument('--ignore_x',action="store_true",default=False)
-    parser.add_argument('--ignore_r',action="store_true",default=False)
-    parser.add_argument('--ignore_e',action="store_true",default=False)
-    parser.add_argument('--ignore_l',action="store_true",default=False)
-    args = parser.parse_args()
-    return args
-
 args = parse_arguments()
+model_name = build_model_name(args)
 print(args)
 print("use_cuda",use_cuda)
 
@@ -60,7 +34,6 @@ print("use_cuda",use_cuda)
 data = args.data
 debug = args.debug
 dict_pickle = os.path.join(data,'train','dict.pickle')
-
 
 print("Loading corpus...")
 # Set Corpus
@@ -82,10 +55,8 @@ print("vocab_size",vocab_size)
 embed_dim = args.embed_dim
 hidden_size = args.hidden_size
 entity_size = args.entity_size
-num_layers = args.num_layers
 dropout = args.dropout
 pretrained = args.pretrained
-model_path = args.model_path
 
 model = EntityNLM(vocab_size=vocab_size, 
                     embed_size=embed_dim, 
@@ -94,9 +65,9 @@ model = EntityNLM(vocab_size=vocab_size,
                     dropout=dropout,
                     use_cuda=use_cuda)
 
-if model_path is not None:
-    print("Loading from {}".format(model_path))
-    model.load_state_dict(torch.load(model_path))
+if args.model_path is not None:
+    print("Loading from {}".format(args.model_path))
+    model.load_state_dict(torch.load(args.model_path))
 elif pretrained: 
     model.load_pretrained(train_corpus.dictionary)
 
@@ -110,32 +81,31 @@ lambda_dist = 1e-6
 #####################
 num_epochs = args.num_epochs
 lr = args.lr
-optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+if args.optim == "adam":
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+else:
+    optimizer = torch.optim.Adagrad(model.parameters(), lr=lr)
 
 crossentropy = nn.CrossEntropyLoss()
 if use_cuda: crossentropy = crossentropy.cuda()
-
-eloss_weight = args.eloss_weight
 
 ignore_x = args.ignore_x
 ignore_r = args.ignore_r
 ignore_e = args.ignore_e
 ignore_l = args.ignore_l
 
-shuffle = args.shuffle
-
 # Evaluation
-every_entity = args.every_entity
 skip_sentence = args.skip_sentence
 max_entity = args.max_entity
 
 def repack(h_t, c_t):
-    return Variable(h_t.data), Variable(c_t.data)
+    if use_cuda:
+        return Variable(h_t.data).cuda(), Variable(c_t.data).cuda()
+    else:
+        return Variable(h_t.data), Variable(c_t.data)
 
 @timeit
 def run_corpus(corpus, epoch, train_mode=False, writer=None):
-    print("train_mode",train_mode)
-
     if train_mode: 
         model.train()
     else:
@@ -193,20 +163,18 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
             losses = []
             if train_mode: optimizer.zero_grad()
 
-            h_t, c_t = repack(h_t,c_t)
-            
             X_tensor = Variable(torch.from_numpy(np.array(X[sent_idx])).type(torch.LongTensor))
             R_tensor = Variable(torch.from_numpy(np.array(R[sent_idx])).type(torch.LongTensor))
             E_tensor = Variable(torch.from_numpy(np.array(E[sent_idx])).type(torch.LongTensor))
             L_tensor = Variable(torch.from_numpy(np.array(L[sent_idx])).type(torch.LongTensor))
 
             if use_cuda:
-                h_t = h_t.cuda()
-                c_t = c_t.cuda()
                 X_tensor = X_tensor.cuda()
                 R_tensor = R_tensor.cuda()
                 E_tensor = E_tensor.cuda()
                 L_tensor = L_tensor.cuda()
+
+            h_t, c_t = repack(h_t,c_t)
 
             for pos in range(0,len(X[sent_idx])-1): # 1 to N-1
                 curr_x = X_tensor[pos]
@@ -223,15 +191,17 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                 embed_curr_x = model.embed(curr_x)
                 h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
 
-                # Need to predict the next entity
+                ########################
+                #   Entity Prediction  #
+                ########################
                 test_condition = ( sent_idx >= skip_sentence ) and ( max_entity < 0 or doc_predict_entity_count < max_entity )
 
-                if (train_mode or test_condition) and ( every_entity or curr_r.data[0] == 0 ) and next_r.data[0] == 1:
+                if (train_mode or test_condition) and next_r.data[0] == 1:
                     next_entity_index = int(next_e.data[0])
                     assert next_entity_index == next_e.data[0]
 
                     # Concatenate entities to a block
-                    pred_e = model.predict_entity(h_t, sent_idx, lambda_dist)
+                    pred_e = model.predict_entity(h_t, sent_idx)
 
                     if next_entity_index < len(model.entities):
                         next_e = Variable(torch.LongTensor([next_entity_index]), requires_grad=False)
@@ -271,7 +241,6 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                 if curr_l.data[0] == 1:
 
                     mention_length = int(curr_l.data[0])
-                    
                     assert mention_length == curr_l.data[0], "{} : {}".format(mention_length, curr_l.data[0])
 
                     pred_r = model.predict_type(h_t)
@@ -288,7 +257,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                         assert next_entity_index == next_e.data[0]
 
                         # Concatenate entities to a block
-                        pred_e = model.predict_entity(h_t, sent_idx, lambda_dist)
+                        pred_e = model.predict_entity(h_t, sent_idx)
 
                         if next_entity_index < len(model.entities):
                             next_e = Variable(torch.LongTensor([next_entity_index]), requires_grad=False)
@@ -300,7 +269,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
 
                         # TODO: OK
                         if not ignore_e:
-                            e_loss = eloss_weight * crossentropy(pred_e, next_e)
+                            e_loss = crossentropy(pred_e, next_e)
                             doc_e_loss += e_loss.data[0]
                             losses.append(e_loss)
 
@@ -329,8 +298,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                     x_loss = crossentropy(pred_x, next_x)
                     doc_x_loss += x_loss.data[0]
                     losses.append(x_loss)
-
-            last_entity = h_t # Take hidden state as last entity embedding for next sentence
+  
             if len(losses):
                 sent_loss = sum(losses)
                 doc_loss += sent_loss.data[0]
@@ -397,13 +365,11 @@ best_valid_loss = None
 early_stop_count = 0
 early_stop_threshold = args.early_stop
 
-model_name = "embed_{}_hidden_{}_entity_{}_dropout_{}_pretrained_{}_every_{}_skip_{}_max_{}_best.pt"\
-            .format(embed_dim,hidden_size,entity_size,dropout,pretrained,every_entity, skip_sentence, max_entity)
-if debug: model_name = "debug_" + model_name
+model_name = build_model_name(args)
 
 exp_dir = args.exp
 if not os.path.exists(exp_dir): os.makedirs(exp_dir)
-model_path = os.path.join(exp_dir, model_name) if model_path is None else model_path
+model_path = os.path.join(exp_dir, model_name + '.pt') if args.model_path is None else args.model_path
 
 tensorboard_dir = args.tensorboard
 
@@ -419,7 +385,8 @@ for epoch in range(1,num_epochs+1,1):
     epoch_loss = 0
     
     # Shuffle Documents Here
-    if shuffle: random.shuffle(train_corpus.documents)
+    random.shuffle(train_corpus.documents)
+
     train_loss, train_entity_acc = run_corpus(train_corpus, epoch, train_mode=True, writer=train_writer)
     print("train_loss",train_loss,"train_entity_acc",train_entity_acc)
    	
