@@ -1,6 +1,7 @@
 import argparse
 from collections import Counter
 from glob import glob
+import json
 import os
 import pickle
 import random
@@ -10,18 +11,11 @@ import xml.etree.ElementTree
 
 from tqdm import tqdm
 
-def split_datasets_modi(xml_dirs, output_dir):
-    # Train 
+def split_datasets_category(xml_dirs, output_dir):
+
     train_dir = os.path.join(output_dir,'train')
     valid_dir = os.path.join(output_dir,'valid')
     test_dir = os.path.join(output_dir,'test')
-
-    for dirname in [ train_dir, valid_dir, test_dir ]:
-        if not os.path.exists(dirname):
-            os.makedirs(dirname)
-        else:
-            print("Dataset already split!")
-            return
 
     test_idx = random.randint(0,9)
     valid_idx1 = random.randint(0,9)
@@ -44,17 +38,12 @@ def split_datasets_modi(xml_dirs, output_dir):
 
 
 def split_datasets_random(xml_dirs, output_dir):
-    # Train 
+    
     train_dir = os.path.join(output_dir,'train')
     valid_dir = os.path.join(output_dir,'valid')
     test_dir = os.path.join(output_dir,'test')
-
-    for dirname in [ train_dir, valid_dir, test_dir ]:
-        if not os.path.exists(dirname):
-            os.makedirs(dirname)
-        else:
-            print("Dataset already split!")
-            return
+    
+    # Train 
     xml_files = []
     for xml_dir in xml_dirs:
         xml_files += glob(os.path.join(xml_dir,"*.xml"))
@@ -71,8 +60,25 @@ def split_datasets_random(xml_dirs, output_dir):
         for copy_file in copy_files:
             shutil.copy(copy_file, copy_dir)
 
-def split_datasets_cv(xml_dirs, output_dir):
-    pass
+def split_datasets_modi(xml_dirs, json_file, output_dir):
+    # Train 
+    train_dir = os.path.join(output_dir,'train')
+    valid_dir = os.path.join(output_dir,'valid')
+    test_dir = os.path.join(output_dir,'test')
+
+    # Load json
+    with open(json_file,'r') as fin:
+        modi_split = json.loads(fin.read())
+
+    for dataset, copy_dir in [('train', train_dir), ('dev', valid_dir), ('test', test_dir) ]:
+
+        files = modi_split[ dataset ]
+
+        for filename in files:
+            category = filename.split('_')[0]
+            filepath = os.path.join('./InScript/corpus',category, filename + '.xml')
+
+            shutil.copy(filepath, copy_dir)
 
 def build_dict(xml_dir, threshold=10):
     cnt = Counter()
@@ -105,22 +111,34 @@ def build_dict(xml_dir, threshold=10):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-o','--output_dir',type=str)
-    parser.add_argument('-t','--type',type=str,help='modi | random | cv')
+    parser.add_argument('-o','--output_dir',type=str, default='./data/modi')
+    parser.add_argument('-t','--type',type=str,default='modi',help='category | random | modi')
+    parser.add_argument('-j','--json',type=str,default='data/clean_data_split.json')
     parser.add_argument('--min_threshold',type=int,default=10)
     args = parser.parse_args()
     
     output_dir = args.output_dir
     split_type = args.type
+    json_file = args.json
     min_threshold = args.min_threshold
 
     xml_dirs = list(filter(os.path.isdir,glob("InScript/corpus/*")))
-    if split_type == "modi":
-        split_datasets_modi(xml_dirs, output_dir)
+
+    # Train 
+    train_dir = os.path.join(output_dir,'train')
+    valid_dir = os.path.join(output_dir,'valid')
+    test_dir = os.path.join(output_dir,'test')
+
+    for dirname in [ train_dir, valid_dir, test_dir ]:
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+
+    if split_type == "category":
+        split_datasets_category(xml_dirs, output_dir)
     elif split_type == "random":
         split_datasets_random(xml_dirs, output_dir)
-    elif split_type == "cv":
-        split_datasets_cv(xml_dirs, output_dir)
+    elif split_type == "modi":
+        split_datasets_modi(xml_dirs, json_file, output_dir)
 
     train_xml_dirs = os.path.join(output_dir,'train')
 

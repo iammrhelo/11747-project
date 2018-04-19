@@ -58,9 +58,9 @@ class EntityNLM(nn.Module):
         self.rnn = nn.LSTMCell(input_size=embed_size, hidden_size=hidden_size)
 
         self.x = nn.Linear(hidden_size, vocab_size) # Linear
-        self.r = nn.Bilinear(hidden_size, hidden_size, 1, bias=False) # Is Entity? Binary
+        self.r = nn.Bilinear(hidden_size, hidden_size, 1) # Is Entity? Binary
         self.l = nn.Linear(2 * hidden_size, 25) # Remaining Length Prediction, Categorial         
-        self.e = nn.Bilinear(hidden_size, hidden_size, 1, bias=False) # Randomly Sample from Entity Set
+        self.e = nn.Bilinear(hidden_size, hidden_size, 1) # Randomly Sample from Entity Set
 
         # For r embeddings
         r_embeddings = Variable(torch.FloatTensor(2, hidden_size), requires_grad=True)
@@ -69,12 +69,12 @@ class EntityNLM(nn.Module):
         self.r_embeddings = r_embeddings
 
         # For distance feature
-        self.w_dist = nn.Linear(1, 1, bias=False)
+        self.w_dist = nn.Linear(1, 1)
 
-        self.delta = nn.Bilinear(entity_size, hidden_size, 1, bias=False) # Delta Matrix
+        self.delta = nn.Bilinear(entity_size, hidden_size, 1) # Delta Matrix
 
-        self.Te = nn.Linear(entity_size, hidden_size, bias=False)
-        self.Tc = nn.Linear(entity_size, hidden_size, bias=False)
+        self.Te = nn.Linear(entity_size, hidden_size)
+        self.Tc = nn.Linear(entity_size, hidden_size)
 
         self.sigmoid = nn.Sigmoid()
         self.dropout = nn.Dropout(dropout)
@@ -126,68 +126,44 @@ class EntityNLM(nn.Module):
 
         # Update Entity List
         self.entities[ entity_idx ] = updated_embedding
-        self.entities_dist[ entity_idx ] = sent_idx
+        self.entities_dist[ entity_idx ] = sent_idx # Update nearest entity apperance in sentencef
 
         return updated_embedding
 
     def get_entity(self, entity_idx):
         if entity_idx >= len(self.entities):
-            return self.entities[0]
+            return self.entities[0] # Dummy Embedding
         else:
             return self.entities[entity_idx]
 
     def get_dist_feat(self, nsent):
         dist_feat = Variable((torch.FloatTensor(self.entities_dist) - nsent).view(-1,1), requires_grad=False) 
-        if self.use_cuda:
+        if self.use_cuda: 
             dist_feat = dist_feat.cuda()
-
         return dist_feat
 
     def predict_type(self, h_t):
-        pred_r = self.r( self.r_embeddings, h_t.expand_as(self.r_embeddings)).transpose(0,1)
+        pred_r = self.r( self.dropout(self.r_embeddings), self.dropout(h_t.expand_as(self.r_embeddings)) ).transpose(0,1)
         return pred_r
 
-    def predict_entity(self, h_t, sent_idx, lambda_dist):
+    def predict_entity(self, h_t, sent_idx):
         # Concatenate entities to a block
         entity_stack = torch.cat(self.entities)
 
-        dist_feat = self.get_dist_feat(sent_idx) # Sentence distance
-        # Github
-        pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + torch.exp(dist_feat * lambda_dist)
-        # Paper, this is very bad...
-        #pred_e = self.e(entity_stack, h_t.expand_as(entity_stack)) + self.w_dist(dist_feat)
-        pred_e = pred_e.transpose(0,1)
+        dist_feat = self.get_dist_feat(sent_idx) # Sentence distance feature
 
+        pred_e = self.e(self.dropout(entity_stack), self.dropout(h_t.expand_as(entity_stack)) ) + self.w_dist(self.dropout(dist_feat))
+        
+        pred_e = pred_e.transpose(0,1)
         return pred_e
 
     def predict_length(self, h_t, entity_embedding):
-        pred_l = self.l(
-            self.dropout(
-                torch.cat((h_t, entity_embedding),dim=1)
-                )
-            )
+        pred_l = self.l(self.dropout(torch.cat((h_t, entity_embedding),dim=1)))
         return pred_l
 
-    def predict_word(self, next_entity_index, h_t, last_entity):
+    def predict_word(self, next_entity_index, h_t, entity_current):
         # Word Prediction
-        pred_x = None
-        if next_entity_index > 0:
-            entity_embedding = self.get_entity(next_entity_index)
-            
-            pred_x = self.x(
-                h_t + self.Te(
-                    self.dropout(
-                        entity_embedding)
-                    )
-                )
-
-        else:
-            pred_x = self.x(
-                h_t + self.Tc(
-                    self.dropout(
-                        last_entity)
-                    )
-                )
+        pred_x = self.x(self.dropout(h_t + self.Te(self.dropout(entity_current))))
         return pred_x
 
     def clear_entities(self):
