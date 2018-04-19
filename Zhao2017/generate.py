@@ -94,7 +94,7 @@ def to_input_variable_src(src_data, vocab, cuda=False, is_test=False):
     return a tensor of shape (src_sent_len, batch_size)
     """
     ret = []
-    max_len = max([max([len(s) for s in sents]) for sents in src_data])
+    max_len = 30
     for each in src_data:
         word_ids = word2id(each, vocab)
         sents_t, masks = input_transpose_src(word_ids, vocab['<pad>'], max_len)
@@ -134,20 +134,20 @@ def generate():
     # dev_loader = FakeLetsGoDataLoader(corpus.valid)
     # test_loader = FakeLetsGoDataLoader(corpus.test)
 
-    train_loader = LetsGoDataLoader(corpus.train)
-    dev_loader = LetsGoDataLoader(corpus.valid)
+    #train_loader = LetsGoDataLoader(corpus.train)
+    #dev_loader = LetsGoDataLoader(corpus.valid)
     test_loader = LetsGoDataLoader(corpus.test)
 
 
-    train_data = list(zip(train_loader.get_src(), train_loader.get_tgt()))
-    dev_data = list(zip(dev_loader.get_src(), dev_loader.get_tgt()))
+    #train_data = list(zip(train_loader.get_src(), train_loader.get_tgt()))
+    #dev_data = list(zip(dev_loader.get_src(), dev_loader.get_tgt()))
     test_data = list(zip(test_loader.get_src(), test_loader.get_tgt()))
 
 
     vocab, model = init_model(args)
 
 
-    for sent, tgt in data_iter(test_data, batch_size = 1):
+    for sent, tgt in data_iter_test(test_data):
 
         sys_utt = [[turn[0] for turn in dial] for dial in sent]
         usr_utt = [[turn[1] for turn in dial] for dial in sent]
@@ -157,7 +157,9 @@ def generate():
         src_sents_usr_vars = to_input_variable_src(usr_utt, vocab.src, cuda=False)
         src_sents_conf_vars = to_input_variable_conf(conf, cuda=False)
 
-
+        #print(src_sents_sys_vars.size())
+        #print(src_sents_usr_vars.size())
+        #exit(0)
         src_sent_len = [len(s) for s in sent]
 
 
@@ -184,9 +186,9 @@ def print_data():
     args = init_config()
     vocab = torch.load('./data/vocab.bin')
     corpus = LetsGoCorpus('./data/union_data-1ab.p')
-    train_loader = FakeLetsGoDataLoader(corpus.train)
-    dev_loader = FakeLetsGoDataLoader(corpus.valid)
-    test_loader = FakeLetsGoDataLoader(corpus.test)
+    train_loader = LetsGoDataLoader(corpus.train)
+    dev_loader = LetsGoDataLoader(corpus.valid)
+    test_loader = LetsGoDataLoader(corpus.test)
 
     train_data = list(zip(train_loader.get_src(), train_loader.get_tgt()))
     dev_data = list(zip(dev_loader.get_src(), dev_loader.get_tgt()))
