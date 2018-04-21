@@ -4,16 +4,15 @@ import numpy as np
 def init_config():
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', default=321, type=int, help='random seed')
-    parser.add_argument('--cuda', action='store_true', default=True, help='use gpu')
+    parser.add_argument('--cuda', action='store_true', default=False, help='use gpu')
     parser.add_argument('--vocab', default='./data/vocab.bin', type=str, help='path of the serialized vocabulary')
     parser.add_argument('--batch_size', default=64, type=int, help='batch size')
     parser.add_argument('--beam_size', default=5, type=int, help='beam size for beam search')
     parser.add_argument('--embed_size', default=100, type=int, help='size of word embeddings')
-    parser.add_argument('--hidden_size', default=256, type=int, help='size of LSTM hidden states')
+    parser.add_argument('--hidden_size', default=500, type=int, help='size of LSTM hidden states')
     parser.add_argument('--dropout', default=0.5, type=float, help='dropout rate')
     parser.add_argument('--uniform_init', default=0.1, type=float, help='if specified, use uniform initialization for all parameters')
     
-
     parser.add_argument('--decode_max_time_step', default=200, type=int, help='maximum number of time steps used '
                                                                               'in decoding and sampling')
 

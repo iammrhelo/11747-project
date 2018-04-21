@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 def aeq(*args):
     """
@@ -21,6 +22,25 @@ def sequence_mask(lengths, max_len=None):
             .type_as(lengths)
             .repeat(batch_size, 1)
             .lt(lengths.unsqueeze(1)))
+
+
+class ZhaoAttention(nn.Module):
+    def __init__(self, hidden_size=500, context_size=500):
+        super(ZhaoAttention, self).__init__()
+        self.bilinear = nn.Bilinear(hidden_size, hidden_size, 1)
+
+    def forward(self, h_t, states):
+     
+        src_seq_len, batch_size, src_hidden_size = states.shape
+        _, batch_size, trg_hidden_size = h_t.shape # (1, batch_size, trg_hidden_size )
+
+        # Reshape to 2D
+        expanded_ht = h_t.expand_as(states).contiguous().view(-1, trg_hidden_size)
+        expanded_states = states.contiguous().view(-1, src_hidden_size)
+        scores = self.bilinear(expanded_ht, expanded_states).view(src_seq_len, batch_size, 1)        
+
+        attn_weights = F.softmax(scores, 0) # (src_seq_len, batch_size, 1)
+        return attn_weights
 
 
 class GlobalAttention(nn.Module):

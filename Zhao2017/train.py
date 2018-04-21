@@ -17,7 +17,6 @@ from vocab import *
 import time
 
 
-
 def evaluate_loss(model, data, crit, args):
     model.eval()
     cum_loss = 0.
@@ -51,7 +50,7 @@ def evaluate_loss(model, data, crit, args):
 
 def word2id(sents, vocab):
     if type(sents[0]) == list:
-        return [[vocab[w] for w in s] for s in sents]
+        return [ [ vocab[w] for w in s] for s in sents]
     else:
         return [vocab[w] for w in sents]
 
@@ -148,9 +147,9 @@ def init_training(args):
 
     cnn_encoder = CNNEncoder(len(vocab.src), args.embed_size)
     encoder = Encoder(cnn_encoder.out_size, args.hidden_size)
-    devoder = Decoder(args.embed_size, args.hidden_size, len(vocab.tgt))
+    decoder = Decoder(args.embed_size, args.hidden_size, len(vocab.tgt))
 
-    model = Seq2Seq(cnn_encoder, encoder, devoder, args, vocab)
+    model = Seq2Seq(cnn_encoder, encoder, decoder, args, vocab)
     model.train()
 
     for p in model.parameters():
@@ -244,8 +243,6 @@ def train():
             report_examples += batch_size
             cum_examples += batch_size
             cum_batches += batch_size
-
-
 
             print('Training: epoch %d, avg. loss %.2f, avg. ppl %.2f ' \
                       'cum. examples %d, speed %.2f words/sec, time elapsed %.2f sec' % (epoch,
