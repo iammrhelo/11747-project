@@ -127,7 +127,7 @@ class Seq2Seq(nn.Module):
         self.att_src_linear = nn.Linear(args.hidden_size * 2, args.hidden_size, bias=False)
         self.att_vec_linear = nn.Linear(args.hidden_size * 2, args.hidden_size, bias=False)
 
-        self.cuda = args.cuda
+        self.use_cuda = args.cuda
 
     def encode(self, src_sys, src_usr, src_conf, src_len):
         # src: #batch, len(sent), #turns
@@ -172,7 +172,7 @@ class Seq2Seq(nn.Module):
         # Create data input
         START_IDX = self.vocab.tgt['<s>']
         decoder_input = Variable(torch.LongTensor([ START_IDX ] * batch_size)).unsqueeze(0) # (1, batch_size)
-        if self.cuda:
+        if self.use_cuda:
             decoder_input = decoder_input.cuda()
         
         decoder_hidden = decoder_init_hidden
