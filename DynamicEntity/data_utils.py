@@ -1,8 +1,14 @@
-import pickle as pkl
 from collections import defaultdict
-import numpy as np
 import copy
+import pickle as pkl
 
+import numpy as np
+import torch
+
+from vocab import *
+
+np.set_printoptions(precision=3)
+use_cuda = torch.cuda.is_available()
 
 class LetsGoCorpus(object):
 
@@ -53,8 +59,6 @@ def read_corpus_vocab(corp, source):
         data.append(sent)
 
     return data
-
-
 
 
 def data_iter(data, batch_size, shuffle=True):
@@ -272,44 +276,49 @@ class FakeLetsGoDataLoader():
     def get_tgt(self):
         return self.tgt
 
-
 class LetsGoEntityDataLoader():
-    def __init__(self, data, entity, vocab):
+    def __init__(self, data, vocab, use_cuda=False):
 
         self.data = data
         self.dialogs = []
         self.R = []
         self.E = []
         self.L = []
-        self.entity = entity
+        self.entity = [] # invalid entity
         self.vocab = vocab
         
-        self.process()
-        
+        self.use_cuda = use_cuda
 
-    def process(self):
-        _ = self.entity.add_entity('NOT_ENTITY')
+        self.documents, self.entities = self.process()
         
-        for dial in self.data:
-            dialog = []
+    def process(self):
+        documents = []
+        entities = []
+        for dial_idx, dial in enumerate(self.data,1):
+            # One Document
+            entity_dict = {}
+            X_s = []
             R_s = []
             E_s = []
             L_s = []
             for i, turn in enumerate(dial):
                 sys = turn[0].strip().split(' ')
                 usr = turn[1].strip().split(' ')
+                
                 sysR = self.get_R(sys)
-                sysE = self.get_E(sys)
-                sysL = self.get_L(sys)
                 usrR = self.get_R(usr)
-                usrE = self.get_E(usr)
+                
+                sysL = self.get_L(sys)
                 usrL = self.get_L(usr)
                 
+                sysE = self.get_E(sys, entity_dict)
+                usrE = self.get_E(usr, entity_dict)
+            
                 sys = [self.vocab[w] for w in sys]
                 usr = [self.vocab[w] for w in usr]
                 
-                dialog.append(sys)
-                dialog.append(usr)
+                X_s.append(sys)
+                X_s.append(usr)
                 R_s.append(sysR)
                 R_s.append(usrR)
                 E_s.append(sysE)
@@ -317,40 +326,110 @@ class LetsGoEntityDataLoader():
                 L_s.append(sysL)
                 L_s.append(usrL)
                 
-            self.dialogs.append(dialog)
-            self.R.append(R_s)
-            self.E.append(E_s)
-            self.L.append(L_s)
+            doc = [ (X_s, R_s, E_s, L_s) ]
+
+            tensor_doc = self.to_tensor(doc)
+
+            documents.append((str(dial_idx), tensor_doc))
+
+            entities.append(entity_dict)
+        
+        return documents, entities
     
     def get_R(self, sent):
-        ret = [int('<' in word) for word in sent]
+        ret = [ int('<' in word) for word in sent]
         return ret
     
-    def get_E(self, sent):
+    def get_E(self, sent, entity_dict):
         ret = []
         for word in sent:
+            # Check if is entity
             if '<' not in word:
-                ret.append(self.entity.add_entity('NOT_ENTITY'))
+                if word not in entity_dict: 
+                    entity_dict[ word ] = len(entity_dict)+1
+                entity_idx = entity_dict.get(word)
             else:
-                ret.append(self.entity.add_entity(word))
+                entity_idx = 0
+            ret.append(entity_idx)
+        
         return ret
     
     def get_L(self, sent):
         ret = [1 for _ in sent]
         return ret
-    
-            
-    def get_dialogs(self):
-        return self.dialogs
-    def get_Rs(self):
-        return self.R
-    def get_Es(self):
-        return self.E
-    def get_Ls(self):
-        return self.L
-    
-    def get_entity(self):
-        return self.entity
+
+    def to_tensor(self, doc):
+        X, R, E, L = doc[0]
+        
+        tX = []
+        tR = []
+        tE = []
+        tL = []
+
+        for sent_idx in range(len(X)):
+        
+            tx = torch.from_numpy(np.array(X[sent_idx]))
+            tr = torch.from_numpy(np.array(R[sent_idx]))
+            te = torch.from_numpy(np.array(E[sent_idx]))
+            tl = torch.from_numpy(np.array(L[sent_idx]))      
+
+            if self.use_cuda:
+                tx = tx.cuda()
+                tr = tr.cuda()
+                te = te.cuda()
+                tl = tl.cuda()
+
+            tX.append(tx)
+            tR.append(tr)
+            tE.append(te)
+            tL.append(tl)      
+        
+        return [(tX, tR, tE, tL)]
+
+    def display_stats(self):
+        # Document 
+        nwords = [] 
+        nentities = []  
+        nentities_distinct = []     
+
+        # Sentence 
+        nwords_sentence = []
+        nentities_sentence = []
+        for (doc_name, doc) in self.documents:
+
+            X, R, E, L = doc[0]
+
+            word_count = 0
+            entity_count = 0
+            for sent_x, sent_r in zip(X,R):
+                word_count += sent_x.size()[0]
+                entity_count += sent_r.sum()
+                nwords_sentence.append(sent_x.size()[0])
+                nentities_sentence.append(sent_r.sum())
+
+            nwords.append(word_count)
+            nentities.append(entity_count)
+        
+        nentities_distinct = [ len(entity_dict) for entity_dict in self.entities ]
+
+        def print_mean_std(name, stats):
+            mean = np.mean(stats)
+            std = np.std(stats)
+            maximum = np.max(stats)
+            mininum = np.min(stats)
+
+            msg = ""
+            msg += "{0:.3f}".format(mean)
+            msg += "(+/-{0:.3f})".format(std)
+            msg += ", max {}".format(maximum)
+            msg += ", min {}".format(mininum)
+            print(name,msg)
+
+        print_mean_std("Average number of words per document", nwords)
+        print_mean_std("Average number of entities per document", nentities)
+        print_mean_std("Average number of distinct entities per document", nentities_distinct)
+        print_mean_std("Average number of words per sentences", nwords_sentence)
+        print_mean_std("Average number of entites per sentence", nentities_sentence)
 
 class Entity():
     def __init__(self):
@@ -366,16 +445,19 @@ class Entity():
         else:
             return self.entity2id[ent]
 
+if __name__ == "__main__":
+    vocab = torch.load('./data/vocab.bin')
+    corpus = LetsGoCorpus('./data/union_data-1ab.p')
+    train_loader = LetsGoEntityDataLoader(corpus.train, vocab.src)
+    print("Train")
+    train_loader.display_stats()
+    valid_loader = LetsGoEntityDataLoader(corpus.valid, vocab.src)
+    print("Valid")
+    valid_loader.display_stats()
 
-
-
-
-
-
-
-
-
-
+    test_loader = LetsGoEntityDataLoader(corpus.test, vocab.src)
+    print("Test")
+    test_loader.display_stats()
 
 
 

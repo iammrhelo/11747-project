@@ -15,8 +15,10 @@ from torch.autograd import Variable
 from tensorboardX import SummaryWriter
 
 from corpus import Corpus
+from data_utils import LetsGoCorpus, LetsGoEntityDataLoader
 from model import EntityNLM
 from opts import build_model_name, parse_arguments
+from vocab import Vocab, VocabEntry
 from util import timeit
 
 # CUDA
@@ -25,23 +27,34 @@ device = 0 if use_cuda else -1
 print("use_cuda",use_cuda)
 
 def load_corpus(args):
-    data = args.data
-    debug = args.debug
+    dataset_name = args.dataset
+    print("Loading dataset",dataset_name)
 
-    dict_pickle = os.path.join(data,'train','dict.pickle')
-
-    print("Loading corpus...")
-    # Set Corpus
-    if debug:
-        train_corpus = Corpus(os.path.join(data,'debug_train'), dict_pickle, use_cuda=use_cuda)
-        valid_corpus = Corpus(os.path.join(data,'debug_valid'),dict_pickle, use_cuda=use_cuda)
-        test_corpus = Corpus(os.path.join(data,'debug_test'),dict_pickle, use_cuda=use_cuda)
+    if dataset_name == "debug":
+        data_dir = './data/modi'
+        dict_pickle = os.path.join(data_dir,'train','dict.pickle')
+        train_corpus = Corpus(os.path.join(data_dir,'debug_train'), dict_pickle, use_cuda=use_cuda)
+        valid_corpus = Corpus(os.path.join(data_dir,'debug_valid'), dict_pickle, use_cuda=use_cuda)
+        test_corpus = Corpus(os.path.join(data_dir,'debug_test'), dict_pickle, use_cuda=use_cuda)
+        dictionary = train_corpus.dictionary
+    elif dataset_name == "inscript":
+        data_dir = './data/modi'
+        dict_pickle = os.path.join(data_dir,'train','dict.pickle')
+        train_corpus = Corpus(os.path.join(data_dir,'train'), dict_pickle, use_cuda=use_cuda)
+        valid_corpus = Corpus(os.path.join(data_dir,'valid'),dict_pickle, use_cuda=use_cuda)
+        test_corpus = Corpus(os.path.join(data_dir,'test'),dict_pickle, use_cuda=use_cuda)
+        dictionary = train_corpus.dictionary
+    elif dataset_name == "letsgo":
+        vocab = torch.load('./data/vocab.bin')
+        corpus = LetsGoCorpus('./data/union_data-1ab.p')
+        train_corpus = LetsGoEntityDataLoader(corpus.train, vocab.src)
+        valid_corpus = LetsGoEntityDataLoader(corpus.valid, vocab.src)
+        test_corpus = LetsGoEntityDataLoader(corpus.test, vocab.src)
+        dictionary = train_corpus.vocab.word2id
     else:
-        train_corpus = Corpus(os.path.join(data,'train'), dict_pickle, use_cuda=use_cuda)
-        valid_corpus = Corpus(os.path.join(data,'valid'),dict_pickle, use_cuda=use_cuda)
-        test_corpus = Corpus(os.path.join(data,'test'),dict_pickle, use_cuda=use_cuda)
-    
-    return train_corpus, valid_corpus, test_corpus
+        raise ValueError("Invalid dataset:",dataset_name)
+
+    return train_corpus, valid_corpus, test_corpus, dictionary
 
 def build_model(vocab_size, args, dictionary):
     model = EntityNLM(vocab_size=vocab_size, 
@@ -81,7 +94,6 @@ def build_model_path(exp_dir, model_name, model_path):
     if model_path is None:
         model_path = os.path.join(exp_dir, model_name + '.pt')
     return model_path
-
 
 @timeit
 def run_corpus(corpus, model, optimizer, criterion, config, train_mode=False):
@@ -374,15 +386,14 @@ def main():
     ##################
     #  Data Loading  #
     ##################
-    train_corpus, valid_corpus, test_corpus = load_corpus(args)
-
-    vocab_size = len(train_corpus.dictionary)+1 # 0 for unknown
+    train_corpus, valid_corpus, test_corpus, dictionary = load_corpus(args)
+    vocab_size = len(dictionary)
     print("vocab_size",vocab_size)
 
     ##################
     #   Model Setup  #
     ##################
-    model = build_model(vocab_size, args, train_corpus.dictionary)
+    model = build_model(vocab_size, args, dictionary)
 
     criterion = nn.CrossEntropyLoss()
     
@@ -411,7 +422,6 @@ def main():
 
     model_name = build_model_name(args)
     model_path = build_model_path(args.exp, model_name, args.model_path)
-
 
     tensorboard_dir = args.tensorboard
 

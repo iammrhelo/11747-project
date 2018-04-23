@@ -3,7 +3,7 @@ import os
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data',type=str,default='./data/modi')
+    parser.add_argument('--dataset',type=str,default='inscript',help='debug | inscript | letsgo')
     parser.add_argument('--embed_dim',type=int,default=256)
     parser.add_argument('--hidden_size',type=int,default=256)
     parser.add_argument('--entity_size',type=int,default=256)
@@ -16,7 +16,6 @@ def parse_arguments():
     parser.add_argument('--model_path',type=str,default=None)
     parser.add_argument('--exp',type=str,default="exp")
     parser.add_argument('--tensorboard',type=str,default="runs")
-    parser.add_argument('--debug',action="store_true",default=False)
     parser.add_argument('--skip_sentence',type=int,default=3)
     parser.add_argument('--max_entity',type=int,default=30)
     parser.add_argument('--ignore_x',action="store_true",default=False)
@@ -27,22 +26,18 @@ def parse_arguments():
     return args
 
 def build_model_name(args):
-    ignore_list = ["early_stop","debug","model_path","data","tensorboard", "exp", "skip_sentence", "max_entity"]
+    ignore_list = ["early_stop","model_path","tensorboard", "exp", "skip_sentence", "max_entity",\
+                    "pretrained",\
+                    "ignore_x","ignore_r","ignore_e","ignore_l"]
 
     attributes = []
     for k, v in sorted(vars(args).items()):
-        if k.startswith('ignore'):
-            if v == True:
-                attrib = "{}_{}".format(k,v)
-                attributes.append(attrib)
-        elif k not in ignore_list:
+        if k not in ignore_list:
             attrib = "{}_{}".format(k,v)
             attributes.append(attrib)
 
     model_name = "_".join(attributes)
 
-    if args.debug:
-        model_name = "debug_" + model_name
     return model_name
 
 def build_model_path(exp_dir, model_name):
