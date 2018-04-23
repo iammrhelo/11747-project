@@ -47,9 +47,9 @@ def load_corpus(args):
     elif dataset_name == "letsgo":
         vocab = torch.load('./data/vocab.bin')
         corpus = LetsGoCorpus('./data/union_data-1ab.p')
-        train_corpus = LetsGoEntityDataLoader(corpus.train, vocab.src)
-        valid_corpus = LetsGoEntityDataLoader(corpus.valid, vocab.src)
-        test_corpus = LetsGoEntityDataLoader(corpus.test, vocab.src)
+        train_corpus = LetsGoEntityDataLoader(corpus.train, vocab.src, use_cuda=use_cuda)
+        valid_corpus = LetsGoEntityDataLoader(corpus.valid, vocab.src, use_cuda=use_cuda)
+        test_corpus = LetsGoEntityDataLoader(corpus.test, vocab.src, use_cuda=use_cuda)
         dictionary = train_corpus.vocab.word2id
     else:
         raise ValueError("Invalid dataset:",dataset_name)
