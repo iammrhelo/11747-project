@@ -325,7 +325,7 @@ class LetsGoEntityDataLoader():
                 E_s.append(usrE)
                 L_s.append(sysL)
                 L_s.append(usrL)
-                
+            
             doc = [ (X_s, R_s, E_s, L_s) ]
 
             tensor_doc = self.to_tensor(doc)
@@ -344,7 +344,7 @@ class LetsGoEntityDataLoader():
         ret = []
         for word in sent:
             # Check if is entity
-            if '<' not in word:
+            if '<' in word:
                 if word not in entity_dict: 
                     entity_dict[ word ] = len(entity_dict)+1
                 entity_idx = entity_dict.get(word)
