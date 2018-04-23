@@ -159,7 +159,8 @@ def run_corpus(corpus, model, optimizer, criterion, config, train_mode=False):
         for sent_idx in range(nsent):
             # Learn for every sentence
             losses = []
-            if train_mode: optimizer.zero_grad()
+            if train_mode: 
+                optimizer.zero_grad()
 
             X_tensor = Variable(X[sent_idx])
             R_tensor = Variable(R[sent_idx])

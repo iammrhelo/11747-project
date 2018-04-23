@@ -1,6 +1,7 @@
 from collections import defaultdict
 import copy
 import pickle as pkl
+import string
 
 import numpy as np
 import torch
@@ -305,6 +306,15 @@ class LetsGoEntityDataLoader():
                 sys = turn[0].strip().split(' ')
                 usr = turn[1].strip().split(' ')
                 
+                assert len(sys) and len(usr)
+
+                if sys[-1] not in string.punctuation:
+                    sys.append('.')
+                if usr[-1] not in string.punctuation:
+                    usr.append('.')
+
+                assert len(sys) > 1 and len(usr) > 1
+
                 sysR = self.get_R(sys)
                 usrR = self.get_R(usr)
                 
