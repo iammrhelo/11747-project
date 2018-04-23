@@ -1,4 +1,5 @@
 import argparse
+import os
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
@@ -39,7 +40,16 @@ def build_model_name(args):
             attributes.append(attrib)
 
     model_name = "_".join(attributes)
+
+    if args.debug:
+        model_name = "debug_" + model_name
     return model_name
+
+def build_model_path(exp_dir, model_name):
+    if not os.path.exists(exp_dir):
+        os.makedirs(exp_dir)
+    model_path = os.path.join(exp_dir,model_name + '.pt')
+    return model_path
 
 if __name__ == "__main__":
     args = parse_arguments()

@@ -9,6 +9,8 @@ from torch.distributions import Normal
 import torch
 import torchtext.vocab as vocab
 
+use_cuda = True if torch.cuda.is_available() else False
+
 class RNNLM(nn.Module):
     def __init__(self, rnn, vocab_size, embed_size, hidden_size, num_layers, dropout=0.5):
         super(RNNLM, self).__init__()
@@ -189,3 +191,12 @@ class EntityNLM(nn.Module):
             var2 = var2.cuda()
 
         return var1, var2
+
+def build_model(vocab_size, args):
+    model = EntityNLM(vocab_size=vocab_size, 
+                    embed_size=args.embed_dim, 
+                    hidden_size=args.hidden_size,
+                    entity_size=args.entity_size,
+                    dropout=args.dropout,
+                    use_cuda=use_cuda)
+    pass

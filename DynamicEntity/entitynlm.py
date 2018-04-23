@@ -24,74 +24,50 @@ use_cuda = torch.cuda.is_available()
 device = 0 if use_cuda else -1
 print("use_cuda",use_cuda)
 
-args = parse_arguments()
-model_name = build_model_name(args)
+def load_corpus(args):
+    data = args.data
+    debug = args.debug
 
-print(args)
+    dict_pickle = os.path.join(data,'train','dict.pickle')
 
-##################
-#  Data Loading  #
-##################
-data = args.data
-debug = args.debug
-if debug:
-    model_name = "debug_" + model_name
-dict_pickle = os.path.join(data,'train','dict.pickle')
+    print("Loading corpus...")
+    # Set Corpus
+    if debug:
+        train_corpus = Corpus(os.path.join(data,'debug_train'), dict_pickle, use_cuda=use_cuda)
+        valid_corpus = Corpus(os.path.join(data,'debug_valid'),dict_pickle, use_cuda=use_cuda)
+        test_corpus = Corpus(os.path.join(data,'debug_test'),dict_pickle, use_cuda=use_cuda)
+    else:
+        train_corpus = Corpus(os.path.join(data,'train'), dict_pickle, use_cuda=use_cuda)
+        valid_corpus = Corpus(os.path.join(data,'valid'),dict_pickle, use_cuda=use_cuda)
+        test_corpus = Corpus(os.path.join(data,'test'),dict_pickle, use_cuda=use_cuda)
+    
+    return train_corpus, valid_corpus, test_corpus
 
-print("Loading corpus...")
-# Set Corpus
-if debug:
-    train_corpus = Corpus(os.path.join(data,'debug_train'), dict_pickle, use_cuda=use_cuda)
-    valid_corpus = Corpus(os.path.join(data,'debug_valid'),dict_pickle, use_cuda=use_cuda)
-    test_corpus = Corpus(os.path.join(data,'debug_test'),dict_pickle, use_cuda=use_cuda)
-else:
-    train_corpus = Corpus(os.path.join(data,'train'), dict_pickle, use_cuda=use_cuda)
-    valid_corpus = Corpus(os.path.join(data,'valid'),dict_pickle, use_cuda=use_cuda)
-    test_corpus = Corpus(os.path.join(data,'test'),dict_pickle, use_cuda=use_cuda)
+def build_model(vocab_size, args, dictionary):
+    model = EntityNLM(vocab_size=vocab_size, 
+                        embed_size=args.embed_dim, 
+                        hidden_size=args.hidden_size,
+                        entity_size=args.entity_size,
+                        dropout=args.dropout,
+                        use_cuda=use_cuda)
 
-vocab_size = len(train_corpus.dictionary)+1 # 0 for unknown
-print("vocab_size",vocab_size)
+    if use_cuda:
+        model = model.cuda()
+    
+    if args.model_path is not None:
+        print("Loading from {}".format(args.model_path))
+        model.load_state_dict(torch.load(args.model_path))
+    elif args.pretrained: 
+        model.load_pretrained(dictionary)
+    
+    return model
 
-##################
-#   Model Setup  #
-##################
-model = EntityNLM(vocab_size=vocab_size, 
-                    embed_size=args.embed_dim, 
-                    hidden_size=args.hidden_size,
-                    entity_size=args.entity_size,
-                    dropout=args.dropout,
-                    use_cuda=use_cuda)
-
-if args.model_path is not None:
-    print("Loading from {}".format(args.model_path))
-    model.load_state_dict(torch.load(args.model_path))
-elif args.pretrained: 
-    model.load_pretrained(train_corpus.dictionary)
-
-if use_cuda:
-    model = model.cuda()
-
-#####################
-#  Training Config  #
-#####################
-num_epochs = args.num_epochs
-if args.optim == "adam":
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-else:
-    optimizer = torch.optim.Adagrad(model.parameters(), lr=args.lr)
-
-crossentropy = nn.CrossEntropyLoss()
-if use_cuda: 
-    crossentropy = crossentropy.cuda()
-
-ignore_x = args.ignore_x
-ignore_r = args.ignore_r
-ignore_e = args.ignore_e
-ignore_l = args.ignore_l
-
-# Evaluation
-skip_sentence = args.skip_sentence
-max_entity = args.max_entity
+def build_optimizer(args, model):
+    if args.optim == "adam":
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    else:
+        optimizer = torch.optim.Adagrad(model.parameters(), lr=args.lr)
+    return optimizer
 
 def repack(h_t, c_t):
     if use_cuda:
@@ -99,13 +75,28 @@ def repack(h_t, c_t):
     else:
         return Variable(h_t.data), Variable(c_t.data)
 
+def build_model_path(exp_dir, model_name, model_path):
+    if not os.path.exists(exp_dir): 
+        os.makedirs(exp_dir)
+    if model_path is None:
+        model_path = os.path.join(exp_dir, model_name + '.pt')
+    return model_path
+
+
 @timeit
-def run_corpus(corpus, epoch, train_mode=False, writer=None):
+def run_corpus(corpus, model, optimizer, criterion, config, train_mode=False):
     if train_mode: 
         model.train()
     else:
         model.eval()
     
+    ignore_x = config['ignore_x']
+    ignore_r = config['ignore_r']
+    ignore_l = config['ignore_l']
+    ignore_e = config['ignore_e']
+    max_entity = config['max_entity']
+    skip_sentence = config['skip_sentence']
+
     corpus_loss = 0
     corpus_x_loss = 0
     corpus_r_loss = 0
@@ -235,7 +226,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                     pred_r = model.predict_type(h_t)
                     # TODO: OK
                     if not ignore_r:
-                        type_loss = crossentropy(pred_r,next_r)
+                        type_loss = criterion(pred_r,next_r)
                         doc_r_loss += type_loss.data[0]
                         losses.append(type_loss)
                             
@@ -258,7 +249,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
 
                         # TODO: OK
                         if not ignore_e:
-                            e_loss = crossentropy(pred_e, next_e)
+                            e_loss = criterion(pred_e, next_e)
                             doc_e_loss += e_loss.data[0]
                             losses.append(e_loss)
 
@@ -272,7 +263,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
                         pred_l = model.predict_length(h_t, entity_embedding)
                         
                         if not ignore_l: 
-                            l_loss = crossentropy(pred_l, next_l)
+                            l_loss = criterion(pred_l, next_l)
                             doc_l_loss += l_loss.data[0]
                             losses.append(l_loss)
 
@@ -284,7 +275,7 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
 
                 # TODO: OK
                 if not ignore_x:
-                    x_loss = crossentropy(pred_x, next_x)
+                    x_loss = criterion(pred_x, next_x)
                     doc_x_loss += x_loss.data[0]
                     losses.append(x_loss)
   
@@ -330,77 +321,145 @@ def run_corpus(corpus, epoch, train_mode=False, writer=None):
     corpus_e_loss /= len(corpus.documents)
     corpus_l_loss /= len(corpus.documents)
 
-    writer.add_scalar('loss/x',corpus_x_loss, epoch)
-    writer.add_scalar('loss/r',corpus_r_loss, epoch)
-    writer.add_scalar('loss/l',corpus_l_loss, epoch)
-    writer.add_scalar('loss/e',corpus_e_loss, epoch)
-    writer.add_scalar('loss/total',corpus_loss, epoch)
+    corpus_losses = {
+        'loss': corpus_loss,
+        'x_loss': corpus_x_loss,
+        'r_loss': corpus_r_loss,
+        'e_loss': corpus_e_loss,
+        'l_loss': corpus_l_loss,
+    }
 
     corpus_entity_acc = entity_correct_count / entity_count
-    corpus_prev_entity_acc = prev_entity_correct_count / prev_entity_count
-    corpus_new_entity_acc = new_entity_correct_count / new_entity_count
+    corpus_prev_entity_acc = prev_entity_correct_count / entity_count
+    corpus_new_entity_acc = new_entity_correct_count / entity_count
 
-    writer.add_scalar('accuracy/entity',corpus_entity_acc, epoch)
-    writer.add_scalar('accuracy/prev_entity',corpus_prev_entity_acc, epoch)
-    writer.add_scalar('accuracy/new_entity',corpus_new_entity_acc, epoch)
-    
-    return corpus_loss, corpus_entity_acc
+    corpus_accuracies = {
+        'entity_acc': corpus_entity_acc,
+        'prev_entity_acc': corpus_prev_entity_acc,
+        'new_entity_acc': corpus_new_entity_acc,
+    }
+
+    return corpus_losses, corpus_accuracies
+
+def record_to_writer(writer, epoch, losses, accuracies):
+
+    x_loss = losses['x_loss']
+    r_loss = losses['r_loss']
+    l_loss = losses['l_loss']
+    e_loss = losses['e_loss']
+    loss = losses['loss']
+
+    writer.add_scalar('loss/x', x_loss, epoch)
+    writer.add_scalar('loss/r', r_loss, epoch)
+    writer.add_scalar('loss/l', l_loss, epoch)
+    writer.add_scalar('loss/e', e_loss, epoch)
+    writer.add_scalar('loss/total', loss, epoch)
+
+    entity_acc = accuracies['entity_acc']
+    prev_entity_acc = accuracies['prev_entity_acc']
+    new_entity_acc = accuracies['new_entity_acc']
+
+    writer.add_scalar('accuracy/entity', entity_acc, epoch)
+    writer.add_scalar('accuracy/prev_entity', prev_entity_acc, epoch)
+    writer.add_scalar('accuracy/new_entity', new_entity_acc, epoch)
 
 ####################
 #   Main Program   #
 ####################
 
-best_valid_loss = None
-early_stop_count = 0
-early_stop_threshold = args.early_stop
+def main():
+    args = parse_arguments()
+    print(args)
 
-model_name = build_model_name(args)
+    ##################
+    #  Data Loading  #
+    ##################
+    train_corpus, valid_corpus, test_corpus = load_corpus(args)
 
-exp_dir = args.exp
-if not os.path.exists(exp_dir): 
-    os.makedirs(exp_dir)
-model_path = os.path.join(exp_dir, model_name + '.pt') if args.model_path is None else args.model_path
+    vocab_size = len(train_corpus.dictionary)+1 # 0 for unknown
+    print("vocab_size",vocab_size)
 
-tensorboard_dir = args.tensorboard
+    ##################
+    #   Model Setup  #
+    ##################
+    model = build_model(vocab_size, args, train_corpus.dictionary)
 
-print("Model will be saved to {}".format(model_path))
-
-train_writer = SummaryWriter('{}/{}/{}'.format(tensorboard_dir,model_name,'train'))
-valid_writer = SummaryWriter('{}/{}/{}'.format(tensorboard_dir,model_name,'valid'))
-test_writer = SummaryWriter('{}/{}/{}'.format(tensorboard_dir,model_name,'test'))
-
-for epoch in range(1,num_epochs+1,1):
-    print("Epoch",epoch)
-
-    epoch_loss = 0
+    criterion = nn.CrossEntropyLoss()
     
-    # Shuffle Documents Here
-    random.shuffle(train_corpus.documents)
+    if use_cuda: 
+        criterion = criterion.cuda()
 
-    train_loss, train_entity_acc = run_corpus(train_corpus, epoch, train_mode=True, writer=train_writer)
-    print("train_loss",train_loss,"train_entity_acc",train_entity_acc)
-   	
-    if len(valid_corpus.documents) == 0: continue 
-    valid_loss, valid_entity_acc = run_corpus(valid_corpus, epoch, train_mode=False, writer=valid_writer)
-    print("valid_loss",valid_loss,"valid_entity_acc",valid_entity_acc)
+    optimizer = build_optimizer(args, model)
 
-    # Early stopping conditioning on validation set loss
-    if best_valid_loss == None or valid_loss < best_valid_loss:
-        best_valid_loss = valid_loss
-        torch.save(model.state_dict(),model_path)
-        early_stop_count = 0
-    else:
-        early_stop_count += 1
+    #####################
+    #  Training Config  #
+    #####################
+    num_epochs = args.num_epochs
 
-    if early_stop_count >= early_stop_threshold:
-        print("Early stopping criteria met!")
-        break
+    config = {
+        'ignore_x': args.ignore_x,
+        'ignore_r': args.ignore_r,
+        'ignore_l': args.ignore_l,
+        'ignore_e': args.ignore_e,
+        'skip_sentence': args.skip_sentence,
+        'max_entity': args.max_entity
+    }
 
-print("Test set evaluation")
-model.load_state_dict(torch.load(model_path))
-test_loss, test_entity_acc = run_corpus(test_corpus, num_epochs, train_mode=False, writer=test_writer)
-print("test_loss",test_loss,"test_entity_acc",test_entity_acc)
+    best_valid_loss = None
+    early_stop_count = 0
+    early_stop_threshold = args.early_stop
 
-train_writer.close()
-valid_writer.close()
-test_writer.close()
+    model_name = build_model_name(args)
+    model_path = build_model_path(args.exp, model_name, args.model_path)
+
+
+    tensorboard_dir = args.tensorboard
+
+    print("Model will be saved to {}".format(model_path))
+
+    train_writer = SummaryWriter('{}/{}/{}'.format(tensorboard_dir,model_name,'train'))
+    valid_writer = SummaryWriter('{}/{}/{}'.format(tensorboard_dir,model_name,'valid'))
+    test_writer = SummaryWriter('{}/{}/{}'.format(tensorboard_dir,model_name,'test'))
+
+    for epoch in range(1,num_epochs+1,1):
+        print("Epoch",epoch)
+        
+        # Run training
+        random.shuffle(train_corpus.documents)
+        train_losses, train_accuracies = run_corpus(train_corpus, model, optimizer, criterion, config, train_mode=True)
+        train_loss, train_entity_acc = train_losses['loss'], train_accuracies['entity_acc']
+        print("train_loss",train_loss,"train_entity_acc",train_entity_acc)
+        record_to_writer(train_writer, epoch, train_losses, train_accuracies)
+        
+        # Run validation
+        valid_losses, valid_accuracies = run_corpus(valid_corpus, model, optimizer, criterion, config, train_mode=False)
+        valid_loss, valid_entity_acc = valid_losses['loss'], valid_accuracies['entity_acc']
+        print("valid_loss",valid_loss,"valid_entity_acc",valid_entity_acc)
+        record_to_writer(valid_writer, epoch, valid_losses, valid_accuracies)
+        
+        # Early stopping conditioning on validation set loss
+        if best_valid_loss == None or valid_loss < best_valid_loss:
+            best_valid_loss = valid_loss
+            torch.save(model.state_dict(),model_path)
+            early_stop_count = 0
+        else:
+            early_stop_count += 1
+
+        if early_stop_count >= early_stop_threshold:
+            print("Early stopping criteria met!")
+            break
+
+    print("Test set evaluation")
+    model.load_state_dict(torch.load(model_path))
+
+    test_losses, test_accuracies = run_corpus(test_corpus, model, optimizer, criterion, config, train_mode=False)
+    test_loss, test_entity_acc = test_losses['loss'], test_accuracies['entity_acc']
+    print("test_loss",test_loss,"test_entity_acc",test_entity_acc)
+    record_to_writer(test_writer, epoch, test_losses, test_accuracies)
+
+    train_writer.close()
+    valid_writer.close()
+    test_writer.close()
+
+if __name__ == "__main__":
+    main()
