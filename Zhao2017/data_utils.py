@@ -55,7 +55,27 @@ def read_corpus_vocab(corp, source):
     return data
 
 
+def data_iter_test(data, batch_size = 1, shuffle=False):
 
+    buckets = defaultdict(list)
+    idx = defaultdict(list)
+    for i, pair in enumerate(data):
+        src_sent = pair[0]
+        buckets[len(src_sent)].append(pair)
+        idx[len(src_sent)].append(i)
+
+
+    batched_data = []
+    batched_idx = []
+    for src_len in buckets:
+        tuples = buckets[src_len]
+        batched_data.extend(list(batch_slice(tuples, batch_size)))
+        batched_idx.extend(idx[src_len])
+    
+    pkl.dump( batched_idx, open( "./data/test_idx.p", "wb" ) )
+    
+    for batch in batched_data:
+        yield batch
 
 def data_iter(data, batch_size, shuffle=True):
     """
