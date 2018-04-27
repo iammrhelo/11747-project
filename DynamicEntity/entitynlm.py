@@ -61,8 +61,7 @@ def build_model(vocab_size, args, dictionary):
                         embed_size=args.embed_dim, 
                         hidden_size=args.hidden_size,
                         entity_size=args.entity_size,
-                        dropout=args.dropout,
-                        use_cuda=use_cuda)
+                        dropout=args.dropout)
 
     if use_cuda:
         model = model.cuda()
@@ -354,6 +353,237 @@ def run_corpus(corpus, model, optimizer, criterion, config, train_mode=False):
 
     return corpus_losses, corpus_accuracies
 
+def id2word(id_list, vocab):
+    sentence = []
+    for word_id in id_list:
+        word = vocab[word_id]
+        sentence.append(word)
+    return sentence
+
+@timeit
+def run_generate(corpus, model):
+    model.eval()
+
+    results = []
+
+    for doc_idx, (doc_name, doc) in enumerate(corpus.documents,1):
+    
+        X, R, E, L = doc[0]
+
+        nsent = len(X)
+        
+        # For every document
+        h_t, c_t = model.init_hidden_states(1)
+        model.create_entity() # Dummy
+        entity_current = model.entities[0]
+
+        # Check
+        assert len(model.entities) == 1 # Only 1 dummy entity
+        import pdb; pdb.set_trace()
+        
+        # Iterate through the sentences
+        for end_sent_idx in range(0, nsent, 2):
+            # usr, sys 
+     
+            def run_sentence(sent_idx):
+            
+                X_tensor = Variable(X[sent_idx])
+                R_tensor = Variable(R[sent_idx])
+                E_tensor = Variable(E[sent_idx])
+                L_tensor = Variable(L[sent_idx])
+
+                h_t, c_t = repack(h_t,c_t)
+
+                for pos in range(0,len(X[sent_idx])-1): # 1 to N-1
+                    curr_x = X_tensor[pos]
+                    curr_r = R_tensor[pos]
+                    curr_e = E_tensor[pos]
+                    curr_l = L_tensor[pos]
+
+                    next_x = X_tensor[pos+1]
+                    next_r = R_tensor[pos+1]
+                    next_e = E_tensor[pos+1]
+                    next_l = L_tensor[pos+1]
+
+                    # Forward and Get Hidden State
+                    embed_curr_x = model.embed(curr_x)
+                    h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
+
+                    # Update Entity accordingly 
+                    if curr_r.data[0] > 0 and curr_e.data[0] > 0:
+                        
+                        # Next Entity Type
+                        entity_idx = int(curr_e.data[0])
+                        assert entity_idx == curr_e.data[0] and entity_idx <= len(model.entities)
+
+                        # Create if it's a new entity
+                        if entity_idx == len(model.entities):
+                            model.create_entity(nsent=sent_idx)
+                        
+                        # Update Entity Here
+                        entity_current = model.update_entity(entity_idx, h_t, sent_idx)
+
+                    # Return pred_x, pred_r, pred_l, pred_e
+                    if curr_l.data[0] == 1:
+
+                        mention_length = int(curr_l.data[0])
+                        assert mention_length == curr_l.data[0], "{} : {}".format(mention_length, curr_l.data[0])
+
+                        pred_r = model.predict_type(h_t)
+                                
+                        # Entity Prediction
+                        if next_r.data[0] > 0: # If the next word is an entity
+                            
+                            next_entity_index = int(next_e.data[0])
+                            assert next_entity_index == next_e.data[0]
+
+                            # Concatenate entities to a block
+                            pred_e = model.predict_entity(h_t, sent_idx)
+
+                            if next_entity_index < len(model.entities):
+                                next_e = Variable(torch.LongTensor([next_entity_index]), requires_grad=False)
+                            else:
+                                next_e = Variable(torch.zeros(1).type(torch.LongTensor), requires_grad=False)
+                            
+                            if use_cuda:
+                                next_e = next_e.cuda()
+
+                        # Entity Length Prediction
+                        if int(next_e.data[0]) > 0: # Has Entity
+
+                            # User predicted entity's embedding
+                            entity_idx = int(next_e.data[0])
+                            entity_embedding = model.get_entity(entity_idx)
+
+                            pred_l = model.predict_length(h_t, entity_embedding)
+
+                    pred_x = model.predict_word(next_entity_index, h_t, entity_current)
+
+                def run_predict():
+                    max_output_length = 30
+
+                    word_idx = corpus.vocab['<s>']
+                    eos_idx = corpus.vocab['</s>']
+                    curr_output_length = 0
+
+                    h_t, c_t = repack(h_t,c_t)
+                    
+                    while word_idx != eos_idx and curr_output_length < max_output_length:
+                        
+                        curr_x = Variable(torch.LongTensor([word_idx]))
+                        if use_cuda:
+                            curr_x = curr_x.cuda()
+                        
+
+                        # Forward and Get Hidden State
+                        embed_curr_x = model.embed(curr_x)
+                        h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
+
+                        # Predict and Generate
+
+                        # Update Entity
+                        if curr_r.data[0] > 0 and curr_e.data[0] > 0:
+                            
+                            # Next Entity Type
+                            entity_idx = int(curr_e.data[0])
+                            assert entity_idx == curr_e.data[0] and entity_idx <= len(model.entities)
+
+                            # Create if it's a new entity
+                            if entity_idx == len(model.entities):
+                                model.create_entity(nsent=sent_idx)
+                            
+                            # Update Entity Here
+                            entity_current = model.update_entity(entity_idx, h_t, sent_idx)
+            
+                        # l == 1, End of Mention
+                        if curr_l.data[0] == 1:
+
+                            mention_length = int(curr_l.data[0])
+                            assert mention_length == curr_l.data[0], "{} : {}".format(mention_length, curr_l.data[0])
+
+                            pred_r = model.predict_type(h_t)
+                            # TODO: OK
+                            if not ignore_r:
+                                type_loss = criterion(pred_r,next_r)
+                                doc_r_loss += type_loss.data[0]
+                                losses.append(type_loss)
+                                    
+                            # Entity Prediction
+                            if next_r.data[0] > 0: # If the next word is an entity
+                                
+                                next_entity_index = int(next_e.data[0])
+                                assert next_entity_index == next_e.data[0]
+
+                                # Concatenate entities to a block
+                                pred_e = model.predict_entity(h_t, sent_idx)
+
+                                if next_entity_index < len(model.entities):
+                                    next_e = Variable(torch.LongTensor([next_entity_index]), requires_grad=False)
+                                else:
+                                    next_e = Variable(torch.zeros(1).type(torch.LongTensor), requires_grad=False)
+                                
+                                if use_cuda:
+                                    next_e = next_e.cuda()
+
+                                # TODO: OK
+                                if not ignore_e:
+                                    e_loss = criterion(pred_e, next_e)
+                                    doc_e_loss += e_loss.data[0]
+                                    losses.append(e_loss)
+
+                            # Entity Length Prediction
+                            if int(next_e.data[0]) > 0: # Has Entity
+
+                                # User predicted entity's embedding
+                                entity_idx = int(next_e.data[0])
+                                entity_embedding = model.get_entity(entity_idx)
+
+                                pred_l = model.predict_length(h_t, entity_embedding)
+                                
+                                if not ignore_l: 
+                                    l_loss = criterion(pred_l, next_l)
+                                    doc_l_loss += l_loss.data[0]
+                                    losses.append(l_loss)
+
+                        # Word Prediction
+                        next_entity_index = int(next_e.data[0])
+                        assert next_entity_index == next_e.data[0]
+
+                        pred_x = model.predict_word(next_entity_index, h_t, entity_current)
+                                
+
+                        curr_output_length += 1
+
+
+
+                ########################################
+                #  1. Run though the system utterance  #
+                #  2. Generate the user utterance      #
+                #  3. Run through the user utterance   #
+                ########################################
+
+                # System sentences index
+                sys_sent_idx = end_sent_idx
+            
+                pred_x = run_sentence(sys_sent_idx)
+
+                gen_user_utt = run_predict()
+
+                # Let the model input the user sentence
+                usr_sent_idx = end_sent_idx+1  # This is the sentece we want to generate
+                
+                run_sentence(sys_sent_idx)
+
+        # End of document
+        # Clear Entities
+        model.clear_entities()
+
+        progress = "{}/{}".format(doc_idx,len(corpus.documents))
+        progress_msg = "progress {}, doc_name {}".format(progress, doc_name)
+        print(progress_msg)
+
+    return results
+
 def record_to_writer(writer, epoch, losses, accuracies):
 
     x_loss = losses['x_loss']
@@ -395,6 +625,14 @@ def main():
     #   Model Setup  #
     ##################
     model = build_model(vocab_size, args, dictionary)
+
+    if args.generate: # generate:
+        print("Generation on test file")
+        results = run_generate(test_corpus, model)
+
+        with open(args.results_file,'w') as fout:
+            fout.write('\n'.join(results))
+        return 
 
     criterion = nn.CrossEntropyLoss()
     

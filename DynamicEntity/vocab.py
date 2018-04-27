@@ -31,9 +31,6 @@ class VocabEntry(object):
     def __repr__(self):
         return 'Vocabulary[size=%d]' % len(self)
 
-    def id2word(self, wid):
-        return self.id2word[wid]
-
     def add(self, word):
         if word not in self:
             wid = self.word2id[word] = len(self)

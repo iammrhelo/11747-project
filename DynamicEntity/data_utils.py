@@ -336,6 +336,8 @@ class LetsGoEntityDataLoader():
                 L_s.append(sysL)
                 L_s.append(usrL)
             
+
+            assert len(X_s) % 2 == 0 
             doc = [ (X_s, R_s, E_s, L_s) ]
 
             tensor_doc = self.to_tensor(doc)
@@ -394,6 +396,8 @@ class LetsGoEntityDataLoader():
             tE.append(te)
             tL.append(tl)      
         
+        assert len(tX) % 2 == 0 
+
         return [(tX, tR, tE, tL)]
 
     def display_stats(self):

@@ -3,7 +3,7 @@ import os
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset',type=str,default='inscript',help='debug | inscript | letsgo')
+    parser.add_argument('--dataset',type=str,default='letsgo',help='debug | inscript | letsgo')
     parser.add_argument('--embed_dim',type=int,default=256)
     parser.add_argument('--hidden_size',type=int,default=256)
     parser.add_argument('--entity_size',type=int,default=256)
@@ -22,6 +22,8 @@ def parse_arguments():
     parser.add_argument('--ignore_r',action="store_true",default=False)
     parser.add_argument('--ignore_e',action="store_true",default=False)
     parser.add_argument('--ignore_l',action="store_true",default=False)
+    parser.add_argument('--generate',action="store_true",default=False)
+    parser.add_argument('--results_file',type=str,default="results.txt")
     args = parser.parse_args()
     return args
 
