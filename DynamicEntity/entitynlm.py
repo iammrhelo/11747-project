@@ -302,14 +302,14 @@ def run_corpus(corpus, model, optimizer, criterion, config, train_mode=False):
         # End of document
         # Clear Entities
         model.clear_entities()
-
+            
         doc_entity_acc = doc_entity_correct_count / doc_entity_count if doc_entity_count > 0 else 0
 
         progress = "{}/{}".format(doc_idx,len(corpus.documents))
         progress_msg = "progress {}, doc_name {}, doc_loss {}, doc_entity_acc {}/{}={:.2f}"\
                         .format(progress, doc_name, doc_loss, doc_entity_correct_count, doc_entity_count, doc_entity_acc)
         print(progress_msg,end='\r')
-
+        
         corpus_x_loss += doc_x_loss
         corpus_r_loss += doc_r_loss
         corpus_e_loss += doc_e_loss
@@ -342,8 +342,8 @@ def run_corpus(corpus, model, optimizer, criterion, config, train_mode=False):
     }
 
     corpus_entity_acc = entity_correct_count / entity_count
-    corpus_prev_entity_acc = prev_entity_correct_count / entity_count
-    corpus_new_entity_acc = new_entity_correct_count / entity_count
+    corpus_prev_entity_acc = prev_entity_correct_count / prev_entity_count
+    corpus_new_entity_acc = new_entity_correct_count / new_entity_count
 
     corpus_accuracies = {
         'entity_acc': corpus_entity_acc,
