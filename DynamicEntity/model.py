@@ -9,7 +9,7 @@ from torch.distributions import Normal
 import torch
 import torchtext.vocab as vocab
 
-use_cuda = True if torch.cuda.is_available() else False
+use_cuda = torch.cuda.is_available()
 
 class RNNLM(nn.Module):
     def __init__(self, rnn, vocab_size, embed_size, hidden_size, num_layers, dropout=0.5):
@@ -50,22 +50,25 @@ class RNNLM(nn.Module):
             return Variable(torch.zeros(dim1,dim2,dim3) ) 
 
 class EntityNLM(nn.Module):
-    def __init__(self, vocab_size, embed_size=256, hidden_size=128, entity_size=128, dropout=0.5):
+    def __init__(self, vocab_size, embed_size=256, hidden_size=256, entity_size=256, dropout=0.5):
         super(EntityNLM, self).__init__()
 
-        assert embed_size == hidden_size and hidden_size == entity_size, "embed_size, hidden_size, entity_size should be equal"
+        assert hidden_size == entity_size, "hidden_size should be equal to entity_size"
 
         self.embed = nn.Embedding(vocab_size, embed_size)
 
         self.rnn = nn.LSTMCell(input_size=embed_size, hidden_size=hidden_size)
 
-        self.x = nn.Linear(hidden_size, vocab_size) # Linear      
+        self.x = nn.Linear(hidden_size, vocab_size) # Linear
+        self.r = nn.Bilinear(hidden_size, hidden_size, 1) # Is Entity? Binary
+        self.l = nn.Linear(2 * hidden_size, 25) # Remaining Length Prediction, Categorial         
         self.e = nn.Bilinear(hidden_size, hidden_size, 1) # Randomly Sample from Entity Set
 
-        # Entity Creation
-        self.r_embedding = Variable(torch.FloatTensor(hidden_size,), requires_grad=True)
-        if use_cuda: 
-            self.r_embeddings = self.r_embeddings.cuda()
+        # For r embeddings
+        r_embeddings = Variable(torch.FloatTensor(2, hidden_size), requires_grad=True)
+        if use_cuda: r_embeddings = r_embeddings.cuda()
+        init.xavier_uniform(r_embeddings,gain=np.sqrt(2)) 
+        self.r_embeddings = r_embeddings
 
         # For distance feature
         self.w_dist = nn.Linear(1, 1)
@@ -83,12 +86,26 @@ class EntityNLM(nn.Module):
 
         self.init_weights()
 
+    def load_pretrained(self, dictionary):
+        # Load pretrained vectors for embedding layer
+        glove = vocab.GloVe(name='6B', dim=self.embed.embedding_dim)
+
+        # Build weight matrix here
+        pretrained_weight = self.embed.weight.data
+        for word, idx in dictionary.items():
+            if word.lower() in glove.stoi:     
+                vector = glove.vectors[ glove.stoi[word.lower()] ]
+                pretrained_weight[ idx ] = vector
+
+        self.embed.weight = nn.Parameter(pretrained_weight)
+
     def create_entity(self, nsent=0.0):
         # Get r1
+        r1 = self.r_embeddings[1]
         
         # Sample from normal distribution
         # Code implementation
-        e_var = self.r_embedding + torch.normal(means=torch.zeros_like(self.r_embedding), std=0.01).view(1,-1)
+        e_var = r1 + torch.normal(means=torch.zeros_like(r1), std=0.01).view(1,-1)
         e_var /= torch.norm(e_var)
         # Not sure if this line is redundant
         if use_cuda: 
@@ -126,6 +143,10 @@ class EntityNLM(nn.Module):
             dist_feat = dist_feat.cuda()
         return dist_feat
 
+    def predict_type(self, h_t):
+        pred_r = self.r( self.dropout(self.r_embeddings), self.dropout(h_t.expand_as(self.r_embeddings)) ).transpose(0,1)
+        return pred_r
+
     def predict_entity(self, h_t, sent_idx):
         # Concatenate entities to a block
         entity_stack = torch.cat(self.entities)
@@ -137,10 +158,13 @@ class EntityNLM(nn.Module):
         pred_e = pred_e.transpose(0,1)
         return pred_e
 
-    def predict_word(self, h_t):
+    def predict_length(self, h_t, entity_embedding):
+        pred_l = self.l(self.dropout(torch.cat((h_t, entity_embedding),dim=1)))
+        return pred_l
+
+    def predict_word(self, next_entity_index, h_t, entity_current):
         # Word Prediction
-        pred_x = self.x(self.dropout(h_t))
-        #pred_x = self.x(self.dropout(h_t + self.Te(self.dropout(entity_current)))) # May use this later
+        pred_x = self.x(self.dropout(h_t + self.Te(self.dropout(entity_current))))
         return pred_x
 
     def clear_entities(self):

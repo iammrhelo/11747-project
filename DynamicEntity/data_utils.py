@@ -217,12 +217,14 @@ class SimpleLetsGoDataLoader(DataLoader):
         return context_sys_vec, context_usr_vec, context_score_vec, c_lens, y_vec, y_lens
 
 class LetsGoDataLoader():
-    def __init__(self, data):
+    def __init__(self, data, vocab):
 
         self.data = data
         self.src = []
         self.tgt = []
         self.max_len = 30
+        
+        self.vocab = vocab
         self.process()
 
     def process(self):
@@ -240,42 +242,117 @@ class LetsGoDataLoader():
 
                 self.tgt.append(['<s>'] + turn[0].strip().split(' ') + ['</s>'])
 
-    def get_src(self):
-        return self.src
-
-    def get_tgt(self):
-        return self.tgt
-
-
-class FakeLetsGoDataLoader():
-    def __init__(self, data):
-
-        self.data = data
-        self.src = []
-        self.tgt = []
-        self.max_len = 30
-        self.process()
-
-    def process(self):
-        for dial in self.data:
+    def build_documents(self):
+        self.documents = []
+        self.entities = []
+        for dial_idx, dial in enumerate(self.src,1):
+            entity_dict = {}
+            X_s = []
+            R_s = []
+            E_s = []
+            L_s = []
             for i, turn in enumerate(dial):
-                src_ctx = []
-                if i == 0: continue
+           
+                sys = turn[0]
+                usr = turn[1]
 
-                for prev in dial[:i]:
-                    sys = prev[0].strip().split(' ')
-                    usr = prev[1].strip().split(' ')
-                    src_ctx.append(sys + usr)
+                assert len(sys) and len(usr)
 
-                self.src.append(src_ctx)
+                if sys[-1] not in string.punctuation:
+                    sys.append('.')
+                if usr[-1] not in string.punctuation:
+                    usr.append('.')
 
-                self.tgt.append(['<s>'] + turn[0].strip().split(' ') + ['</s>'])
+                assert len(sys) > 1 and len(usr) > 1
+
+                sysR = self.get_R(sys)
+                usrR = self.get_R(usr)
+                
+                sysL = self.get_L(sys)
+                usrL = self.get_L(usr)
+                
+                sysE = self.get_E(sys, entity_dict)
+                usrE = self.get_E(usr, entity_dict)
+            
+                sys = [self.vocab[w] for w in sys]
+                usr = [self.vocab[w] for w in usr]
+                
+                X_s.append(sys)
+                X_s.append(usr)
+                R_s.append(sysR)
+                R_s.append(usrR)
+                E_s.append(sysE)
+                E_s.append(usrE)
+                L_s.append(sysL)
+                L_s.append(usrL)
+            
+
+            assert len(X_s) % 2 == 0 
+            doc = [ (X_s, R_s, E_s, L_s) ]
+
+            tensor_doc = self.to_tensor(doc)
+
+            self.documents.append((str(dial_idx), tensor_doc))
+
+            self.entities.append(entity_dict)
 
     def get_src(self):
         return self.src
 
     def get_tgt(self):
         return self.tgt
+
+    def get_R(self, sent):
+        ret = [ int('<' in word) for word in sent]
+        return ret
+    
+    def get_E(self, sent, entity_dict):
+        ret = []
+        for word in sent:
+            # Check if is entity
+            if '<' in word:
+                if word not in entity_dict: 
+                    entity_dict[ word ] = len(entity_dict)+1
+                entity_idx = entity_dict.get(word)
+            else:
+                entity_idx = 0
+            ret.append(entity_idx)
+        
+        return ret
+    
+    def get_L(self, sent):
+        ret = [1 for _ in sent]
+        return ret
+
+    def to_tensor(self, doc):
+        X, R, E, L = doc[0]
+        
+        tX = []
+        tR = []
+        tE = []
+        tL = []
+
+        for sent_idx in range(len(X)):
+        
+            tx = torch.from_numpy(np.array(X[sent_idx]))
+            tr = torch.from_numpy(np.array(R[sent_idx]))
+            te = torch.from_numpy(np.array(E[sent_idx]))
+            tl = torch.from_numpy(np.array(L[sent_idx]))      
+
+            if use_cuda:
+                tx = tx.cuda()
+                tr = tr.cuda()
+                te = te.cuda()
+                tl = tl.cuda()
+
+            tX.append(tx)
+            tR.append(tr)
+            tE.append(te)
+            tL.append(tl)      
+        
+        assert len(tX) % 2 == 0 
+
+        return [(tX, tR, tE, tL)]
 
 class LetsGoEntityDataLoader():
     def __init__(self, data, vocab, use_cuda=False):
@@ -347,7 +424,8 @@ class LetsGoEntityDataLoader():
             entities.append(entity_dict)
         
         return documents, entities
-    
+
+
     def get_R(self, sent):
         ret = [ int('<' in word) for word in sent]
         return ret
@@ -462,6 +540,9 @@ class Entity():
 if __name__ == "__main__":
     vocab = torch.load('./data/vocab.bin')
     corpus = LetsGoCorpus('./data/union_data-1ab.p')
+    test_loader = LetsGoDataLoader(corpus.test, vocab.src)
+    test_loader.build_documents()
+    """
     train_loader = LetsGoEntityDataLoader(corpus.train, vocab.src)
     print("Train")
     train_loader.display_stats()
@@ -472,7 +553,7 @@ if __name__ == "__main__":
     test_loader = LetsGoEntityDataLoader(corpus.test, vocab.src)
     print("Test")
     test_loader.display_stats()
-
+    """
 
 
 
