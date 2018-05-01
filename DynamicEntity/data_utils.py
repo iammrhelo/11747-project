@@ -11,6 +11,8 @@ from vocab import *
 np.set_printoptions(precision=3)
 use_cuda = torch.cuda.is_available()
 
+ignore_list = ['<s>','</s>']
+
 class LetsGoCorpus(object):
 
     def __init__(self, data_path):
@@ -226,6 +228,7 @@ class LetsGoDataLoader():
         
         self.vocab = vocab
         self.process()
+        self.build_documents()
 
     def process(self):
         for dial in self.data:
@@ -235,17 +238,21 @@ class LetsGoDataLoader():
 
                 for prev in dial[:i]:
                     sys = prev[0].strip().split(' ')[:self.max_len]
+                    sys = ['<s>'] + sys + ['</s>']
                     usr = prev[1].strip().split(' ')[:self.max_len]
+                    usr = ['<s>'] + usr + ['</s>']
                     src_ctx.append((sys, usr, prev[2], prev[3]))
-
+                
                 self.src.append(src_ctx)
 
-                self.tgt.append(['<s>'] + turn[0].strip().split(' ') + ['</s>'])
-
+                tgt = ['<s>'] + turn[0].strip().split(' ') + ['</s>']
+                self.tgt.append(tgt)
+    
     def build_documents(self):
         self.documents = []
         self.entities = []
-        for dial_idx, dial in enumerate(self.src,1):
+        
+        for dial_idx, (dial, tgt_sent) in enumerate(zip(self.src, self.tgt),1):
             entity_dict = {}
             X_s = []
             R_s = []
@@ -255,15 +262,11 @@ class LetsGoDataLoader():
            
                 sys = turn[0]
                 usr = turn[1]
-
-                assert len(sys) and len(usr)
-
-                if sys[-1] not in string.punctuation:
-                    sys.append('.')
-                if usr[-1] not in string.punctuation:
-                    usr.append('.')
-
-                assert len(sys) > 1 and len(usr) > 1
+                try: 
+                    assert sys[0] == '<s>' and sys[-1] == '</s>', sys
+                    assert usr[0] == '<s>' and usr[-1] == '</s>', usr
+                except:
+                    import pdb; pdb.set_trace()
 
                 sysR = self.get_R(sys)
                 usrR = self.get_R(usr)
@@ -286,8 +289,17 @@ class LetsGoDataLoader():
                 L_s.append(sysL)
                 L_s.append(usrL)
             
-
-            assert len(X_s) % 2 == 0 
+            # Append Target Sentence to Document
+            tgtX = [ self.vocab[w] for w in tgt_sent ]
+            tgtR = self.get_R(tgt_sent)
+            tgtL = self.get_L(tgt_sent) 
+            tgtE = self.get_E(tgt_sent, entity_dict)
+           
+            X_s.append(tgtX)
+            R_s.append(tgtR)
+            L_s.append(tgtL)
+            E_s.append(tgtE)
+            
             doc = [ (X_s, R_s, E_s, L_s) ]
 
             tensor_doc = self.to_tensor(doc)
@@ -303,14 +315,19 @@ class LetsGoDataLoader():
         return self.tgt
 
     def get_R(self, sent):
-        ret = [ int('<' in word) for word in sent]
+        ret = []
+        for word in sent:
+            if word.startswith('<') and word not in ignore_list:
+                ret.append(1)
+            else:
+                ret.append(0)
         return ret
     
     def get_E(self, sent, entity_dict):
         ret = []
         for word in sent:
             # Check if is entity
-            if '<' in word:
+            if word.startswith('<') and word not in ignore_list:
                 if word not in entity_dict: 
                     entity_dict[ word ] = len(entity_dict)+1
                 entity_idx = entity_dict.get(word)
@@ -380,15 +397,13 @@ class LetsGoEntityDataLoader():
             E_s = []
             L_s = []
             for i, turn in enumerate(dial):
-                sys = turn[0].strip().split(' ')
-                usr = turn[1].strip().split(' ')
-                
-                assert len(sys) and len(usr)
+                # Insert <s> and </s>
+                sys_raw = '<s> ' + turn[0].strip() + ' </s>'
+                usr_raw = '<s> ' + turn[1].strip() + ' </s>'
 
-                if sys[-1] not in string.punctuation:
-                    sys.append('.')
-                if usr[-1] not in string.punctuation:
-                    usr.append('.')
+                sys = sys_raw.split(' ')
+                usr = usr_raw.split(' ')
+
 
                 assert len(sys) > 1 and len(usr) > 1
 
@@ -427,14 +442,14 @@ class LetsGoEntityDataLoader():
 
 
     def get_R(self, sent):
-        ret = [ int('<' in word) for word in sent]
+        ret = [ int('<' in word and word not in ['<s>','</s>']) for word in sent]
         return ret
     
     def get_E(self, sent, entity_dict):
         ret = []
         for word in sent:
             # Check if is entity
-            if '<' in word:
+            if '<' in word and word not in ['<s>','</s>']:
                 if word not in entity_dict: 
                     entity_dict[ word ] = len(entity_dict)+1
                 entity_idx = entity_dict.get(word)
