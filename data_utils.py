@@ -13,7 +13,6 @@ from vocab import Vocab, VocabEntry
 np.set_printoptions(precision=3)
 use_cuda = torch.cuda.is_available()
 
-
 def to_tensor(doc):
     X, R, E, L = doc[0]
     
@@ -41,9 +40,9 @@ def to_tensor(doc):
         tL.append(tl)      
 
     return [(tX, tR, tE, tL)]
-
-
-
+"""
+    DataLoader for InScript corpus
+"""
 class InScriptDataLoader(object):
     def __init__(self, xml_dir, dict_pickle):
         self.name = os.path.basename(xml_dir)
@@ -216,7 +215,7 @@ For EntityNLM,
     II: Previous context and target sentence => 55k
 """
 class LetsGoDataLoader():
-    def __init__(self, data, vocab):
+    def __init__(self, data, vocab=None, build_documents=False):
 
         self.data = data
         self.vocab = vocab
@@ -230,7 +229,8 @@ class LetsGoDataLoader():
         # For Entity NLM
         self.documents = []
         self.entities = []
-        self.build_documents()
+        if build_documents:
+            self.build_documents()
        
     def process(self):
         for dial in self.data:
@@ -241,10 +241,11 @@ class LetsGoDataLoader():
                 for prev in dial[:i]:
                     sys = prev[0].strip().split(' ')[:self.max_len]
                     usr = prev[1].strip().split(' ')[:self.max_len]
+                    sys = ['<s>'] + sys + ['</s>']
+                    usr = ['<s>'] + usr + ['</s>']
                     src_ctx.append((sys, usr, prev[2], prev[3]))
 
                 self.src.append(src_ctx)
-
                 self.tgt.append(['<s>'] + turn[0].strip().split(' ') + ['</s>'])
 
     def build_documents(self):
@@ -371,9 +372,9 @@ def load_corpus(args):
     elif dataset_name == "letsgo":
         vocab = torch.load('./data/vocab.bin')
         corpus = LetsGoCorpus('./data/union_data-1ab.p')
-        train_corpus = LetsGoDataLoader(corpus.train, vocab.src)
-        valid_corpus = LetsGoDataLoader(corpus.valid, vocab.src)
-        test_corpus = LetsGoDataLoader(corpus.test, vocab.src)
+        train_corpus = LetsGoDataLoader(corpus.train, vocab.src, build_documents=True)
+        valid_corpus = LetsGoDataLoader(corpus.valid, vocab.src, build_documents=True)
+        test_corpus = LetsGoDataLoader(corpus.test, vocab.src, build_documents=True)
         dictionary = train_corpus.vocab.word2id
     else:
         raise ValueError("Invalid dataset:",dataset_name)
