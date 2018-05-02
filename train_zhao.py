@@ -14,11 +14,10 @@ from torch.nn.utils import clip_grad_norm
 from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence
 from torch.nn import functional as F
 
-from config import init_config
 from data_utils import LetsGoCorpus, LetsGoDataLoader, data_iter
 from models.zhao import CNNEncoder, Encoder, Decoder, Seq2Seq
+from opts import init_config
 from vocab import Vocab, VocabEntry
-
 
 def evaluate_loss(model, data, crit, args):
     model.eval()
