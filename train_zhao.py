@@ -126,7 +126,8 @@ def to_input_variable_src(src_data, vocab, cuda=False, is_test=False):
     return a tensor of shape (src_sent_len, batch_size)
     """
     ret = []
-    max_len = max([max([len(s) for s in sents]) for sents in src_data])
+    #max_len = max([max([len(s) for s in sents]) for sents in src_data])
+    max_len = 30
     for each in src_data:
         word_ids = word2id(each, vocab)
         sents_t, masks = input_transpose_src(word_ids, vocab['<pad>'], max_len)
@@ -204,14 +205,13 @@ def train():
             sys_utt = [[turn[0] for turn in dial] for dial in src_sents]
             usr_utt = [[turn[1] for turn in dial] for dial in src_sents]
             conf = [[turn[2] for turn in dial] for dial in src_sents]
-
+            
             src_sents_sys_vars = to_input_variable_src(sys_utt, vocab.src, cuda=args.cuda)
             src_sents_usr_vars = to_input_variable_src(usr_utt, vocab.src, cuda=args.cuda)
             src_sents_conf_vars = to_input_variable_conf(conf, cuda=args.cuda)
 
             tgt_sents_var = to_input_variable(tgt_sents, vocab.tgt, cuda=args.cuda)
-
-
+            
             batch_size = len(src_sents)
             src_sents_len = [len(s) for s in src_sents]
             pred_tgt_word_num = sum(len(s[1:]) for s in tgt_sents) # omitting leading `<s>`
