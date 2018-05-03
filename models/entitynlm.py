@@ -9,14 +9,16 @@ from torch.distributions import Normal
 use_cuda = torch.cuda.is_available()
 
 class EntityNLM(nn.Module):
-    def __init__(self, vocab_size, embed_size=256, hidden_size=256, entity_size=256, dropout=0.5):
+    def __init__(self, vocab_size, embed_size=256, hidden_size=256, entity_size=256, num_layers=1, dropout=0.5):
         super(EntityNLM, self).__init__()
 
         assert hidden_size == entity_size, "hidden_size should be equal to entity_size"
 
         self.embed = nn.Embedding(vocab_size, embed_size)
 
-        self.rnn = nn.LSTMCell(input_size=embed_size, hidden_size=hidden_size)
+        self.rnn = nn.LSTM( input_size=embed_size, 
+                            hidden_size=hidden_size,
+                            num_layers=num_layers )
 
         self.x = nn.Linear(hidden_size, vocab_size) # Linear
         self.r = nn.Bilinear(hidden_size, hidden_size, 1) # Is Entity? Binary
@@ -138,11 +140,12 @@ class EntityNLM(nn.Module):
                 init.xavier_uniform(param,gain=np.sqrt(2))  
     
     def init_hidden_states(self, batch_size):
-        dim1 = batch_size
-        dim2 = self.rnn.hidden_size
+        dim1 = 1
+        dim2 = batch_size
+        dim3 = self.rnn.hidden_size
 
-        var1 = Variable(torch.zeros(dim1,dim2))
-        var2 = Variable(torch.zeros(dim1,dim2))
+        var1 = Variable(torch.zeros(dim1,dim2,dim3))
+        var2 = Variable(torch.zeros(dim1,dim2,dim3))
 
         if use_cuda:
             var1 = var1.cuda()

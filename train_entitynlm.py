@@ -107,11 +107,18 @@ def run_corpus(corpus, model, optimizer, criterion, config, train_mode=False):
 
                 # Forward and Get Hidden State
                 embed_curr_x = model.embed(curr_x)
-                h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
-
+                
+                # reshape
+                embed_curr_x = embed_curr_x.unsqueeze(0)
+                h_t, (_, c_t) = model.rnn(embed_curr_x, (h_t, c_t))
+     
                 #######################
                 #  Entity Prediction  #
                 #######################
+
+                h_t = h_t.squeeze(0)
+                c_t = c_t.squeeze(0)           
+
                 test_condition = ( sent_idx >= skip_sentence ) and ( max_entity < 0 or doc_predict_entity_count < max_entity )
 
                 if (train_mode or test_condition) and next_r.data[0] == 1:
@@ -216,7 +223,10 @@ def run_corpus(corpus, model, optimizer, criterion, config, train_mode=False):
                     x_loss = criterion(pred_x, next_x)
                     doc_x_loss += x_loss.data[0]
                     losses.append(x_loss)
-  
+
+                h_t = h_t.unsqueeze(0)
+                c_t = c_t.unsqueeze(0)   
+
             if len(losses):
                 sent_loss = sum(losses)
                 doc_loss += sent_loss.data[0]
@@ -224,7 +234,8 @@ def run_corpus(corpus, model, optimizer, criterion, config, train_mode=False):
                 if train_mode:
                     sent_loss.backward(retain_graph=True)
                     optimizer.step()
-
+        
+        
         # End of document
         # Clear Entities
         model.clear_entities()
