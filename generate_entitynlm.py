@@ -91,6 +91,8 @@ def run_generate(corpus, model, max_output_length=30):
 
     for doc_idx, (doc_name, doc) in enumerate(corpus.documents,1):
 
+        context = []
+
         X, R, E, L = doc[0]
 
         nsent = len(X)
@@ -127,10 +129,17 @@ def run_generate(corpus, model, max_output_length=30):
 
                 # Forward and Get Hidden State
                 embed_curr_x = model.embed(curr_x)
-                h_t, c_t = model.rnn(embed_curr_x, (h_t, c_t))
+
+                embed_curr_x = embed_curr_x.unsqueeze(0)
+                h_t, (_, c_t) = model.rnn(embed_curr_x, (h_t, c_t))
 
                 # We only need to update entity in this case
                 
+                h_t = h_t.squeeze(0)
+                c_t = c_t.squeeze(0)
+
+                context.append(h_t)
+
                 # Update Entity
                 if curr_r.data[0] > 0 and curr_e.data[0] > 0:
                     
@@ -186,7 +195,8 @@ def run_generate(corpus, model, max_output_length=30):
 
                 pred_x = model.predict_word(next_entity_index, h_t, entity_current)
 
-            
+        print(model.entities)
+        print()    
         ##################
         #   Generation   #
         ##################

@@ -1,0 +1,2848 @@
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+<restart>
+Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+Right Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+What can I do for you ?
+The <route-0> . Is this correct ?
+Right Where are you going ?
+What can I do for you ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+Going to <location-2> . Did I get that right ?
+Okay When are you going to take that bus ?
+Going to <location-1> . When do you want to travel ?
+What can I do for you ?
+Going to <location-1> . When do you want to travel ?
+The <route-0> . Did I get that right ?
+What can I do for you ?
+Leaving at <time.hour-0> .. Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Leaving from <location-0> . Is this correct ?
+What can I do for you ?
+Leaving from <location-0> . Did I get that right ?
+The <route-1> . Is this correct ?
+Right When do you want to travel ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Okay Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-1> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Are you sure you want to start over ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Okay Where do you want to leave from ?
+What can I do for you ?
+<example>
+<example>
+The <route-0> . Did I get that right ?
+Right Leaving from <location-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+The <route-1> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-1> . Is this correct ?
+Alright Leaving from <location-0> . Did I get that right ?
+Leaving at <time.hour-0> .. Did I get that right ?
+What can I do for you ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+When do you want to travel ?
+The <route-1> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+The <route-2> . Did I get that right ?
+<location-2> . Is this correct ?
+Leaving from <location-2> . Did I get that right ?
+Okay Where are you going ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Where do you want to leave from ?
+Leaving from <location-1> . Is this correct ?
+Okay Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+The next bus . Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Alright Going to <location-1> . Did I get that right ?
+Alright Leaving from <location-0> . Did I get that right ?
+If you want the schedule of the <route-1> say yes , otherwise say no .
+The <route-0> . Did I get that right ?
+Right The <route-2> . Is this correct ?
+Leaving from <location-2> . Did I get that right ?
+Going to <location-4> . When do you want to travel ?
+Going to <location-3> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-0> . Is this correct ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-1> . Is this correct ?
+Leaving from <location-3> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Okay Where do you want to go ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-4> . Did I get that right ?
+Right When do you want to travel ?
+At what time do you want to travel ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+<example>
+Leaving from <location-1> . Is this correct ?
+Going to <location-3> . Is this correct ?
+Okay When do you want to travel ?
+The <route-0> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Okay When do you want to travel ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Alright Where do you want to go ?
+Where are you leaving from ?
+Leaving from <location-3> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Going to <location-2> . When are you going to take that bus ?
+Leaving from <location-2> . Is this correct ?
+The <route-2> . Is this correct ?
+What can I do for you ?
+Where are you leaving from ?
+The <route-1> . Did I get that right ?
+Where are you leaving from ?
+Right Where do you want to go ?
+Going to <location-1> . When do you want to travel ?
+Going to <location-5> . Did I get that right ?
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Going to <location-5> . When do you want to travel ?
+Where are you leaving from ?
+If you a bus for <location-2> say yes , otherwise say no .
+Leaving from <location-3> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+<location-7> . Is this correct ?
+Leaving at <time.hour-0> .. Hold on . Let me check that for you . <backend.call> <location-1> <location-3> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Alright Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Where do you want to leave from ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Okay Where are you going ?
+Okay Where are you going ?
+The <route-3> . Is this correct ?
+Right When do you want to travel ?
+If you want to go to <location-3> say yes , otherwise say no .
+Where do you want to go ?
+Leaving from <location-12> . Is this correct ?
+Going to <location-4> . Did I get that right ?
+If you want to go to <location-4> say yes , otherwise say no .
+Just a second . <backend.call> <location-1> <location-3> <time.hour-0> <time.ampm-0> <backend.example>
+Where do you want to go ?
+Alright Where do you want to leave from ?
+Going to <location-7> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+The <route-2> . Is this correct ?
+Leaving from <location-8> . Did I get that right ?
+I looked for a bus leaving <location-5> for <location-6> at around <time.hour-0> <time.ampm-0> . <backend.call> <location-5> <location-6> <time.hour-0> <time.ampm-0> <backend.example>
+Going to <location-5> . Is this correct ?
+Leaving from <location-4> . Is this correct ?
+Right When are you going to take that bus ?
+The <route-4> . Is this correct ?
+Okay . <backend.call> <location-1> <location-3> <time.rel-0> <backend.example>
+<backend.call> <location-2> <location-3> <time.hour-0> <backend.example>
+Going to <location-8> . Is this correct ?
+Leaving at <time.hour-0> .. Did I get that right ?
+Leaving at <time.hour-0> .. Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+At what time do you want to travel ?
+Alright Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.hour-2> <time.minute-0> <time.ampm-0> <backend.example>
+Going to <location-11> . Did I get that right ?
+Alright Where do you want to go ?
+Going to <location-5> . When do you want to travel ?
+When do you want to travel ?
+Going to <location-9> . When do you want to travel ?
+Leaving at <time.hour-0> .. Just a minute . Let me check that for you . <backend.call> <location-1> <location-3> <time.hour-0> <backend.example>
+Are you sure you want to start over ?
+Right When do you want to travel ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+If you want to leave from <location-1> say yes , otherwise say no .
+Going to <location-22> . Is this correct ?
+Just a second . <backend.call> <location-1> <location-2> <time.hour-0> <time.minute-0> <backend.example>
+<restart>
+Leaving from <location-4> . Did I get that right ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+<example>
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+Welcome to the CMU Let 's Go bus information system . To get help at any time , just say Help . What can I do for you ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Alright Leaving from <location-0> . Is this correct ?
+The <route-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+The <route-1> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+Going to <location-1> . When are you going to take that bus ?
+Okay Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+Alright Going to <location-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-1> . Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+Going to <location-1> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+The <route-2> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Going to <location-1> . When are you going to take that bus ?
+Okay Where do you want to go ?
+Leaving from <location-0> . Is this correct ?
+Where do you want to go ?
+The <route-1> . Is this correct ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-3> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-0> . Did I get that right ?
+<example>
+Leaving from <location-2> . Is this correct ?
+The <route-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+<example>
+The <route-1> . Is this correct ?
+The <route-2> . Did I get that right ?
+The <route-2> . Did I get that right ?
+What can I do for you ?
+What is your destination ?
+Right When do you want to travel ?
+Going to <location-2> . When are you going to take that bus ?
+Leaving from <location-1> . Did I get that right ?
+Okay When are you going to take that bus ?
+Leaving from <location-2> . Did I get that right ?
+<location-2> . Is this correct ?
+What can I do for you ?
+<example>
+Right Leaving from <location-0> . Did I get that right ?
+Where do you want to go ?
+The <route-0> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+The <route-4> . Did I get that right ?
+Going to <location-3> . When are you going to take that bus ?
+Going to <location-1> . Did I get that right ?
+Going to <location-1> . Just a minute . Let me check that for you . <backend.call> <location-1> <location-2> <time.rel-0> <backend.example>
+Alright Where do you want to leave from ?
+Leaving at <time.hour-0> <time.minute-0> .. Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Going to <location-4> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-3> . Is this correct ?
+<example>
+Alright When do you want to travel ?
+The <route-0> . Did I get that right ?
+Okay Where do you want to go ?
+Leaving from <location-1> . Did I get that right ?
+Going to <location-4> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-1> . Is this correct ?
+Going to <location-4> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-2> . Did I get that right ?
+Going to <location-1> . Just a minute . Let me check that for you . <backend.call> <location-1> <location-2> <time.rel-0> <backend.example>
+Leaving from <location-0> . Is this correct ?
+Leaving at <time.hour-0> .. Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Leaving from <location-2> . Is this correct ?
+Right Where do you want to leave from ?
+Leaving from <location-1> . Did I get that right ?
+What can I do for you ?
+Alright Where do you want to go ?
+Going to <location-2> . When do you want to travel ?
+The <route-0> . Did I get that right ?
+Leaving from <location-5> . Did I get that right ?
+When are you going to take that bus ?
+Right Leaving from <location-2> . Is this correct ?
+Where would you like to leave from ?
+Leaving from <location-22> . Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Going to <location-3> . When do you want to travel ?
+Leaving from <location-1> . Did I get that right ?
+You want the next bus . Is this correct ?
+When do you want to travel ?
+<restart>
+Right When do you want to travel ?
+Going to <location-4> . When do you want to travel ?
+Going to <location-1> . Is this correct ?
+Going to <location-4> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+The <route-0> . Did I get that right ?
+The <route-2> . Did I get that right ?
+<restart>
+<restart>
+Leaving from <location-8> . Did I get that right ?
+If you want to leave from <location-7> say yes , otherwise say no .
+Leaving from <location-5> . Is this correct ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-3> . Did I get that right ?
+Leaving from <location-3> . Is this correct ?
+Where do you want to go ?
+Leaving from <location-0> . Is this correct ?
+The <route-0> . Did I get that right ?
+The <route-4> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+Going to <location-2> . Did I get that right ?
+Leaving from <location-5> . Is this correct ?
+Alright Where do you want to go ?
+The <route-2> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+<example>
+Leaving from <location-5> . Is this correct ?
+When do you want to travel ?
+Going to <location-3> . When are you going to take that bus ?
+Going to <location-4> . Is this correct ?
+Going to <location-7> . Did I get that right ?
+The <route-1> . Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+Leaving from <location-10> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+When do you want to travel ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+<example>
+When do you want to travel ?
+Going to <location-3> . When are you going to take that bus ?
+Alright Where do you want to go ?
+Leaving from <location-6> . Did I get that right ?
+Where do you want to go ?
+The <route-3> . Did I get that right ?
+The <route-0> . Did I get that right ?
+<location-9> . Is this correct ?
+Alright When do you want to travel ?
+When would you like to travel ?
+Just a second . <backend.call> <location-3> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+Leaving from <location-8> . Did I get that right ?
+At what time do you want to travel ?
+Leaving from <location-4> . Did I get that right ?
+Where do you want to go ?
+When would you like to travel ?
+<restart>
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+Alright Where do you want to go ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-5> <location-3> <time.rel-0> <backend.example>
+The <route-6> . Did I get that right ?
+Leaving from <location-8> . Did I get that right ?
+Going to <location-7> . Did I get that right ?
+Going to <location-4> . Is this correct ?
+Going to <location-2> . Did I get that right ?
+Leaving from <location-7> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Going to <location-26> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-5> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+The <route-5> . Is this correct ?
+Going to <location-13> . Did I get that right ?
+Leaving at <time.hour-0> <time.minute-0> .. Hold on . I 'll look that up . <backend.call> <location-5> <location-6> <time.hour-0> <backend.example>
+Where do you want to go ?
+Going to <location-5> . Is this correct ?
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+The <route-2> . Did I get that right ?
+Alright Where do you want to go ?
+Okay . <backend.call> <location-1> <location-4> <time.hour-0> <backend.example>
+Where do you want to go ?
+Leaving from <location-4> . Did I get that right ?
+Going to <location-3> . Did I get that right ?
+Leaving from <location-11> . Is this correct ?
+<example>
+If you want to leave from <location-4> say yes , otherwise say no .
+Going to <location-7> . When do you want to travel ?
+Leaving from <location-2> . Did I get that right ?
+The <route-4> . Did I get that right ?
+Leaving from <location-3> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-2> . Did I get that right ?
+Leaving from <location-3> . Did I get that right ?
+Leaving from <location-6> . Did I get that right ?
+<location-0> . Did I get that right ?
+Leaving from <location-11> . Did I get that right ?
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+Where are you going ?
+Leaving from <location-2> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Going to <location-10> . Is this correct ?
+Right Which stop in <location-9> are you leaving from ?
+Leaving from <location-15> . Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+Going to <location-12> . Is this correct ?
+Alright Where would you like to leave from ?
+Right Which stop in <location-9> are you leaving from ?
+Going to <location-12> . Is this correct ?
+Leaving from <location-10> . Is this correct ?
+Leaving from <location-13> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Alright When do you want to travel ?
+Leaving from <location-9> . Is this correct ?
+If you want to leave at <time.hour-0> . say yes , otherwise say no .
+When would you like to travel ?
+When are you going to take that bus ?
+Leaving at <time.hour-1> <time.minute-0> .. Is this correct ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-1> <location-3> <time.rel-0> <backend.example>
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+<example>
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+<example>
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+I think you want the next bus . Am I right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+<example>
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+What can I do for you ?
+Going to <location-2> . When do you want to travel ?
+The <route-0> . Did I get that right ?
+The <route-2> . Is this correct ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+<example>
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+<location-0> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+<location-0> . Is this correct ?
+What can I do for you ?
+The <route-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Going to <location-3> . Did I get that right ?
+Leaving from <location-1> . Is this correct ?
+<location-0> . Is this correct ?
+Leaving from <location-0> . Where do you want to go ?
+What can I do for you ?
+Okay Going to <location-1> . Is this correct ?
+Leaving from <location-1> . Is this correct ?
+<example>
+Leaving from <location-2> . Is this correct ?
+Going to <location-1> . When are you going to take that bus ?
+Going to <location-3> . When are you going to take that bus ?
+When do you want to travel ?
+Okay Where do you want to go ?
+Going to <location-1> . When are you going to take that bus ?
+Alright Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Alright Where do you want to leave from ?
+Alright Where do you want to go ?
+Going to <location-1> . When do you want to travel ?
+Alright Leaving from <location-0> . Did I get that right ?
+When do you want to travel ?
+Leaving from <location-1> . Is this correct ?
+Right Where do you want to leave from ?
+Going to <location-1> . When do you want to travel ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-1> . Where do you want to go ?
+Leaving from <location-2> . Is this correct ?
+Okay Where do you want to go ?
+Leaving from <location-0> . Did I get that right ?
+<example>
+Where do you want to go ?
+Okay Where are you going ?
+Going to <location-1> . When do you want to travel ?
+Alright Where do you want to go ?
+Going to <location-1> . When do you want to travel ?
+Okay Where are you going ?
+The <route-1> . Did I get that right ?
+The <route-1> . Is this correct ?
+Okay Where are you going ?
+Going to <location-1> . Did I get that right ?
+Going to <location-12> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Alright Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+Alright When do you want to travel ?
+Going to <location-3> . Is this correct ?
+Right Where do you want to go ?
+Leaving from <location-0> . Is this correct ?
+Alright When are you going to take that bus ?
+What can I do for you ?
+Where do you want to leave from ?
+Right Leaving from <location-2> . Is this correct ?
+Going to <location-1> . Is this correct ?
+Going to <location-1> . When do you want to travel ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Alright When do you want to travel ?
+Okay When do you want to travel ?
+Going to <location-3> . Did I get that right ?
+The <route-3> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Okay When do you want to travel ?
+Leaving from <location-2> . Did I get that right ?
+Leaving at <time.hour-0> .. Did I get that right ?
+Alright Going to <location-9> . Is this correct ?
+<example>
+The <route-1> . Did I get that right ?
+The <route-2> . Did I get that right ?
+What can I do for you ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+<example>
+The next bus . Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+If you want the schedule of the <route-4> say yes , otherwise say no .
+Going to <location-2> . Is this correct ?
+The <route-0> . Did I get that right ?
+Okay . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+I think you want the next bus . Am I right ?
+<location-0> . Did I get that right ?
+Just a second . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+What can I do for you ?
+<example>
+Alright The <route-1> . Did I get that right ?
+Going to <location-6> . Did I get that right ?
+Going to <location-2> . When are you going to take that bus ?
+When do you want to travel ?
+Where do you want to go ?
+Alright Where do you want to go ?
+Alright When do you want to travel ?
+Just a second . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Where do you want to go ?
+Right Where do you want to leave from ?
+Leaving from <location-1> . Did I get that right ?
+Where do you want to go ?
+What can I do for you ?
+Leaving from <location-3> . Is this correct ?
+Okay Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+When would you like to travel ?
+Going to <location-1> . Is this correct ?
+Going to <location-4> . When do you want to travel ?
+Going to <location-6> . When do you want to travel ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-5> . Did I get that right ?
+Leaving from <location-6> . Did I get that right ?
+Okay Where do you want to leave from ?
+When are you going to take that bus ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+<location-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+I think you want the next bus . Am I right ?
+The <route-0> . Did I get that right ?
+<location-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-4> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+Alright Leaving from <location-0> . Is this correct ?
+Alright Leaving from <location-0> . Did I get that right ?
+Alright When do you want to travel ?
+Going to <location-1> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving at <time.hour-0> .. Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Okay Where are you going ?
+Leaving from <location-1> . Where do you want to go ?
+Leaving from <location-0> . Is this correct ?
+Okay Where are you going ?
+Going to <location-1> . When are you going to take that bus ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+Going to <location-1> . When are you going to take that bus ?
+Okay Where are you going ?
+Alright When do you want to travel ?
+Okay Leaving from <location-0> . Is this correct ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-0> . Did I get that right ?
+Going to <location-1> . When are you going to take that bus ?
+Where do you want to leave from ?
+Where do you want to leave from ?
+Leaving from <location-0> . Is this correct ?
+Going to <location-1> . When are you going to take that bus ?
+Alright Where do you want to leave from ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-1> . Where do you want to go ?
+What can I do for you ?
+Leaving from <location-2> . Is this correct ?
+Are you sure you want to start over ?
+Alright Where do you want to leave from ?
+Okay Where do you want to go ?
+Going to <location-4> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-2> . Is this correct ?
+Going to <location-3> . When do you want to travel ?
+Alright Where do you want to go ?
+Leaving from <location-2> . Did I get that right ?
+Alright Where do you want to go ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-3> . Is this correct ?
+The <route-2> . Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Which neighborhood do you want to leave from ?
+Going to <location-1> . When are you going to take that bus ?
+Leaving from <location-0> . Did I get that right ?
+Going to <location-4> . Did I get that right ?
+The <route-3> . Is this correct ?
+Leaving from <location-3> . Is this correct ?
+Alright Where do you want to go ?
+Leaving from <location-3> . Did I get that right ?
+Leaving at <time.hour-0> .. Hold on . Let me check that for you . <backend.call> <location-2> <location-3> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Leaving from <location-4> . Did I get that right ?
+When would you like to travel ?
+Leaving from <location-2> . Is this correct ?
+The <route-0> . Did I get that right ?
+Alright Going to <location-1> . Did I get that right ?
+When do you want to travel ?
+Going to <location-1> . Is this correct ?
+Leaving from <location-1> . Is this correct ?
+Okay Where do you want to go ?
+Where do you want to leave from ?
+Going to <location-2> . When do you want to travel ?
+Leaving at <time.hour-0> .. Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Going to <location-1> . Is this correct ?
+Leaving from <location-3> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-3> . Is this correct ?
+Where do you want to leave from ?
+Leaving from <location-1> . Did I get that right ?
+Alright Where do you want to go ?
+The next bus . Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+What can I do for you ?
+When are you going to take that bus ?
+Going to <location-4> . Is this correct ?
+Right Where do you want to leave from ?
+<example>
+Going to <location-2> . Did I get that right ?
+Going to <location-5> . Did I get that right ?
+Alright When do you want to travel ?
+Leaving from <location-4> . Did I get that right ?
+Going to <location-0> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Leaving at <time.hour-0> <time.minute-0> .. Hold on . Let me check that for you . <backend.call> <location-1> <location-2> <time.hour-0> <time.minute-0> <backend.example>
+Right When do you want to travel ?
+Right When do you want to travel ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+The <route-2> . Is this correct ?
+Leaving at <time.hour-0> .. Did I get that right ?
+Going to <location-0> . Did I get that right ?
+Right Where do you want to go ?
+When do you want to travel ?
+Alright Where do you want to go ?
+Okay Where are you going ?
+Going to <location-5> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving at <time.hour-0> .. Did I get that right ?
+that 's true . i have a big problem . i missed my flight to korea this morning . bu . Going to <location-1> . Is this correct ?
+What can I do for you ?
+Leaving from <location-2> . Is this correct ?
+Alright Where do you want to go ?
+What is your destination ?
+When do you want to travel ?
+Leaving at <time.hour-0> .. Did I get that right ?
+The <route-5> . Is this correct ?
+it must be hard . The <route-4> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+Going to <location-19> . Is this correct ?
+Okay . <backend.call> <location-1> <location-3> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Leaving at <time.hour-0> .. Just a minute . Let me check that for you . <backend.call> <location-1> <location-3> <time.hour-0> <backend.example>
+Okay <location-4> . Is this correct ?
+Okay . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+Leaving from <location-3> . Did I get that right ?
+Alright When do you want to travel ?
+Okay . <backend.call> <location-1> <location-3> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Are you still there ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Just a second . <backend.call> <location-1> <location-3> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Okay . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-1> . Is this correct ?
+Alright Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving at <time.hour-0> .. Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+What can I do for you ?
+Alright Leaving from <location-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+Leaving from <location-1> . Is this correct ?
+Okay Where do you want to leave from ?
+Alright Leaving from <location-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+Leaving from <location-0> . Is this correct ?
+Okay Where do you want to leave from ?
+Alright When do you want to travel ?
+Leaving from <location-0> . Is this correct ?
+What can I do for you ?
+Okay Where do you want to leave from ?
+Okay Where do you want to leave from ?
+If you want the schedule of the <route-0> say yes , otherwise say no .
+<location-0> . Did I get that right ?
+What can I do for you ?
+If you want to leave from <location-0> say yes , otherwise say no .
+Okay Where do you want to leave from ?
+Okay Where do you want to leave from ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-0> . Did I get that right ?
+Going to <location-3> . When do you want to travel ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Going to <location-2> . When are you going to take that bus ?
+Alright Where do you want to go ?
+The <route-2> . Is this correct ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+If you want the schedule of the <route-0> say yes , otherwise say no .
+Leaving from <location-1> . Did I get that right ?
+<location-1> . Is this correct ?
+Okay Where do you want to go ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-0> . Did I get that right ?
+Alright When do you want to travel ?
+i know . it was so funny . the djs were cracking up . Leaving from <location-1> . Did I get that right ?
+<location-2> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Alright Where do you want to go ?
+Where are you leaving from ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Leaving at <time.hour-0> .. Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+What can I do for you ?
+The <route-2> . Is this correct ?
+Right Where do you want to leave from ?
+Going to <location-2> . When are you going to take that bus ?
+What is your destination ?
+<location-1> . Is this correct ?
+If you a bus for <location-0> say yes , otherwise say no .
+The <route-2> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+Where do you want to go ?
+Going to <location-2> . When do you want to travel ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+Where do you want to leave from ?
+<example>
+<location-1> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <backend.example>
+Going to <location-1> . Did I get that right ?
+Where do you want to leave from ?
+The <route-1> . Is this correct ?
+What can I do for you ?
+Going to <location-3> . When do you want to travel ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-2> . Did I get that right ?
+Leaving at <time.hour-0> .. Did I get that right ?
+Okay When do you want to travel ?
+Leaving from <location-1> . Did I get that right ?
+Alright Where do you want to leave from ?
+Leaving from <location-4> . Did I get that right ?
+Going to <location-4> . Is this correct ?
+Leaving from <location-3> . Is this correct ?
+Right When do you want to travel ?
+Going to <location-0> . Is this correct ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+Where do you want to leave from ?
+What can I do for you ?
+<example>
+<example>
+Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+What can I do for you ?
+<example>
+Going to <location-1> . Is this correct ?
+<example>
+Leaving from <location-0> . Is this correct ?
+<example>
+The <route-0> . Did I get that right ?
+The <route-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+The <route-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+Okay Where do you want to leave from ?
+Okay Where do you want to leave from ?
+Okay Where do you want to leave from ?
+Okay Where do you want to leave from ?
+What can I do for you ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+The <route-2> . Is this correct ?
+What can I do for you ?
+The <route-0> . Is this correct ?
+Okay Where are you going ?
+Okay Where do you want to leave from ?
+Leaving from <location-0> . Is this correct ?
+Okay Where do you want to leave from ?
+Okay Where do you want to leave from ?
+What can I do for you ?
+Okay Where do you want to leave from ?
+Okay Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+What can I do for you ?
+Alright Where do you want to go ?
+<example>
+The <route-1> . Is this correct ?
+What can I do for you ?
+Leaving from <location-0> . Is this correct ?
+What can I do for you ?
+At what time do you want to travel ?
+Okay Leaving from <location-0> . Did I get that right ?
+Alright Where do you want to go ?
+Leaving from <location-1> . Is this correct ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-3> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+The <route-0> . Is this correct ?
+Leaving from <location-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+What can I do for you ?
+The next bus . Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+<example>
+Alright Where do you want to leave from ?
+Going to <location-1> . When are you going to take that bus ?
+Going to <location-2> . When do you want to travel ?
+The <route-1> . Did I get that right ?
+Right Which stop in <location-2> do you want to leave from ?
+What can I do for you ?
+Leaving from <location-0> . Where do you want to go ?
+Okay Where do you want to go ?
+Leaving from <location-2> . Is this correct ?
+Okay Where are you going ?
+Leaving from <location-1> . Did I get that right ?
+Going to <location-2> . When are you going to take that bus ?
+Alright Where do you want to go ?
+Leaving from <location-4> . Did I get that right ?
+Okay When do you want to travel ?
+You can say start a new query , or goodbye .
+What can I do for you ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+What can I do for you ?
+Leaving from <location-1> . Is this correct ?
+Leaving at <time.hour-0> .. Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Okay Where are you going ?
+Leaving from <location-1> . Did I get that right ?
+What is your destination ?
+Where do you want to go ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-1> . Did I get that right ?
+Going to <location-5> . When do you want to travel ?
+Where do you want to leave from ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Okay When do you want to travel ?
+Where do you want to go ?
+The <route-3> . Is this correct ?
+Right When do you want to travel ?
+Leaving from <location-1> . Did I get that right ?
+Okay When are you going to take that bus ?
+Going to <location-2> . Did I get that right ?
+Going to <location-2> . Did I get that right ?
+Alright When do you want to travel ?
+Going to <location-4> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Going to <location-5> . Is this correct ?
+Leaving from <location-3> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+Where do you want to leave from ?
+Going to <location-4> . Did I get that right ?
+<example>
+Leaving from <location-2> . Is this correct ?
+Leaving at <time.hour-0> .. Is this correct ?
+Okay When do you want to travel ?
+What can I do for you ?
+Leaving at <time.hour-1> .. Hold on . I 'll look that up . <backend.call> <location-1> <location-2> <time.hour-0> <backend.example>
+Leaving from <location-0> . Is this correct ?
+Leaving at <time.hour-1> <time.minute-0> .. Hold on . Let me check that for you . <backend.call> <location-5> <location-6> <time.hour-0> <backend.example>
+The next bus . Hold on . I 'll look that up . <backend.call> <location-1> <location-2> <time.rel-0> <backend.example>
+Going to <location-3> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+Alright When do you want to travel ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+The <route-3> . Is this correct ?
+Where do you want to go ?
+Where would you like to leave from ?
+Leaving from <location-3> . Is this correct ?
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+The <route-3> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Alright Where do you want to go ?
+The <route-2> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving at <time.hour-1> .. Did I get that right ?
+<restart>
+The next bus . Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Alright Where do you want to go ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Where do you want to go ?
+Alright Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+I think you want the next bus . Am I right ?
+The <route-0> . Did I get that right ?
+What can I do for you ?
+What is your destination ?
+Okay Where do you want to leave from ?
+Leaving from <location-0> . Where do you want to go ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Where do you want to go ?
+Leaving from <location-0> . Where do you want to go ?
+The <route-0> . Did I get that right ?
+The <route-0> . Is this correct ?
+The <route-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+Leaving from <location-0> . Where do you want to go ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+Okay Where do you want to leave from ?
+Leaving from <location-0> . Is this correct ?
+Okay Where do you want to go ?
+The <route-1> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+If you want to go to <location-1> say yes , otherwise say no .
+Leaving from <location-1> . Is this correct ?
+Going to <location-1> . When do you want to travel ?
+If you want to leave from <location-1> say yes , otherwise say no .
+Alright The <route-1> . Did I get that right ?
+Alright When do you want to travel ?
+What can I do for you ?
+Alright The <route-1> . Did I get that right ?
+If you want to leave from <location-1> say yes , otherwise say no .
+The <route-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+The <route-2> . Is this correct ?
+Alright The <route-0> . Did I get that right ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-5> . Did I get that right ?
+<location-1> . Is this correct ?
+Going to <location-1> . When do you want to travel ?
+Okay When do you want to travel ?
+Alright When do you want to travel ?
+Right When do you want to travel ?
+Leaving from <location-5> . Did I get that right ?
+The next bus . Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Going to <location-1> . Is this correct ?
+The <route-1> . Did I get that right ?
+Where do you want to go ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+If you a bus for <location-1> say yes , otherwise say no .
+Leaving from <location-4> . Did I get that right ?
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Alright Where do you want to go ?
+The <route-1> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Going to <location-3> . When do you want to travel ?
+What can I do for you ?
+What can I do for you ?
+Alright When do you want to travel ?
+Leaving from <location-1> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-3> . Did I get that right ?
+Where do you want to go ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Alright Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <backend.example>
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-1> . Is this correct ?
+Going to <location-1> . Did I get that right ?
+Going to <location-2> . Is this correct ?
+Alright Where do you want to go ?
+Leaving from <location-2> . Did I get that right ?
+The <route-1> . Is this correct ?
+The <route-1> . Did I get that right ?
+Leaving from <location-3> . Did I get that right ?
+Where are you going ?
+The <route-1> . Did I get that right ?
+Alright Where do you want to go ?
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Going to <location-3> . Did I get that right ?
+Okay When do you want to travel ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Where are you going ?
+When are you going to take that bus ?
+Alright Where do you want to go ?
+Leaving from <location-6> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+The next bus . Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Going to <location-5> . When do you want to travel ?
+The next bus . Just a minute . I 'll look that up . <backend.call> <location-1> <location-2> <time.rel-0> <backend.example>
+Going to <location-6> . Did I get that right ?
+Leaving at <time.hour-0> .. Did I get that right ?
+The <route-2> . Did I get that right ?
+The <route-1> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Okay Where are you going ?
+Going to <location-1> . When are you going to take that bus ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+<example>
+What can I do for you ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-0> . Did I get that right ?
+Okay Where are you going ?
+The <route-0> . Did I get that right ?
+Going to <location-1> . When are you going to take that bus ?
+<example>
+The <route-0> . Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+Alright Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+Going to <location-1> . Is this correct ?
+The <route-1> . Is this correct ?
+Leaving from <location-1> . Is this correct ?
+Leaving from <location-2> . Is this correct ?
+What can I do for you ?
+The <route-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+The <route-1> . Is this correct ?
+Leaving from <location-0> . Is this correct ?
+Alright Leaving from <location-0> . Is this correct ?
+Leaving at <time.hour-0> .. Did I get that right ?
+Okay Where do you want to leave from ?
+Alright Going to <location-1> . Is this correct ?
+Leaving from <location-1> . Is this correct ?
+Alright The <route-1> . Did I get that right ?
+Going to <location-2> . When are you going to take that bus ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+Okay When do you want to travel ?
+Leaving from <location-1> . Did I get that right ?
+The <route-1> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Is this correct ?
+What can I do for you ?
+Leaving from <location-1> . Did I get that right ?
+Alright Where do you want to go ?
+The <route-0> . Is this correct ?
+Okay Where are you going ?
+Leaving from <location-0> . Did I get that right ?
+Okay Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Alright Where do you want to go ?
+<restart>
+Right Where are you going ?
+Going to <location-2> . When do you want to travel ?
+Leaving from <location-1> . Did I get that right ?
+Going to <location-5> . Is this correct ?
+The <route-1> . Did I get that right ?
+<example>
+Going to <location-2> . Is this correct ?
+Going to <location-2> . Did I get that right ?
+Leaving from <location-1> . Where do you want to go ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+Okay Where are you going ?
+Going to <location-1> . When do you want to travel ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+If you want to leave from <location-3> say yes , otherwise say no .
+What can I do for you ?
+The <route-0> . Did I get that right ?
+Right Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Right When do you want to travel ?
+<example>
+Where are you going ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Right Which stop in <location-2> do you want to leave from ?
+Okay Where do you want to go ?
+The <route-2> . Is this correct ?
+Where do you want to go ?
+<restart>
+The <route-1> . Did I get that right ?
+Going to <location-6> . Is this correct ?
+Alright Where do you want to go ?
+The <route-1> . Is this correct ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-1> . Is this correct ?
+Alright Where do you want to leave from ?
+Leaving from <location-2> . Is this correct ?
+Okay When do you want to travel ?
+Alright Going to <location-1> . Is this correct ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+The <route-2> . Is this correct ?
+Alright Where would you like to leave from ?
+Leaving from <location-1> . Is this correct ?
+Alright Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+If you a bus for <location-0> say yes , otherwise say no .
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+If you want the schedule of the <route-0> say yes , otherwise say no .
+The <route-3> . Is this correct ?
+Leaving from <location-2> . Is this correct ?
+The next bus . Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+The <route-1> . Is this correct ?
+Leaving from <location-1> . Is this correct ?
+The <route-1> . Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+Where do you want to go ?
+The <route-0> . Did I get that right ?
+Right Where do you want to go ?
+Leaving from <location-1> . Did I get that right ?
+Okay Where do you want to leave from ?
+Leaving at <time.hour-0> <time.minute-0> .. Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Leaving from <location-1> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-4> . Did I get that right ?
+If you want the schedule of the <route-2> say yes , otherwise say no .
+When do you want to travel ?
+Okay When do you want to travel ?
+Alright The <route-1> . Did I get that right ?
+<example>
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+The <route-0> . Did I get that right ?
+What can I do for you ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-1> . Did I get that right ?
+The <route-1> . Is this correct ?
+Going to <location-1> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+What can I do for you ?
+Alright When do you want to travel ?
+Going to <location-5> . Is this correct ?
+Right Leaving from <location-0> . Is this correct ?
+What is your destination ?
+Where do you want to leave from ?
+The <route-2> . Is this correct ?
+Alright Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Okay Where are you going ?
+The <route-1> . Did I get that right ?
+Going to <location-1> . When do you want to travel ?
+Alright Where do you want to go ?
+Alright The <route-2> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-1> . Did I get that right ?
+Going to <location-6> . Did I get that right ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+The next bus . Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Where do you want to go ?
+Leaving from <location-7> . Is this correct ?
+Going to <location-2> . Did I get that right ?
+Where do you want to leave from ?
+Going to <location-4> . Did I get that right ?
+Alright Where do you want to go ?
+The <route-1> . Is this correct ?
+Alright When do you want to travel ?
+Leaving from <location-3> . Did I get that right ?
+Going to <location-2> . Did I get that right ?
+The <route-1> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-1> . Did I get that right ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-0> . Did I get that right ?
+Leaving at <time.hour-0> .. Did I get that right ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+The <route-2> . Is this correct ?
+Where do you want to go ?
+The <route-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Okay Where are you going ?
+Leaving from <location-1> . Is this correct ?
+Leaving from <location-1> . Where do you want to go ?
+What can I do for you ?
+<example>
+The <route-3> . Is this correct ?
+The <route-6> . Did I get that right ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+Going to <location-2> . When are you going to take that bus ?
+Leaving from <location-0> . Where do you want to go ?
+When do you want to travel ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-6> . Is this correct ?
+Leaving from <location-2> . Is this correct ?
+Going to <location-5> . Is this correct ?
+Right Where do you want to go ?
+Going to <location-3> . When do you want to travel ?
+Okay When do you want to travel ?
+Going to <location-1> . Is this correct ?
+Okay . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Leaving from <location-2> . Did I get that right ?
+<example>
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+Going to <location-7> . Did I get that right ?
+The <route-4> . Is this correct ?
+Going to <location-1> . Is this correct ?
+Alright Where do you want to go ?
+At what time do you want to travel ?
+The <route-4> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-9> . Is this correct ?
+The <route-6> . Did I get that right ?
+Right Where do you want to leave from ?
+Alright Where do you want to go ?
+Where do you want to go ?
+The <route-6> . Where do you want to leave from ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-9> . Is this correct ?
+Okay . <backend.call> <location-2> <location-4> <time.rel-0> <backend.example>
+The <route-2> . Is this correct ?
+Okay When do you want to travel ?
+Alright When do you want to travel ?
+Where are you leaving from ?
+Leaving from <location-4> . Did I get that right ?
+Right Where do you want to go ?
+Leaving from <location-11> . Is this correct ?
+Leaving from <location-5> . Did I get that right ?
+Right Where do you want to go ?
+Right When do you want to travel ?
+The <route-0> . Did I get that right ?
+Going to <location-1> . When are you going to take that bus ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-7> . Is this correct ?
+What can I do for you ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+<location-0> . Is this correct ?
+What can I do for you ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Alright Where do you want to leave from ?
+The <route-1> . Is this correct ?
+The <route-1> . Where do you want to leave from ?
+Leaving from <location-1> . Is this correct ?
+The <route-1> . Where do you want to leave from ?
+<location-0> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+The <route-1> . Where do you want to leave from ?
+Leaving from <location-0> . Where do you want to go ?
+The <route-0> . Did I get that right ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-5> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+Okay Where do you want to go ?
+Okay Where are you going ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Okay Where do you want to leave from ?
+What can I do for you ?
+<location-2> . Is this correct ?
+Right Where do you want to go ?
+The <route-2> . Did I get that right ?
+The <route-1> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+When do you want to travel ?
+Where do you want to go ?
+Leaving from <location-5> . Did I get that right ?
+The <route-2> . Did I get that right ?
+Where do you want to leave from ?
+The <route-2> . Is this correct ?
+Going to <location-3> . When do you want to travel ?
+What can I do for you ?
+Leaving from <location-2> . Is this correct ?
+Okay Where do you want to go ?
+The <route-1> . Is this correct ?
+<example>
+Going to <location-2> . Did I get that right ?
+<location-0> . Is this correct ?
+The <route-2> . Is this correct ?
+The <route-3> . Did I get that right ?
+Right Which stop in <location-6> do you want to leave from ?
+Leaving from <location-2> . Is this correct ?
+If you a bus for <location-1> say yes , otherwise say no .
+When are you going to take that bus ?
+Okay When would you like to travel ?
+Going to <location-12> . Did I get that right ?
+Going to <location-4> . Did I get that right ?
+Leaving from <location-9> . Did I get that right ?
+If you want to leave from <location-3> say yes , otherwise say no .
+Right When do you want to travel ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-5> . Did I get that right ?
+When are you going to take that bus ?
+The <route-4> . Did I get that right ?
+If you want to leave from <location-5> say yes , otherwise say no .
+Where do you want to go ?
+Going to <location-3> . Is this correct ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-5> <location-6> <time.rel-0> <backend.example>
+Leaving from <location-6> . Did I get that right ?
+Leaving from <location-3> . Did I get that right ?
+Are you still there ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+<example>
+Right Where do you want to go ?
+Okay When are you going to take that bus ?
+Leaving from <location-12> . Is this correct ?
+Where do you want to go ?
+<restart>
+Leaving from <location-10> . Is this correct ?
+Going to <location-9> . Is this correct ?
+Going to <location-6> . Is this correct ?
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+Okay Where do you want to go ?
+The <route-0> . Did I get that right ?
+The <route-5> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+The <route-6> . Did I get that right ?
+The <route-6> . Did I get that right ?
+Which neighborhood do you want to leave from ?
+Leaving from <location-8> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+I think you want the next bus . Am I right ?
+Leaving from <location-12> . Is this correct ?
+Leaving from <location-12> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-12> . Is this correct ?
+Going to <location-11> . Is this correct ?
+If you want the schedule of the <route-1> say yes , otherwise say no .
+Leaving from <location-10> . Is this correct ?
+Alright Where do you want to go ?
+I looked for the next bus from <location-5> to <location-12> . <backend.call> <location-5> <location-1> <time.hour-1> <time.minute-0> <time.ampm-0> <backend.example>
+Leaving from <location-15> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-11> . Is this correct ?
+Going to <location-3> . Is this correct ?
+Where do you want to go ?
+Going to <location-4> . Is this correct ?
+Going to <location-11> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+The next bus . Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-1> . Did I get that right ?
+Okay Where do you want to go ?
+Alright Where do you want to go ?
+Leaving from <location-0> . Where do you want to go ?
+Leaving from <location-1> . Is this correct ?
+What can I do for you ?
+Leaving from <location-3> . Did I get that right ?
+Okay When do you want to travel ?
+The <route-2> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Okay When do you want to travel ?
+If you a bus for <location-1> say yes , otherwise say no .
+The <route-3> . Is this correct ?
+The <route-0> . Did I get that right ?
+The <route-1> . Did I get that right ?
+If you want the schedule of the <route-1> say yes , otherwise say no .
+<example>
+Leaving from <location-2> . Is this correct ?
+Where do you want to go ?
+When do you want to travel ?
+<example>
+Leaving at <time.hour-1> <time.minute-0> .. Is this correct ?
+Okay Where do you want to go ?
+<example>
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-1> . Did I get that right ?
+Okay When do you want to travel ?
+The <route-3> . Did I get that right ?
+When do you want to travel ?
+Leaving at <time.hour-0> .. Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+If you want to leave from <location-8> say yes , otherwise say no .
+Alright Where do you want to leave from ?
+Going to <location-7> . Is this correct ?
+Leaving from <location-8> . Did I get that right ?
+Leaving from <location-6> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+Alright Where do you want to go ?
+Okay Where are you going ?
+Leaving at <time.hour-1> .. Is this correct ?
+Alright Where do you want to go ?
+Leaving from <location-5> . Did I get that right ?
+Going to <location-3> . Did I get that right ?
+Where are you leaving from ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-2> . Is this correct ?
+<example>
+Alright Where do you want to go ?
+Leaving from <location-8> . Did I get that right ?
+Going to <location-14> . Did I get that right ?
+Going to <location-5> . Is this correct ?
+<example>
+Alright Where do you want to go ?
+Leaving from <location-8> . Did I get that right ?
+So far , I know that you want to take the <route-0> from <location-0> Right now , I need you to tell me the stop or neighborhood you want
+<example>
+<example>
+<example>
+If you want the schedule of the <route-0> say yes , otherwise say no .
+<example>
+<example>
+The <route-0> . Did I get that right ?
+<example>
+<example>
+Leaving from <location-0> . Did I get that right ?
+If you want the schedule of the <route-0> say yes , otherwise say no .
+<example>
+<example>
+<example>
+<example>
+<example>
+<example>
+<example>
+<example>
+<example>
+<example>
+<example>
+<example>
+Going to <location-3> . Is this correct ?
+Leaving from <location-2> . Is this correct ?
+What can I do for you ?
+You want the next bus . Is this correct ?
+Going to <location-4> . Is this correct ?
+You can say start a new query , or goodbye .
+Okay When do you want to travel ?
+Alright When do you want to travel ?
+Going to <location-7> . When are you going to take that bus ?
+Okay . <backend.call> <location-1> <location-3> <time.hour-0> <time.minute-0> <backend.example>
+What can I do for you ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+Leaving from <location-2> . Is this correct ?
+Going to <location-5> . Did I get that right ?
+Going to <location-7> . Did I get that right ?
+When are you going to take that bus ?
+Leaving from <location-3> . Did I get that right ?
+Where do you want to leave from ?
+Leaving from <location-1> . Is this correct ?
+Leaving at <time.hour-0> <time.minute-0> .. Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Where do you want to leave from ?
+Alright Where do you want to go ?
+Leaving at <time.hour-0> .. Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+The <route-2> . Is this correct ?
+<example>
+Alright Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+Alright Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+Going to <location-3> . When do you want to travel ?
+Going to <location-4> . When are you going to take that bus ?
+Where do you want to leave from ?
+<location-1> . Is this correct ?
+Going to <location-2> . Did I get that right ?
+The <route-2> . Is this correct ?
+Where are you going ?
+What can I do for you ?
+Going to <location-6> . Is this correct ?
+Where do you want to go ?
+Okay . <backend.call> <location-1> <location-3> <time.rel-0> <backend.example>
+Going to <location-4> . Is this correct ?
+When do you want to travel ?
+Leaving from <location-5> . Is this correct ?
+When do you want to travel ?
+What can I do for you ?
+Going to <location-5> . Is this correct ?
+Where would you like to leave from ?
+Right When do you want to travel ?
+Leaving from <location-3> . Did I get that right ?
+<restart>
+When do you want to travel ?
+Going to <location-4> . Is this correct ?
+Where do you want to go ?
+The <route-0> . Did I get that right ?
+<example>
+Leaving from <location-0> . Did I get that right ?
+Going to <location-1> . When do you want to travel ?
+Okay Where are you going ?
+If you want the schedule of the <route-1> say yes , otherwise say no .
+Where do you want to leave from ?
+If you a bus for <location-2> say yes , otherwise say no .
+Going to <location-1> . When are you going to take that bus ?
+Alright The <route-1> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+What can I do for you ?
+When do you want to travel ?
+What can I do for you ?
+What can I do for you ?
+Leaving from <location-2> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+The <route-0> . Did I get that right ?
+Going to <location-5> . Is this correct ?
+Leaving from <location-3> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-5> . Did I get that right ?
+Where do you want to leave from ?
+If you want to go to <location-3> say yes , otherwise say no .
+Leaving from <location-2> . Is this correct ?
+Alright When do you want to travel ?
+Leaving from <location-5> . Did I get that right ?
+Alright Leaving from <location-2> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+You want the next bus . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-3> . Is this correct ?
+Alright Where do you want to go ?
+Going to <location-4> . When are you going to take that bus ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+The <route-2> . Did I get that right ?
+Alright When do you want to travel ?
+Leaving from <location-2> . Did I get that right ?
+Going to <location-2> . Did I get that right ?
+Going to <location-7> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-5> <location-6> <time.rel-0> <backend.example>
+When are you going to take that bus ?
+The <route-4> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Where are you going ?
+Which neighborhood do you want to leave from ?
+Leaving at <time.hour-0> .. Just a minute . Let me check that for you . <backend.call> <location-1> <location-3> <time.hour-0> <backend.example>
+<example>
+The <route-1> . Is this correct ?
+<restart>
+The <route-2> . Is this correct ?
+Going to <location-3> . Did I get that right ?
+What can I do for you ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-4> . Is this correct ?
+Going to <location-2> . Did I get that right ?
+Okay Where do you want to leave from ?
+Leaving from <location-4> . Did I get that right ?
+Going to <location-5> . Is this correct ?
+Leaving at <time.hour-1> .. Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+When do you want to travel ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Going to <location-3> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+When would you like to travel ?
+Right When do you want to travel ?
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+Leaving from <location-0> . Did I get that right ?
+Where do you want to leave from ?
+What can I do for you ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-6> . Did I get that right ?
+The <route-4> . Did I get that right ?
+<example>
+What can I do for you ?
+Alright When do you want to travel ?
+The <route-2> . Is this correct ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+When do you want to travel ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+At what time do you want to travel ?
+Leaving from <location-2> . Is this correct ?
+Okay Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Right Where do you want to go ?
+Going to <location-1> . Did I get that right ?
+The <route-2> . Did I get that right ?
+Leaving from <location-3> . Is this correct ?
+Okay . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Alright The <route-2> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Alright Where do you want to go ?
+Leaving from <location-2> . Is this correct ?
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+What can I do for you ?
+Leaving from <location-2> . Is this correct ?
+The <route-1> . Is this correct ?
+Where do you want to go ?
+Alright When do you want to travel ?
+The <route-1> . Did I get that right ?
+Going to <location-5> . Is this correct ?
+What can I do for you ?
+Leaving from <location-1> . Did I get that right ?
+Going to <location-26> . Did I get that right ?
+<restart>
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-6> . Did I get that right ?
+Leaving from <location-3> . Is this correct ?
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-4> . Did I get that right ?
+The <route-4> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Okay Where are you going ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-1> . Is this correct ?
+What can I do for you ?
+Leaving from <location-1> . Is this correct ?
+Okay Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+Right When do you want to travel ?
+The <route-0> . Did I get that right ?
+Okay Where do you want to go ?
+Leaving from <location-1> . Where do you want to go ?
+Leaving from <location-1> . Did I get that right ?
+Going to <location-2> . When are you going to take that bus ?
+The <route-2> . Is this correct ?
+Going to <location-1> . Did I get that right ?
+Leaving at <time.hour-0> .. Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Okay Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+<example>
+The <route-0> . Did I get that right ?
+The <route-1> . Where do you want to leave from ?
+Okay When do you want to travel ?
+The <route-1> . Is this correct ?
+Leaving from <location-3> . Is this correct ?
+Going to <location-3> . When do you want to travel ?
+Going to <location-3> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving at <time.hour-0> <time.minute-0> .. Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+The <route-3> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Right Where do you want to go ?
+Leaving at <time.hour-0> .. Did I get that right ?
+Okay Leaving from <location-1> . Did I get that right ?
+The <route-1> . Did I get that right ?
+Where are you going ?
+Right When do you want to travel ?
+<location-3> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+<example>
+Right Which stop in <location-2> do you want to leave from ?
+Leaving from <location-1> . Did I get that right ?
+Alright Where do you want to go ?
+Okay Where are you going ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Where do you want to go ?
+Leaving from <location-0> . Where do you want to go ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-1> . Is this correct ?
+Okay Where do you want to leave from ?
+Leaving from <location-0> . Is this correct ?
+Okay When do you want to travel ?
+Leaving from <location-0> . Where do you want to go ?
+Alright Where do you want to leave from ?
+Leaving from <location-0> . Where do you want to go ?
+Leaving from <location-0> . Where do you want to go ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+The <route-0> . Is this correct ?
+Leaving from <location-0> . Where do you want to go ?
+<location-0> . Is this correct ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Where do you want to go ?
+The <route-0> . Did I get that right ?
+Okay Leaving from <location-0> . Did I get that right ?
+Leaving at <time.hour-0> .. Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-2> . Is this correct ?
+The <route-0> . Did I get that right ?
+The <route-2> . Is this correct ?
+What is your destination ?
+Okay Where do you want to go ?
+Alright Where do you want to go ?
+Where do you want to leave from ?
+actually , i see . The <route-1> . Did I get that right ?
+what airline is it on . The <route-2> . Is this correct ?
+Leaving from <location-0> . Where are you going ?
+Alright Leaving from <location-0> . Did I get that right ?
+Alright Where do you want to leave from ?
+Alright Where do you want to leave from ?
+Okay Where are you going ?
+Leaving from <location-0> . Where are you going ?
+Okay Leaving from <location-0> . Did I get that right ?
+Okay Leaving from <location-0> . Did I get that right ?
+<example>
+Okay Where are you going ?
+Leaving from <location-0> . Did I get that right ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-0> . Did I get that right ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <backend.example>
+Going to <location-1> . Is this correct ?
+Alright Going to <location-2> . Did I get that right ?
+If you a bus for <location-0> say yes , otherwise say no .
+Leaving from <location-0> . Is this correct ?
+Right Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+The <route-1> . Did I get that right ?
+Going to <location-2> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-1> . Did I get that right ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-2> . Is this correct ?
+Going to <location-1> . Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <backend.example>
+Okay When are you going to take that bus ?
+Leaving from <location-1> . Did I get that right ?
+Going to <location-2> . Did I get that right ?
+When are you going to take that bus ?
+Alright Leaving from <location-0> . Did I get that right ?
+Alright Going to <location-1> . Did I get that right ?
+Okay When do you want to travel ?
+When are you going to take that bus ?
+Going to <location-2> . When do you want to travel ?
+Going to <location-2> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-1> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+<location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Going to <location-1> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Okay Where do you want to go ?
+The <route-2> . Is this correct ?
+Leaving from <location-0> . Is this correct ?
+Going to <location-1> . When are you going to take that bus ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-1> . Did I get that right ?
+Going to <location-2> . When do you want to travel ?
+Okay Where are you going ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+<example>
+Okay Where do you want to go ?
+The <route-1> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Okay Where are you going ?
+Alright Leaving from <location-0> . Did I get that right ?
+If you want the schedule of the <route-0> say yes , otherwise say no .
+Leaving from <location-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+Okay Where are you going ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Okay Where are you going ?
+<location-0> . Is this correct ?
+<location-0> . Is this correct ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+<example>
+What can I do for you ?
+Alright Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+If you want the schedule of the <route-0> say yes , otherwise say no .
+Okay Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Okay Leaving from <location-0> . Is this correct ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Okay Where are you going ?
+What can I do for you ?
+Leaving from <location-2> . Is this correct ?
+Leaving at <time.hour-0> <time.minute-0> .. Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-4> . Did I get that right ?
+Leaving at <time.hour-0> <time.minute-0> .. Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Okay Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <backend.example>
+Leaving from <location-2> . Is this correct ?
+When are you going to take that bus ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-0> . Where do you want to go ?
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-4> . Is this correct ?
+Leaving from <location-1> . Is this correct ?
+Alright When do you want to travel ?
+The <route-2> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+When are you going to take that bus ?
+Going to <location-5> . Did I get that right ?
+Leaving from <location-5> . Did I get that right ?
+The <route-0> . Where do you want to leave from ?
+When would you like to travel ?
+Alright Where do you want to go ?
+Okay Where do you want to go ?
+Alright Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <backend.example>
+Where do you want to go ?
+Just a second . <backend.call> <location-3> <location-0> <time.hour-0> <time.minute-0> <backend.example>
+Okay When do you want to travel ?
+Leaving from <location-5> . Is this correct ?
+Going to <location-6> . When do you want to travel ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+Alright When do you want to travel ?
+When do you want to travel ?
+Leaving from <location-5> . Did I get that right ?
+So far , I know that you want to take the <route-0> from <location-0> Right now , I need you to tell me the stop or neighborhood you want
+Leaving from <location-11> . Is this correct ?
+Just a second . <backend.call> <location-3> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+Okay When do you want to travel ?
+Going to <location-5> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Alright Where do you want to leave from ?
+Alright Where do you want to leave from ?
+Alright Where do you want to leave from ?
+Alright Where do you want to leave from ?
+Alright Where do you want to leave from ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-1> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Where do you want to leave from ?
+Alright Where do you want to go ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+What can I do for you ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Is this correct ?
+The <route-0> . Did I get that right ?
+The <route-0> . Is this correct ?
+Okay Where do you want to leave from ?
+Leaving from <location-0> . Is this correct ?
+The <route-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Where do you want to go ?
+What can I do for you ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+Leaving from <location-4> . Did I get that right ?
+Going to <location-5> . When do you want to travel ?
+At what time would you like to travel ?
+The <route-0> . Did I get that right ?
+Where are you leaving from ?
+Okay Where do you want to go ?
+Okay Where are you going ?
+The <route-0> . Did I get that right ?
+Leaving from <location-3> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Right When are you going to take that bus ?
+What can I do for you ?
+Where are you going ?
+Alright Where do you want to go ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-1> . Did I get that right ?
+Going to <location-1> . Did I get that right ?
+Going to <location-1> . When do you want to travel ?
+Going to <location-1> . When are you going to take that bus ?
+Leaving from <location-1> . Did I get that right ?
+<example>
+The <route-0> . Did I get that right ?
+Alright Going to <location-2> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Going to <location-5> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-2> . Is this correct ?
+Which neighborhood do you want to leave from ?
+<restart>
+What can I do for you ?
+<restart>
+Leaving from <location-5> . Is this correct ?
+You can say start a new query , or goodbye .
+Going to <location-7> . Did I get that right ?
+Going to <location-5> . Did I get that right ?
+Alright Where do you want to go ?
+The <route-1> . Did I get that right ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Going to <location-2> . When are you going to take that bus ?
+<example>
+Going to <location-3> . Did I get that right ?
+Going to <location-3> . When do you want to travel ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+Alright Going to <location-1> . Did I get that right ?
+Alright Leaving from <location-2> . Is this correct ?
+Right Where are you leaving from ?
+Leaving from <location-1> . Did I get that right ?
+What can I do for you ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+The <route-1> . Is this correct ?
+Okay Leaving from <location-0> . Did I get that right ?
+The <route-1> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Okay Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Leaving at <time.hour-0> .. Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+When do you want to travel ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-2> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Going to <location-4> . Is this correct ?
+Right When do you want to travel ?
+Alright When do you want to travel ?
+Alright When do you want to travel ?
+Alright Where do you want to go ?
+The next bus . Hold on . I 'll look that up .
+Going to <location-22> . Is this correct ?
+The <route-4> . Is this correct ?
+Alright Leaving from <location-2> . Is this correct ?
+If you want to leave at <time.hour-0> . say yes , otherwise say no .
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-1> . Is this correct ?
+When are you going to take that bus ?
+Leaving from <location-5> . Is this correct ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+You want the next bus . Is this correct ?
+Alright When do you want to travel ?
+What can I do for you ?
+Leaving from <location-4> . Did I get that right ?
+Going to <location-7> . Did I get that right ?
+Going to <location-1> . Did I get that right ?
+Going to <location-6> . When do you want to travel ?
+Leaving from <location-3> . Did I get that right ?
+Going to <location-5> . Did I get that right ?
+Alright Where do you want to leave from ?
+Leaving from <location-3> . Did I get that right ?
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Going to <location-3> . When would you like to travel ?
+Leaving from <location-6> . Did I get that right ?
+<restart>
+Leaving from <location-4> . Did I get that right ?
+Where do you want to go ?
+Leaving from <location-1> . Is this correct ?
+Going to <location-7> . Did I get that right ?
+<location-7> . Is this correct ?
+Going to <location-1> . Did I get that right ?
+Okay When do you want to travel ?
+When would you like to travel ?
+The <route-6> . Did I get that right ?
+Going to <location-5> . Did I get that right ?
+Okay . <backend.call> <location-1> <location-4> <time.hour-0> <backend.example>
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Alright The <route-1> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+The <route-1> . Is this correct ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+Leaving from <location-2> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+Leaving from <location-0> . Is this correct ?
+What can I do for you ?
+If you want to leave from <location-0> say yes , otherwise say no .
+Going to <location-1> . Did I get that right ?
+The <route-1> . Did I get that right ?
+The <route-1> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+What can I do for you ?
+The <route-1> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-0> . Where do you want to go ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+The <route-0> . Did I get that right ?
+What can I do for you ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Where do you want to go ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+Leaving from <location-0> . Is this correct ?
+Alright Where do you want to leave from ?
+The <route-0> . Did I get that right ?
+<restart>
+Going to <location-1> . When are you going to take that bus ?
+Alright Where do you want to go ?
+<location-0> . Did I get that right ?
+Which neighborhood do you want to leave from ?
+Alright When do you want to travel ?
+Leaving from <location-0> . Did I get that right ?
+Going to <location-1> . When do you want to travel ?
+The next bus . Just a minute . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+Okay Where are you going ?
+Are you sure you want to start over ?
+Alright When do you want to travel ?
+Alright When do you want to travel ?
+Going to <location-4> . When are you going to take that bus ?
+Leaving from <location-1> . Did I get that right ?
+Okay Where do you want to leave from ?
+Leaving from <location-4> . Is this correct ?
+<restart>
+The <route-1> . Did I get that right ?
+<restart>
+Leaving from <location-3> . Did I get that right ?
+Going to <location-3> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Going to <location-4> . Is this correct ?
+Going to <location-2> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+The <route-0> . Is this correct ?
+The <route-0> . Is this correct ?
+The <route-1> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+Going to <location-4> . Is this correct ?
+Going to <location-2> . When do you want to travel ?
+Going to <location-3> . Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+Going to <location-2> . Did I get that right ?
+The <route-1> . Did I get that right ?
+Going to <location-5> . Is this correct ?
+Leaving at <time.hour-0> .. Did I get that right ?
+The <route-3> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Going to <location-1> . When do you want to travel ?
+The <route-2> . Did I get that right ?
+Leaving at <time.hour-0> .. Hold on . Let me check that for you . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+When are you going to take that bus ?
+Going to <location-2> . When do you want to travel ?
+Going to <location-3> . Is this correct ?
+Where do you want to leave from ?
+If you want to leave from <location-3> say yes , otherwise say no .
+The next bus . Just a minute . Let me check that for you . <backend.call> <location-1> <location-3> <time.rel-0> <backend.example>
+At what time do you want to travel ?
+Where do you want to go ?
+Going to <location-6> . Did I get that right ?
+If you a bus for <location-9> say yes , otherwise say no .
+Which neighborhood do you want to leave from ?
+Leaving at <time.hour-0> <time.minute-0> .. Just a minute . Let me check that for you . <backend.call> <location-1> <location-3> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Leaving from <location-6> . Did I get that right ?
+Leaving from <location-2> . Is this correct ?
+Leaving at <time.hour-0> .. Did I get that right ?
+At what time do you want to travel ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Going to <location-1> . When are you going to take that bus ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+What can I do for you ?
+Leaving from <location-2> . Is this correct ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-4> . Is this correct ?
+<location-2> . Is this correct ?
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Where are you leaving from ?
+Leaving from <location-2> . Is this correct ?
+<example>
+The <route-2> . Did I get that right ?
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-2> . Did I get that right ?
+Going to <location-4> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+Alright Where do you want to go ?
+Leaving from <location-2> . Is this correct ?
+When do you want to travel ?
+Going to <location-10> . Is this correct ?
+Alright Where do you want to go ?
+Going to <location-9> . Is this correct ?
+Going to <location-4> . Is this correct ?
+<unk> <unk> . Leaving from <location-3> . Is this correct ?
+Leaving from <location-11> . Is this correct ?
+Leaving from <location-12> . Is this correct ?
+Alright When do you want to travel ?
+Going to <location-3> . Is this correct ?
+Leaving from <location-12> . Is this correct ?
+Leaving from <location-12> . Is this correct ?
+If you want to go to <location-6> say yes , otherwise say no .
+Leaving from <location-11> . Is this correct ?
+Alright Where do you want to go ?
+Leaving from <location-1> . Did I get that right ?
+Alright Where do you want to go ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+At what time do you want to travel ?
+Going to <location-4> . Did I get that right ?
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+Going to <location-4> . Is this correct ?
+<restart>
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-7> . Is this correct ?
+The <route-1> . Where do you want to leave from ?
+When do you want to travel ?
+Alright When do you want to travel ?
+Okay . <backend.call> <location-1> <location-2> <time.hour-0> <time.ampm-0> <backend.example>
+Leaving at <time.hour-0> .. Hold on . Let me check that for you . <backend.call> <location-1> <location-3> <time.hour-0> <backend.example>
+Leaving from <location-9> . Is this correct ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+Are you sure you want to start over ?
+The <route-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Going to <location-1> . When do you want to travel ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Is this correct ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <backend.example>
+Leaving from <location-1> . Did I get that right ?
+Alright Leaving from <location-2> . Is this correct ?
+The <route-2> . Is this correct ?
+Going to <location-2> . When are you going to take that bus ?
+Going to <location-1> . Is this correct ?
+<location-4> . Is this correct ?
+Leaving from <location-2> . Is this correct ?
+Going to <location-2> . Is this correct ?
+Okay Where are you going ?
+<location-2> . Is this correct ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-2> . Is this correct ?
+Alright Where do you want to go ?
+Going to <location-1> . Is this correct ?
+If you want to start over say yes , to continue where we left off say no .
+Alright Leaving from <location-2> . Did I get that right ?
+At what time do you want to travel ?
+Where do you want to go ?
+Right When are you going to take that bus ?
+Alright When do you want to travel ?
+Going to <location-2> . Did I get that right ?
+The <route-4> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Going to <location-4> . Is this correct ?
+The <route-1> . Is this correct ?
+Right Where are you going ?
+Going to <location-3> . Did I get that right ?
+Going to <location-4> . When are you going to take that bus ?
+Okay Where do you want to leave from ?
+The <route-2> . Is this correct ?
+What can I do for you ?
+Okay . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Alright Where do you want to go ?
+Leaving from <location-2> . Did I get that right ?
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+Okay . <backend.call> <location-0> <location-1> <time.hour-0> <backend.example>
+Going to <location-2> . Did I get that right ?
+Leaving from <location-3> . Is this correct ?
+<example>
+Okay Just a minute . I 'll look that up . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Right When do you want to travel ?
+The <route-0> . Did I get that right ?
+Leaving from <location-7> . Is this correct ?
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Going to <location-3> . Did I get that right ?
+<example>
+Leaving from <location-8> . Is this correct ?
+Right Where do you want to leave from ?
+Leaving at <time.hour-0> .. Is this correct ?
+Leaving from <location-2> . Did I get that right ?
+Going to <location-8> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Okay When do you want to travel ?
+Going to <location-5> . Did I get that right ?
+Going to <location-8> . Is this correct ?
+Leaving at <time.hour-0> <time.minute-0> .. Just a minute . Let me check that for you . <backend.call> <location-2> <location-3> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+The <route-0> . Is this correct ?
+<example>
+Leaving from <location-0> . Is this correct ?
+The <route-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+Leaving from <location-0> . Did I get that right ?
+Okay Where do you want to leave from ?
+What can I do for you ?
+Okay Where do you want to leave from ?
+Okay Where do you want to leave from ?
+If you want the schedule of the <route-1> say yes , otherwise say no .
+What can I do for you ?
+Okay Where do you want to leave from ?
+Alright Where do you want to go ?
+Okay Where do you want to leave from ?
+Where do you want to leave from ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+The next bus . Just a minute . Let me check that for you . <backend.call> <location-1> <location-2> <time.rel-0> <backend.example>
+Leaving from <location-4> . Did I get that right ?
+<restart>
+Right When do you want to travel ?
+Leaving from <location-2> . Is this correct ?
+When are you going to take that bus ?
+Going to <location-11> . Is this correct ?
+Going to <location-8> . Is this correct ?
+Right Where do you want to go ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Going to <location-7> . Did I get that right ?
+Going to <location-12> . Is this correct ?
+<example>
+Okay When do you want to travel ?
+The next bus . Hold on . Let me check that for you . <backend.call> <location-1> <location-3> <time.rel-0> <backend.example>
+Where do you want to go ?
+Going to <location-14> . Did I get that right ?
+When do you want to travel ?
+The <route-1> . Is this correct ?
+Leaving from <location-9> . Is this correct ?
+Leaving from <location-6> . Did I get that right ?
+Leaving from <location-5> . Did I get that right ?
+Are you sure you want to start over ?
+When would you like to travel ?
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+Are you sure you want to start over ?
+<restart>
+<example>
+Leaving from <location-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+When do you want to travel ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+When do you want to travel ?
+Going to <location-4> . Is this correct ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-5> <location-3> <time.rel-0> <backend.example>
+Leaving from <location-3> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Going to <location-3> . When do you want to travel ?
+Just a second . <backend.call> <location-1> <location-4> <time.rel-0> <backend.example>
+When are you going to take that bus ?
+Okay . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-2> . Is this correct ?
+Leaving from <location-2> . Is this correct ?
+The <route-2> . Is this correct ?
+Going to <location-5> . Did I get that right ?
+Leaving from <location-3> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+What can I do for you ?
+<location-7> . Is this correct ?
+Right Where do you want to leave from ?
+<restart>
+Leaving from <location-3> . Did I get that right ?
+Where do you want to go ?
+Leaving from <location-5> . Did I get that right ?
+Going to <location-7> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Okay When do you want to travel ?
+Leaving from <location-8> . Is this correct ?
+<example>
+Leaving from <location-11> . Is this correct ?
+Going to <location-5> . Is this correct ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+Okay . <backend.call> <location-0> <location-1> <time.hour-0> <time.ampm-0> <backend.example>
+Okay When do you want to travel ?
+Leaving from <location-4> . Is this correct ?
+Going to <location-6> . Is this correct ?
+Leaving from <location-9> . Is this correct ?
+Leaving from <location-12> . Is this correct ?
+Leaving from <location-0> . Did I get that right ?
+Leaving from <location-1> . Did I get that right ?
+<location-7> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Alright Where do you want to go ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Right When do you want to travel ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+<location-9> . Is this correct ?
+Leaving at <time.hour-2> .. Hold on . I 'll look that up . <backend.call> <location-1> <location-2> <time.hour-1> <backend.example>
+The <route-2> . Did I get that right ?
+Right When do you want to travel ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Right When do you want to travel ?
+Leaving from <location-7> . Is this correct ?
+Alright When do you want to travel ?
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+Leaving from <location-5> . Did I get that right ?
+Going to <location-7> . Did I get that right ?
+Where do you want to go ?
+The next bus . Just a minute . I 'll look that up . <backend.call> <location-1> <location-2> <time.rel-0> <backend.example>
+Leaving from <location-11> . Is this correct ?
+Alright When do you want to travel ?
+Leaving from <location-2> . Did I get that right ?
+Going to <location-3> . When do you want to travel ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+What can I do for you ?
+Okay . <backend.call> <location-1> <location-2> <time.hour-0> <time.minute-0> <backend.example>
+Leaving from <location-5> . Is this correct ?
+The next bus . Hold on . I 'll look that up . <backend.call> <location-1> <location-2> <time.rel-0> <backend.example>
+Okay Where do you want to go ?
+Alright Where do you want to go ?
+Leaving at <time.hour-0> <time.minute-0> .. Hold on . Let me check that for you . <backend.call> <location-1> <location-3> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+The <route-2> . Did I get that right ?
+well , i have a friend who said she would be that ? i could find someone . The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+The <route-0> . Did I get that right ?
+Okay . <backend.call> <location-2> <location-4> <time.rel-0> <backend.example>
+Where do you want to go ?
+Okay . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+Leaving from <location-0> . Did I get that right ?
+Just a second . <backend.call> <location-0> <location-1> <time.rel-0> <backend.example>
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Can you repeat what you just said ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-4> . Did I get that right ?
+Right Where are you going ?
+Leaving from <location-3> . Did I get that right ?
+Going to <location-3> . Is this correct ?
+Where are you going ?
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+Going to <location-7> . Is this correct ?
+Alright Where do you want to go ?
+The next bus . Just a minute . I 'll look that up . <backend.call> <location-2> <location-3> <time.rel-0> <backend.example>
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+Leaving from <location-2> . Is this correct ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+Going to <location-8> . Is this correct ?
+<example>
+If you want to leave from <location-4> say yes , otherwise say no .
+Leaving from <location-4> . Did I get that right ?
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+When do you want to travel ?
+Going to <location-5> . Did I get that right ?
+Where do you want to go ?
+Alright Going to <location-1> . Is this correct ?
+The <route-0> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-7> . Is this correct ?
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Leaving from <location-9> . Is this correct ?
+The <route-0> . Did I get that right ?
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+Leaving from <location-5> . Did I get that right ?
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+Where are you going ?
+Leaving from <location-4> . Did I get that right ?
+Alright When do you want to travel ?
+If you want to go to <location-6> say yes , otherwise say no .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-5> . Did I get that right ?
+<location-4> . Is this correct ?
+Going to <location-9> . Is this correct ?
+Where are you going ?
+Where are you going ?
+Leaving from <location-11> . Is this correct ?
+Alright Where do you want to go ?
+Alright Where do you want to go ?
+Leaving at <time.hour-0> <time.minute-0> .. Hold on . I 'll look that up . <backend.call> <location-2> <location-3> <time.hour-0> <time.minute-0> <time.ampm-0> <backend.example>
+Going to <location-5> . Did I get that right ?
+Going to <location-4> . Is this correct ?
+Alright When do you want to travel ?
+Alright Where do you want to leave from ?
+Going to <location-4> . Is this correct ?
+Going to <location-11> . Did I get that right ?
+Going to <location-3> . Is this correct ?
+The <route-2> . Is this correct ?
+Okay Where do you want to go ?
+Where do you want to go ?
+Leaving at <time.hour-0> .. Did I get that right ?
+Going to <location-6> . Did I get that right ?
+Leaving from <location-7> . Did I get that right ?
+Going to <location-5> . When do you want to travel ?
+Where do you want to go ?
+Where do you want to go ?
+Going to <location-12> . Is this correct ?
+Going to <location-11> . Is this correct ?
+Where do you want to go ?
+<example>
+Going to <location-4> . Is this correct ?
+<example>
+Going to <location-12> . Is this correct ?
+Where do you want to go ?
+Going to <location-3> . Did I get that right ?
+Going to <location-14> . Did I get that right ?
+Alright When do you want to travel ?
+Leaving at <time.hour-0> .. Hold on . I 'll look that up . <backend.call> <location-1> <location-3> <time.hour-0> <backend.example>
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+<restart>
+When are you going to take that bus ?
+<location-1> . Is this correct ?
+Where do you want to leave from ?
+Leaving from <location-2> . Is this correct ?
+The <route-1> . Is this correct ?
+When are you going to take that bus ?
+The <route-3> . Did I get that right ?
+Leaving from <location-2> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+<restart>
+Leaving from <location-3> . Is this correct ?
+Leaving from <location-2> . Is this correct ?
+Leaving at <time.hour-1> .. Hold on . I 'll look that up . <backend.call> <location-1> <location-2> <time.hour-0> <time.ampm-0> <backend.example>
+Leaving from <location-2> . Is this correct ?
+Going to <location-5> . When do you want to travel ?
+<restart>
+To ask about a different trip , you can say , start a new query . If you are finished , you can say goodbye .
+Leaving from <location-9> . Did I get that right ?
+Leaving from <location-8> . Did I get that right ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Leaving from <location-10> . Did I get that right ?
+Leaving from <location-12> . Is this correct ?
+Leaving from <location-9> . Is this correct ?
+Are you sure you want to start over ?
+<restart>
+If you want to leave from <location-8> say yes , otherwise say no .
+Alright Where would you like to leave from ?
+Alright Where would you like to leave from ?
+Leaving from <location-16> . Is this correct ?
+Alright Where would you like to leave from ?
+Leaving from <location-19> . Is this correct ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Okay . <backend.call> <location-1> <location-4> <time.hour-0> <backend.example>
+Okay . <backend.call> <location-1> <location-3> <time.hour-0> <backend.example>
+When do you want to travel ?
+Alright When do you want to travel ?
+The <route-3> . Did I get that right ?
+Leaving from <location-4> . Did I get that right ?
+Leaving from <location-21> . Is this correct ?
+Leaving from <location-12> . Is this correct ?
+Leaving from <location-23> . Is this correct ?
+Leaving from <location-9> . Did I get that right ?
+Alright The <route-2> . Did I get that right ?
+Leaving from <location-11> . Is this correct ?
+The <route-1> . Is this correct ?
+Leaving from <location-12> . Is this correct ?
+Leaving from <location-5> . Did I get that right ?
+Alright When do you want to travel ?
+Leaving at <time.hour-0> .. Did I get that right ?
+Leaving at <time.hour-0> <time.minute-0> .. Did I get that right ?
+Right Just a minute . I 'll look that up . <backend.call> <location-2> <location-6> <time.hour-1> <time.minute-0> <backend.example>
+<restart>
+Alright When do you want to travel ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Are you still there ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+Can you say that again ?
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+<restart>
+Going to <location-5> . Is this correct ?
+Leaving from <location-8> . Is this correct ?
+Going to <location-9> . Is this correct ?
+<restart>
+To get more information about buses related to this trip , you can say , when is the next bus , or , when is the previous bus .
+You can say , when is the next bus , when is the previous bus , start a new query , or goodbye .
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <backend.example>
+Just a second . <backend.call> <location-0> <location-1> <time.hour-0> <time.minute-0> <backend.example>

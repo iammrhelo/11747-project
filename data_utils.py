@@ -234,19 +234,58 @@ class LetsGoDataLoader():
        
     def process(self):
         for dial in self.data:
+
             for i, turn in enumerate(dial):
-                src_ctx = []
+                
                 if i == 0: continue
 
+                src_ctx = []
+
+                entity_dict = {}
+                X_s = []
+                R_s = []
+                E_s = []
+                L_s = []
+
+
+                last_tgt = ['<s>'] + turn[0].strip().split(' ') + ['</s>']
+
                 for prev in dial[:i]:
-                    sys = prev[0].strip().split(' ')[:self.max_len]
-                    usr = prev[1].strip().split(' ')[:self.max_len]
+                    sys = prev[0].strip().split(' ')
+                    usr = prev[1].strip().split(' ')
+
                     sys = ['<s>'] + sys + ['</s>']
                     usr = ['<s>'] + usr + ['</s>']
-                    src_ctx.append((sys, usr, prev[2], prev[3]))
 
-                self.src.append(src_ctx)
-                self.tgt.append(['<s>'] + turn[0].strip().split(' ') + ['</s>'])
+                    sysR = self.get_R(sys)
+                    usrR = self.get_R(usr)
+                    
+                    sysL = self.get_L(sys)
+                    usrL = self.get_L(usr)
+                    
+                    sysE = self.get_E(sys, entity_dict)
+                    usrE = self.get_E(usr, entity_dict)
+
+                    sys = [ self.vocab[w] for w in sys ]
+                    usr = [ self.vocab[w] for w in usr ]
+
+                    X_s.append(sys)
+                    X_s.append(usr)
+                    R_s.append(sysR)
+                    R_s.append(usrR)
+                    E_s.append(sysE)
+                    E_s.append(usrE)
+                    L_s.append(sysL)
+                    L_s.append(usrL)
+
+                assert len(X_s) % 2 == 0 
+                doc = [ (X_s, R_s, E_s, L_s) ]
+                tensor_doc = to_tensor(doc)
+
+                self.src.append(tensor_doc)
+
+                self.tgt.append(last_tgt)
+
 
     def build_documents(self):
         
